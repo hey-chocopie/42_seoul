@@ -1,0 +1,5 @@
+R 500 600
+SO textures/wall_2.xpm
+WE textures/wall_3.xpm
+EA textures/wall_4.xpm
+
