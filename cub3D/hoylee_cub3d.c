@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:30:20 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/17 20:52:38 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/18 19:05:52 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,8 +140,8 @@ void	draw(t_info *info)
 	{
 		for (int x = 0; x < info->width; x++)
 		{
-			info->img.data[(info->img).size_l / (info->img.bpp / 8)	*y  + x] = info->buf[y][x];
-			
+		//	printf("y = %d, x = %d\n", y, x);
+			info->img.data[(info->img).size_l / (info->img.bpp / 8)	*y  + x] = info->buf[y][x];		
 			//* info->width
 		}
 	}
@@ -150,7 +150,6 @@ void	draw(t_info *info)
 	if(info->bmpflag == 0)
 		save_bmp(info);
 	info->bmpflag = 1;
-
 }
 
 
@@ -418,7 +417,6 @@ int	main_loop(t_info *info)
 	draw(info);
 	key_update(info);
 	mlx_hook((*info).win, 17, 1L << 17, mouseexit, info);
-	
 	return (0);
 }
 
@@ -573,6 +571,13 @@ int	main(void)
 	info.SO_texture = 0;
 	info.WE_texture = 0;
 	info.EA_texture = 0;
+	info.x_texture = 0;
+	info.FT_texture = 0;
+	info.CT_texture = 0;
+
+
+	info.F_texture = -1;
+	info.C_texture = -1;
 
 	info.bmpflag = 0;
 	info.posX = 22.0;
@@ -586,6 +591,7 @@ int	main(void)
 	info.key_s = 0;
 	info.key_d = 0;
 	info.key_esc = 0;
+
 	int texturecount = 15;
 	int x = 0;
 
@@ -610,12 +616,11 @@ int	main(void)
 //			while(text[i] == ' ')
 //				i++;
 //			text = i + text;
-			if(text[0] != '\n')
-				if(-1 == dot_cub_test(&text, &info))
-				{
-					printf("oh no");
-					return (-1);
-				}
+			if(-1 == dot_cub_test(&text, &info))
+			{
+				printf("oh no\n");
+				return (-1);
+			}
 			printf("how\n");
 			free(text);
 		}
@@ -625,7 +630,13 @@ int	main(void)
 	printf("SO, %s\n", info.SO_texture);
 	printf("WE, %s\n", info.WE_texture);
 	printf("EA, %s\n", info.EA_texture);
-	
+	printf("S, %sfinish\n", info.x_texture);
+	printf("FT, %s\n", info.FT_texture);
+	printf("CT, %s\n", info.CT_texture);
+	printf("F, %d\n", info.F_texture);
+	printf("C, %d\n", info.C_texture);
+
+//	free(info.S_texture);
 //	if (info.NO_texture != 0)
 //		free(info.NO_texture);
 
@@ -657,7 +668,6 @@ int	main(void)
 	}
 	//  -----a
 
-	printf("test33\n");
 	if (!(info.skybox = (int **)malloc(sizeof(int *) * 1)))
 		return (-1);
 	if (!(info.skybox[0] = (int *)malloc(sizeof(int) * (642 * 360))))
@@ -673,9 +683,9 @@ int	main(void)
 	// -----
 
 
-	printf("test44\n");
 	if (!(info.texture = (int **)malloc(sizeof(int *) * texturecount)))
 		return (-1);
+
 	for (int i = 0; i < texturecount ; i++)
 	{
 		if (!(info.texture[i] = (int *)malloc(sizeof(int) * (texHeight * texWidth))))
@@ -689,13 +699,11 @@ int	main(void)
 		}
 	}
 	load_hoyleetexture(&info);
-
 	load_texture(&info);
 	info.moveSpeed = 0.05;
 	info.rotSpeed = 0.05;
 	
 	info.win = mlx_new_window(info.mlx,  info.width, info.height,"mlx");
-
 	info.img.img = mlx_new_image(info.mlx,  info.width ,info.height);
 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
 	mlx_loop_hook(info.mlx, &main_loop, &info);
@@ -708,5 +716,4 @@ int	main(void)
 	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 0, &key_release, &info);
 //	printf("11111%s\n" , info.NO_texture);
 	mlx_loop(info.mlx);
-	printf("333 \n");
 }

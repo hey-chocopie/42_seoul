@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:40:13 by oouklich          #+#    #+#             */
-/*   Updated: 2020/11/17 19:53:29 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/18 17:48:01 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,18 +152,17 @@ typedef struct	s_info
 	int		**texture;
 	double	moveSpeed;
 	double	rotSpeed;
-
 	int mx;
 	int my;
-
+	int		F_texture;
+	int		C_texture;
 	char *NO_texture;
-	
 	char *SO_texture;
 	char *WE_texture;
 	char *EA_texture;
-	
-	
-	
+	char *x_texture;
+	char *FT_texture;
+	char *CT_texture;
 	//bmp----
 	int bmpflag;
 	int	bmpwidth;
