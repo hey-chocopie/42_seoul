@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 20:11:44 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/18 18:58:29 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/19 11:31:30 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,32 +64,42 @@ int ft_R(t_info *info, char **text)
 	return (0);
 }
 
-void texture_value(t_info *info, int adr, char *textsave)
+int		 texture_value(t_info *info, int adr, char *textsave)
 {
+	int a;	
+	a = open(textsave,O_WRONLY);
+	if (a == -1)
+	{
+		free(textsave);
+		printf("could not be found : %s\n", textsave);
+		return (-1);
+	}
+	close(a);
 	if(adr == 0)
-		info -> NO_texture = textsave;
+		info -> no_texture = textsave;
 	else if(adr == 1)
-		info -> SO_texture = textsave;
+		info -> so_texture = textsave;
 	else if(adr == 2)
-		info -> WE_texture = textsave;
+		info -> we_texture = textsave;
 	else if(adr == 3)
-		info -> EA_texture = textsave;
+		info -> ea_texture = textsave;
 	else if(adr == 4)
-		info -> x_texture = textsave;
+		info -> s_texture = textsave;
 	else if(adr == 5)
-		info -> CT_texture = textsave;
+		info -> ct_texture = textsave;
 	else if(adr == 6)
-		info -> FT_texture = textsave;
+		info -> ft_texture = textsave;
+	return (0);
 }
 
 int ft_floor_celing_texture(t_info *info, char **text, int jump, int adr)
 {
+
 	int flag;
 	char value[4];
 	int i;
 	int save;
 
-	adr = 1;
 	flag = 0;
 	while((*text)[jump])
 	{
@@ -110,16 +120,32 @@ int ft_floor_celing_texture(t_info *info, char **text, int jump, int adr)
 			flag ++;
 		}
 		if (flag == 1 && value[0] != 0)
-			save = ft_atoi(value);			
-		if (flag > 1 && flag <= 3 && value[0] != 0)
-			save = ft_atoi(value) * save;			
-		if (flag > 3)
+			save = ft_atoi(value) * 16 * 16 * 16 * 16;			
+		if (flag == 2 && value[0] != 0)
+			save = save + ft_atoi(value) * 16 * 16;	
+		if (flag == 3 && value[0] != 0)
+			save = save + ft_atoi(value);			
+		if (flag > 3 || (ft_atoi(value) > 255 && ft_atoi(value) < 0))
+		{
+			printf("check rgb input value");
 			return (-1);
+		}
+	}
+	if (flag != 3)
+	{
+		printf("check rgb input value");
+		return (-1);
 	}
 	if(adr == 7)
-		info -> F_texture = save;
+	{
+		info -> f_texture = save;
+	}
 	if(adr == 8)
-		info -> C_texture = save;
+	{
+		info -> c_texture = save;	
+		printf("emfdjrksk? ");
+	}
+	printf("save == %d", save);
 	return (0);
 }
 
@@ -148,14 +174,17 @@ int ft_diretion(t_info *info, char **text, int jump, int adr)
 		textsave[j] = (*text)[i + j];
 		j++;
 	}
-	textsave[j] = 0;
-	texture_value(info, adr, textsave);
-	if(info -> bmpwidth == adr)
-		printf("1");
 	if((*text)[i+j] != 0)
+	{
+		printf("please check  texture adress input vlaue");
+		free(textsave);
+		return (-1);
+	}
+	if (-1 == texture_value(info, adr, textsave))
 		return (-1);
 	return (0);
 }
+
 int	dot_cub_test(char **text, t_info *info)
 {
 

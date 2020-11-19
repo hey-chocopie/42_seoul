@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:30:20 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/18 19:05:52 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/19 11:47:55 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ struct Sprite	sprite[numSprites] =
 
 	//row of pillars in front of wall: fisheye test
 //	{18.5, 10.5, 1},
-	{18.5, 11.5, 1},
+	{18.5, 11.5, 4},
 //	{18.5, 12.5, 1},
 
 	//some barrels around the map
@@ -190,24 +190,12 @@ void	calc(t_info *info)
 			floorX += floorStepX;
 			floorY += floorStepY;
 
-			int checkerBoardPattern = (int)(cellX + cellY) & 1;
-			int floorTexture;
-			if(checkerBoardPattern == 0) floorTexture = 12;
-			else floorTexture = 12;
 			int color;
-			// choose texture and draw the pixel
-
-//			if(checkerBoardPattern == 0) floorTexture = 3;
-//			else floorTexture = 4;
-			int ceilingTexture = 13;
-			//11
-			// floor
-			//if(floorTexture != 12)
-				color = info->texture[floorTexture][texWidth * ty + tx];
+			color = info->texture[5][texWidth * ty + tx];
 			color = (color >> 1) & 8355711; // make a bit darker
 			info->buf[y][x] = color;
 			//ceiling (symmetrical, at height - y - 1 instead of y)
-			color = info->texture[ceilingTexture][texWidth * ty + tx];
+			color = info->texture[6][texWidth * ty + tx];
 			color = (color >> 1) & 8355711; // make a bit darker
 			info->buf[info->height - y - 1][x] = color;
 		}
@@ -306,10 +294,10 @@ void	calc(t_info *info)
 			int texY = (int)texPos & (texHeight - 1);
 			texPos += step;
 			// hoyleetest
-			if (texNum < 5)
-				texNum = 14;
+			if (texNum < 4)
+				texNum = 0;
+			// 이거 바꿔서 코드 짜야함. 
 			int color = info->texture[texNum][texHeight * texY + texX];
-			//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 			if(side == 1) color = (color >> 1) & 8355711;
 			info->buf[y][x] = color;
 		}
@@ -349,12 +337,10 @@ void	calc(t_info *info)
 		#define uDiv 1
 		#define vDiv 1
 		int vMove = 0.0;
-		if(spriteflag < 5000000 && sprite[spriteOrder[i]].texture== 1)
+		if(spriteflag < 5000000 && sprite[spriteOrder[i]].texture== 4)
 			vMove = 150;
-		else if(spriteflag >= 5000000 && spriteflag <= 10000000&& sprite[spriteOrder[i]].texture== 1)
+		else if(spriteflag >= 5000000 && spriteflag <= 10000000&& sprite[spriteOrder[i]].texture== 4)
 			vMove = 50;
-//		if(sprite[spriteOrder[i]].texture == 9)
-//			vMove = 64;
 		int vMoveScreen = (int)(vMove / transformY);
 
 		//calculate height of the sprite on screen
@@ -388,19 +374,19 @@ void	calc(t_info *info)
 				int texY = ((d * texHeight) / spriteHeight) / 256;
 				int color;
 				color = info->texture[sprite[spriteOrder[i]].texture][texWidth * texY + texX];
-				if(spriteflag < 5000000 && sprite[spriteOrder[i]].texture == 1)
+				if(spriteflag < 5000000 && sprite[spriteOrder[i]].texture == 4)
 				{
 				color = info->texture[sprite[spriteOrder[i]].texture][texWidth * texY + texX]; //get current color from the texture
 					spriteflag++;
 				}
-				else if(sprite[spriteOrder[i]].texture == 1)
+				else if(sprite[spriteOrder[i]].texture == 4)
 				{
-				color = info->texture[9][texWidth * texY + texX]; //get current color from the texture
+				color = info->texture[9][texWidth * texY + texX];
 					spriteflag++;
 					if(spriteflag >10000000)
 						spriteflag = 0;
 				}			
-				if((color & 0x00FFFFFF) != 0) info->buf[y][stripe] = color; //paint pixel if it isn't black, black is the invisible color
+				if((color & 0x00FFFFFF) != 0) info->buf[y][stripe] = color;
 			}
 		}
 	}
@@ -531,13 +517,35 @@ void	load_hoyleetexture(t_info *info)
 	}
 
 }
+
+void	map_texture(t_info *info)
+{
+	t_img	img;
+
+	if(info -> no_texture != 0)
+		load_image(info, info->texture[0], info -> no_texture, &img);
+	if(info -> so_texture != 0)
+		load_image(info, info->texture[1], info -> so_texture, &img);
+	if(info -> we_texture != 0)
+		load_image(info, info->texture[2], info -> we_texture, &img);
+	if(info -> ea_texture != 0)
+		load_image(info, info->texture[3], info -> ea_texture, &img);
+	if(info -> s_texture != 0)
+		load_image(info, info->texture[4], info -> s_texture, &img);
+	if(info -> ft_texture != 0)
+		load_image(info, info->texture[5], info -> ft_texture, &img);
+	if(info -> ct_texture != 0)
+		load_image(info, info->texture[6], info -> ct_texture, &img);
+
+}
+
 void	load_texture(t_info *info)
 {
 	t_img	img;
 
-	load_image(info, info->texture[0], "textures/eagle.xpm", &img);
+//	load_image(info, info->texture[0], "textures/eagle.xpm", &img);
 	//textures/eagle.xpm"
-	load_image(info, info->texture[1], "textures/sprite8smallgom.xpm", &img);
+//	load_image(info, info->texture[1], "textures/sprite8smallgom.xpm", &img);
 	load_image(info, info->texture[2], "textures/purplestone.xpm", &img);
 	load_image(info, info->texture[3], "textures/greystone.xpm", &img);
 	load_image(info, info->texture[4], "textures/bluestone.xpm", &img);
@@ -556,6 +564,45 @@ void	load_texture(t_info *info)
 	load_image(info, info->texture[14], "textures/test4whitewall.xpm", &img);
 	
 	load_image(info, info->skybox[0], "textures/22.xpm", &img);
+
+
+//	printf("dlrpanjswl?==%sfin\n", info -> so_texture);
+
+
+//	if(info -> no_texture != 0)
+//		load_image(info, info->texture[0], info -> no_texture, &img);
+	if(info -> so_texture != 0)
+		load_image(info, info->texture[1], info -> so_texture, &img);
+//	if(info -> we_texture != 0)
+//		load_image(info, info->texture[2], info -> no_texture, &img);
+//	if(info -> ea_texture != 0)
+//		load_image(info, info->texture[3], info -> no_texture, &img);
+//	if(info -> s_texture != 0)
+//		load_image(info, info->texture[4], info -> no_texture, &img);
+//	if(info -> ft_texture != 0)
+//		load_image(info, info->texture[5], info -> no_texture, &img);
+//	if(info -> ct_texture != 0)
+//		load_image(info, info->texture[6], info -> no_texture, &img);
+
+
+}
+
+void	ft_input_texture_free(t_info *info)
+{
+	if(info->no_texture != 0)
+		free(info -> no_texture);
+	else if(info->so_texture != 0)
+		free(info -> so_texture);
+	else if(info->we_texture != 0)
+		free(info -> we_texture);
+	else if(info->ea_texture != 0)
+		free(info -> ea_texture);
+	else if(info->s_texture != 0)
+		free(info -> s_texture);
+	else if(info->ft_texture != 0)
+		free(info -> ft_texture);
+	else if(info->ct_texture != 0)
+		free(info -> ct_texture);
 }
 
 
@@ -567,17 +614,17 @@ int	main(void)
 	int sizexx;
 	int	sizeyy;
 
-	info.NO_texture = 0;
-	info.SO_texture = 0;
-	info.WE_texture = 0;
-	info.EA_texture = 0;
-	info.x_texture = 0;
-	info.FT_texture = 0;
-	info.CT_texture = 0;
+	info.no_texture = 0;
+	info.so_texture = 0;
+	info.we_texture = 0;
+	info.ea_texture = 0;
+	info.s_texture = 0;
+	info.ft_texture = 0;
+	info.ct_texture = 0;
 
 
-	info.F_texture = -1;
-	info.C_texture = -1;
+	info.f_texture = -1;
+	info.c_texture = -1;
 
 	info.bmpflag = 0;
 	info.posX = 22.0;
@@ -611,7 +658,6 @@ int	main(void)
         fd=open("./map/2.cub",O_RDONLY);
 		while(check != 0 && check != -1 )
 		{
-			
 			check = get_next_line(fd, &text);
 //			while(text[i] == ' ')
 //				i++;
@@ -619,28 +665,26 @@ int	main(void)
 			if(-1 == dot_cub_test(&text, &info))
 			{
 				printf("oh no\n");
+				ft_input_texture_free(&info);		
 				return (-1);
 			}
-			printf("how\n");
 			free(text);
 		}
-       close(fd);
+		close(fd);
 //====
-	printf("NO, %s\n", info.NO_texture);
-	printf("SO, %s\n", info.SO_texture);
-	printf("WE, %s\n", info.WE_texture);
-	printf("EA, %s\n", info.EA_texture);
-	printf("S, %sfinish\n", info.x_texture);
-	printf("FT, %s\n", info.FT_texture);
-	printf("CT, %s\n", info.CT_texture);
-	printf("F, %d\n", info.F_texture);
-	printf("C, %d\n", info.C_texture);
+	printf("NO, %s\n", info.no_texture);
+	printf("SO, %s\n", info.so_texture);
+	printf("WE, %s\n", info.we_texture);
+	printf("EA, %s\n", info.ea_texture);
+	printf("S, %sfinish\n", info.s_texture);
+	printf("FT, %s\n", info.ft_texture);
+	printf("CT, %s\n", info.ct_texture);
+	printf("F, %d\n", info.f_texture);
+	printf("C, %d\n", info.c_texture);
 
 //	free(info.S_texture);
-//	if (info.NO_texture != 0)
-//		free(info.NO_texture);
-
-	printf("test1\n");
+//	if (info.no_texture != 0)
+//		free(info.no_texture);
 	if(sizexx <info.width)
 	{
 		info.width =  sizexx;	
@@ -700,9 +744,11 @@ int	main(void)
 	}
 	load_hoyleetexture(&info);
 	load_texture(&info);
+	map_texture(&info);
 	info.moveSpeed = 0.05;
 	info.rotSpeed = 0.05;
 	
+
 	info.win = mlx_new_window(info.mlx,  info.width, info.height,"mlx");
 	info.img.img = mlx_new_image(info.mlx,  info.width ,info.height);
 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
@@ -714,6 +760,6 @@ int	main(void)
 
 	mlx_hook(info.win, X_EVENT_KEY_PRESS, 0, &key_press, &info);
 	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 0, &key_release, &info);
-//	printf("11111%s\n" , info.NO_texture);
+//	printf("11111%s\n" , info.no_texture);
 	mlx_loop(info.mlx);
 }
