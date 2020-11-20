@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:30:20 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/19 11:47:55 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/19 15:29:28 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -744,7 +744,7 @@ int	main(void)
 	}
 	load_hoyleetexture(&info);
 	load_texture(&info);
-	map_texture(&info);
+//	map_texture(&info);
 	info.moveSpeed = 0.05;
 	info.rotSpeed = 0.05;
 	

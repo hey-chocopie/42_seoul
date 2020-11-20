@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 20:11:44 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/19 11:31:30 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/20 12:05:05 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int ft_R(t_info *info, char **text)
 	char textsave[100];
 	i = 1;
 	ft_memset(textsave, 0, 100);
-	while((*text)[i] != '\n')
+	while((*text)[i] != 0)
 	{
 		j = 0;
 		while((*text)[i] >= '0' && (*text)[i] <= '9')
@@ -49,6 +49,7 @@ int ft_R(t_info *info, char **text)
 		}
 		if(textsave[0] != 0)
 		{
+
 			if (flag == 0)
 				info -> width = ft_atoi(textsave);
 			else if (flag == 1)
@@ -58,7 +59,7 @@ int ft_R(t_info *info, char **text)
 		}
 		if ((*text)[i] == ' ')
 			i++;
-		if (((*text)[i] != ' ' && (*text)[i] < '0' && (*text)[i] < '9' && (*text)[i] == 0) || flag == 2)
+		if ((((*text)[i] != ' ' && ((*text)[i] < '0' || (*text)[i] > '9'))&& (*text)[i] != 0) || flag == 3)
 			return (-1);
 	}
 	return (0);
@@ -187,9 +188,18 @@ int ft_diretion(t_info *info, char **text, int jump, int adr)
 
 int	dot_cub_test(char **text, t_info *info)
 {
-
+//
+//	int i;
+//
+//	if (*text[i] == '1' && *text[i] != 0)
+//	{
+//		if ( -1 == ft_map(text, info, &i);
+//	}
 	if(!ft_strncmp(*text, "R ", 2))
-		ft_R(info, text);
+	{	
+		if( -1 == ft_R(info, text))
+			return (-1);
+	}
 	else if(!ft_strncmp(*text, "NO ", 3))
 	{
 		if(-1 == ft_diretion(info, text, 3, 0))
