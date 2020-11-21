@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 20:11:44 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/20 12:05:05 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/20 16:09:50 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int ft_R(t_info *info, char **text)
 		}
 		if(textsave[0] != 0)
 		{
-
 			if (flag == 0)
 				info -> width = ft_atoi(textsave);
 			else if (flag == 1)
@@ -59,7 +58,7 @@ int ft_R(t_info *info, char **text)
 		}
 		if ((*text)[i] == ' ')
 			i++;
-		if ((((*text)[i] != ' ' && ((*text)[i] < '0' || (*text)[i] > '9'))&& (*text)[i] != 0) || flag == 3)
+		if (((*text)[i] != ' ' && (*text)[i] < '0' && (*text)[i] > '9' && (*text)[i] != 0) || flag == 3)
 			return (-1);
 	}
 	return (0);
@@ -188,15 +187,16 @@ int ft_diretion(t_info *info, char **text, int jump, int adr)
 
 int	dot_cub_test(char **text, t_info *info)
 {
-//
-//	int i;
-//
-//	if (*text[i] == '1' && *text[i] != 0)
-//	{
-//		if ( -1 == ft_map(text, info, &i);
-//	}
+	int i;
+
+	i = 0;
+	if(((*text)[i] == '1' ||  info->err_m == 1) && (*text)[i] != 0)
+	{
+		if (-1 == ft_map(info, *text, &i))
+				return (-1);
+	}
 	if(!ft_strncmp(*text, "R ", 2))
-	{	
+	{
 		if( -1 == ft_R(info, text))
 			return (-1);
 	}

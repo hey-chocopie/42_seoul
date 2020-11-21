@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:30:20 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/19 15:29:28 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/21 12:37:28 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,13 +191,19 @@ void	calc(t_info *info)
 			floorY += floorStepY;
 
 			int color;
-			color = info->texture[5][texWidth * ty + tx];
+	//texWidth
+//(info->img).size_l / (info->img.bpp / 8)	*y  + x
+// 또여기.
+
+			color = info->texture[5][ texWidth *ty + tx];
 			color = (color >> 1) & 8355711; // make a bit darker
 			info->buf[y][x] = color;
 			//ceiling (symmetrical, at height - y - 1 instead of y)
 			color = info->texture[6][texWidth * ty + tx];
 			color = (color >> 1) & 8355711; // make a bit darker
 			info->buf[info->height - y - 1][x] = color;
+
+
 		}
 	}
 	// WALL CASTING
@@ -481,12 +487,14 @@ int		key_release(int key, t_info *info)
 
 void	load_image(t_info *info, int *texture, char *path, t_img *img)
 {
+	// 여기 사이즈 바꾸면됨
 	img->img = mlx_xpm_file_to_image(info->mlx, path, &img->img_width, &img->img_height);
 	img->data = (int *)mlx_get_data_addr(img->img, &img->bpp, &img->size_l, &img->endian);
 	for (int y = 0; y < img->img_height; y++)
 	{
 		for (int x = 0; x < img->img_width; x++)
 		{
+//(info->img).size_l / (info->img.bpp / 8)	*y  + x
 			texture[img->img_width * y + x] = img->data[img->img_width * y + x];
 		}
 	}
@@ -605,14 +613,113 @@ void	ft_input_texture_free(t_info *info)
 		free(info -> ct_texture);
 }
 
+int		ft_mapcheck(t_info *info)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (i < info->map.y)
+	{
+		j = 0;
+		while (j < info->map.x)
+		{
+			if (info->map.tab[i][j] != 1 && i == 0)
+				return (-1);
+			else if (info->map.tab[i][j] != 1 && i == info->map.y - 1)
+				return (-1);
+			else if (info->map.tab[i][j] != 1 && j == 0)
+				return (-1);
+			else if (info->map.tab[i][j] != 1 && j == info->map.x - 1)
+				return (-1);
+			j++;
+		}
+		i++;
+	}
+
+
+	return (1);
+}
+
+void	ft_pos(t_info *info)
+{
+	char	c;
+	int		i;
+	int		j;
+
+	i = -1;
+	j = -1;
+	while (++i < info->map.y)
+	{
+		while (++j < info->map.x)
+		{
+			c = info->map.tab[i][j];
+			if (c == 'N' || c == 'E' || c == 'S' || c == 'W')
+			{
+				info->posY = (double)i + 0.5;
+				info->posX = (double)j + 0.5;
+				info->dirX = (c == 'E' || c == 'W') ? 1 : 0;
+				info->dirX *= (c == 'W') ? -1 : 1;
+				info->dirY = (c == 'S' || c == 'N') ? 1 : 0;
+				info->dirY *= (c == 'N') ? -1 : 1;
+				
+				info->posY = 5 + 0.5;
+				info->posX = 2 + 0.5;
+				//rintf("pos x %f, pos Y,%f " ,info->posX, info->posY);
+
+				//info->err.p++;
+			}
+		}
+		j = -1;
+	}
+}
+
+int ft_mapcp(t_info *info)
+{
+	int		**mapsave;
+	int		i;
+	int		j;
+	mapsave = (int **)malloc(sizeof(int *) * (info->map.y));
+	
+	i = 0;
+	while(i < info->map.y)
+	{
+		mapsave[i] = (int *)malloc(sizeof(int) * (info->map.x));
+		i++;
+	}
+	i = 0;
+	j = 0;
+	printf("info ->mapx %d, info->mapy %d\n", info->map.x,info->map.y);
+	while(i < info->map.y)
+	{
+		j = 0;
+		while(j < info->map.x)
+		{
+
+			mapsave[i][j] = info->map.tab[i][j] - 48;
+			j++;
+		}
+		i++;
+	}
+	info->worldmap2 = mapsave;
+	free(info->map.tab);
+return(0);
+}
 
 int	main(void)
 {
-
 	t_info info;
 	info.mlx = mlx_init();
 	int sizexx;
 	int	sizeyy;
+
+	info.map.x = 0;
+	info.map.y = 0;
+	info.map.spr = 0;
+	info.map.tab = NULL;
+
+
 
 	info.no_texture = 0;
 	info.so_texture = 0;
@@ -629,16 +736,17 @@ int	main(void)
 	info.bmpflag = 0;
 	info.posX = 22.0;
 	info.posY = 11.5;
-	info.dirX = -1.0;
+	info.dirX = 1.0;
 	info.dirY = 0.0;
-	info.planeX = 0.0;
-	info.planeY = 0.66;
+	info.planeX = 0.66;
+	info.planeY = 0.0;
 	info.key_a = 0;
 	info.key_w = 0;
 	info.key_s = 0;
 	info.key_d = 0;
 	info.key_esc = 0;
 
+	info.err_m = 0;
 	int texturecount = 15;
 	int x = 0;
 
@@ -652,26 +760,65 @@ int	main(void)
 		int check;
 		char *aa;
 		int i;
-		aa= (char *)malloc(sizeof(char)*1);
+
 		i = 0;
 		check = 1;
         fd=open("./map/2.cub",O_RDONLY);
 		while(check != 0 && check != -1 )
 		{
 			check = get_next_line(fd, &text);
-//			while(text[i] == ' ')
-//				i++;
-//			text = i + text;
+			while(text[i] == ' ')
+				i++;
+			text = i + text;	
+			aa = text;
 			if(-1 == dot_cub_test(&text, &info))
 			{
 				printf("oh no\n");
 				ft_input_texture_free(&info);		
 				return (-1);
 			}
-			free(text);
+			free(aa);
 		}
 		close(fd);
-//====
+//====	
+	ft_pos(&info);
+	ft_mapcheck(&info);
+	ft_mapcp(&info);
+	info.planeX = info.dirY * (0.66);
+	info.planeY = info.dirX * (-0.66);
+	int a;
+	int b;
+
+	b= 0;
+	a= 0;
+	while(info.map.tab[a])
+	{
+		b= 0;
+		while(info.map.tab[b])
+		{
+			printf("%d,", info.map.tab[a][b]);
+			b++;
+		}
+		printf("\n");
+		a++;
+	}
+	a = 0;
+	b = 0;
+	//이거 내일부터 하면됨. 
+	while(a < info.map.y)
+	{
+		b= 0;
+		while(b < info.map.x)
+		{
+			printf("%d,", info.worldmap2[a][b]);
+			b++;
+		}
+		printf("\n");
+		a++;
+	}
+
+	printf("\nrkqt2 %d\n",info.map.x);
+	printf("\nrkqt %d\n",info.worldmap2[1][28]);
 	printf("NO, %s\n", info.no_texture);
 	printf("SO, %s\n", info.so_texture);
 	printf("WE, %s\n", info.we_texture);
@@ -744,7 +891,7 @@ int	main(void)
 	}
 	load_hoyleetexture(&info);
 	load_texture(&info);
-//	map_texture(&info);
+	map_texture(&info);
 	info.moveSpeed = 0.05;
 	info.rotSpeed = 0.05;
 	

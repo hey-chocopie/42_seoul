@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:40:13 by oouklich          #+#    #+#             */
-/*   Updated: 2020/11/18 21:29:48 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/21 12:26:29 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,22 @@ struct	Sprite
 
 };
 
+typedef struct	s_map
+{
+	char			**tab;
+	int				x;
+	int				y;
+	int				spr;
+}				t_map;
+
 
 typedef struct	s_info
 {
+	t_map map;
+	int err_m;
+	int **worldmap2;
+
+
 	int width;
 	int height;
 	double posX;
@@ -174,4 +187,6 @@ typedef struct	s_info
 int save_bmp(t_info *info);
 int     get_next_line(int fd, char **line);
 int dot_cub_test(char **text, t_info *info);
+int dot_mapset(char **text, t_info *info);
+int ft_map(t_info *info, char *line, int *i);
 #endif
