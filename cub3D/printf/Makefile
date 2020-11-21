@@ -3,53 +3,35 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hoylee <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: frdescam <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/11/16 17:51:13 by hoylee            #+#    #+#              #
-#    Updated: 2020/11/21 15:14:57 by hoylee           ###   ########.fr        #
+#    Created: 2019/06/21 16:00:31 by frdescam          #+#    #+#              #
+#    Updated: 2020/11/21 13:41:45 by hoylee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-MNAME = libmlx.dylib
+NAME = libftprintf.a
 
-LNAME = libft.a
+SRCS = aa.c libft.c ft_width_value.c ft_itoa_u.c ft_decimalnum.c ft_decimalnum2.c ft_octal.c ft_persent_count.c ft_discrimination.c ft_d.c ft_stprintf.c ft_stprintf2.c ft_string_stprintf.c ft_s_c.c ft_u_x_p_o.c
 
-NAME = cub3d.out
-
-SRCS = hoylee_cub3d.c bmp.c	./gnl_for_cub3d/get_next_line.c ./gnl_for_cub3d/get_next_line_utils.c dot_cub_test.c ft_map.c
-
-MLX = a
-
-LIBFT = b
 
 OBJS = ${SRCS:.c=.o}
 
-CC		= gcc
+CC		= cc
 RM		= rm -f
 
-CFLAGS = -Wall -Wextra -Werror
-
+CFLAGS = -Wall -Wextra -Werror 
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
-$(NAME): ${OBJS} ${MLX} ${LIBFT}
-		${CC} ${CFLAGS}  -L .. -lmlx -L./libft -lft -L./printf -lftprintf -framework OpenGL -framework Appkit -o ${NAME} ${OBJS} libft.a libmlx.dylib\
-
-
-$(MLX): 
-		${MAKE} -C ./mlxfolder/
-		cp ./mlxfolder/${MNAME}  ./ 
-$(LIBFT):
-		${MAKE} -C ./libft/
-
+$(NAME): ${OBJS}
+		ar rcs ${NAME} ${OBJS}
 
 all:	${NAME}
 
 clean:
 		${RM} ${OBJS}
-		cd ./mlxfolder/; make clean
-		cd ./libft/; make fclean
-		rm libmlx.dylib;
+
 fclean:	clean
 		${RM} ${NAME}
 

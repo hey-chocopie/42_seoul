@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:40:13 by oouklich          #+#    #+#             */
-/*   Updated: 2020/11/21 12:26:29 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/21 20:02:05 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,10 @@ typedef struct	s_info
 {
 	t_map map;
 	int err_m;
-	int **worldmap2;
+	int **fullmap;
 
-
+	int map_width;
+	int	map_height;
 	int width;
 	int height;
 	double posX;
@@ -189,4 +190,5 @@ int     get_next_line(int fd, char **line);
 int dot_cub_test(char **text, t_info *info);
 int dot_mapset(char **text, t_info *info);
 int ft_map(t_info *info, char *line, int *i);
+int ft_errorprint(int a, t_info *info);
 #endif

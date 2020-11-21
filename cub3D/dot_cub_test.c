@@ -6,13 +6,14 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 20:11:44 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/20 16:09:50 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/21 20:02:07 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./mlxfolder/mlx.h"
 #include "key_macos.h"
 #include "./libft/libft.h"
+#include "./printf/ft_printf.h"
 int		ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t				i;
@@ -70,9 +71,8 @@ int		 texture_value(t_info *info, int adr, char *textsave)
 	a = open(textsave,O_WRONLY);
 	if (a == -1)
 	{
-		free(textsave);
 		printf("could not be found : %s\n", textsave);
-		return (-1);
+		return(ft_errorprint(-2,info));
 	}
 	close(a);
 	if(adr == 0)
@@ -127,25 +127,19 @@ int ft_floor_celing_texture(t_info *info, char **text, int jump, int adr)
 			save = save + ft_atoi(value);			
 		if (flag > 3 || (ft_atoi(value) > 255 && ft_atoi(value) < 0))
 		{
-			printf("check rgb input value");
-			return (-1);
+			ft_printf("check rgb input value");
+			return(ft_errorprint(-22, info));
 		}
 	}
 	if (flag != 3)
 	{
 		printf("check rgb input value");
-		return (-1);
+		return(ft_errorprint(-22, info));
 	}
 	if(adr == 7)
-	{
 		info -> f_texture = save;
-	}
 	if(adr == 8)
-	{
 		info -> c_texture = save;	
-		printf("emfdjrksk? ");
-	}
-	printf("save == %d", save);
 	return (0);
 }
 
@@ -159,13 +153,16 @@ int ft_diretion(t_info *info, char **text, int jump, int adr)
 	int textlen;
 
 	textlen = (int)strlen(*text);
-	
+	textsave = 0;
 	i = jump;
 	j = 0;
 	if(!(textsave = (char *)(malloc(sizeof(char) * (textlen - jump + 1)))))
-		return (-1);
+		return(ft_errorprint(-12,info));
 	if(textlen < jump)
-		return (-1);
+	{
+		free(textsave);
+		return(ft_errorprint(-22,info));
+	}
 	ft_memset(textsave, 0,(textlen - jump + 1));
 	while((*text)[i] == ' ')
 		i++;
@@ -176,12 +173,15 @@ int ft_diretion(t_info *info, char **text, int jump, int adr)
 	}
 	if((*text)[i+j] != 0)
 	{
-		printf("please check  texture adress input vlaue");
+		ft_printf("please check  texture adress input vlaue");
 		free(textsave);
-		return (-1);
+		return(ft_errorprint(-22,info));
 	}
 	if (-1 == texture_value(info, adr, textsave))
-		return (-1);
+	{
+		free(textsave);
+		return(ft_errorprint(-2,info));
+	}
 	return (0);
 }
 
@@ -195,7 +195,7 @@ int	dot_cub_test(char **text, t_info *info)
 		if (-1 == ft_map(info, *text, &i))
 				return (-1);
 	}
-	if(!ft_strncmp(*text, "R ", 2))
+	else if(!ft_strncmp(*text, "R ", 2))
 	{
 		if( -1 == ft_R(info, text))
 			return (-1);
