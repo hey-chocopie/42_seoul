@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 12:40:54 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/21 17:15:15 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/23 18:22:04 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "key_macos.h"
@@ -93,6 +93,5 @@ int		ft_map(t_info *info, char *line, int *i)
 	info->map.y++;
 	if ((info->map.x = ft_slablen(info, line)) < 0)
 		return (-22);
-	printf("ok\n");
 	return (0);
 }

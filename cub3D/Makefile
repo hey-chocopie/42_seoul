@@ -6,7 +6,7 @@
 #    By: hoylee <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/16 17:51:13 by hoylee            #+#    #+#              #
-#    Updated: 2020/11/21 15:14:57 by hoylee           ###   ########.fr        #
+#    Updated: 2020/11/23 12:00:35 by hoylee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LNAME = libft.a
 
 NAME = cub3d.out
 
-SRCS = hoylee_cub3d.c bmp.c	./gnl_for_cub3d/get_next_line.c ./gnl_for_cub3d/get_next_line_utils.c dot_cub_test.c ft_map.c
+SRCS = hoylee_cub3d.c bmp.c	./gnl_for_cub3d/get_next_line.c ./gnl_for_cub3d/get_next_line_utils.c dot_cub_test.c ft_map.c ft_map_info.c ft_tool.c
 
 MLX = a
 

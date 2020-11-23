@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:40:13 by oouklich          #+#    #+#             */
-/*   Updated: 2020/11/21 20:02:05 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/23 13:59:20 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,11 @@
 #define mapHeight 24
 
 #define numSprites 19
-
+typedef struct s_winsize
+{
+	int size_x;
+	int size_y;
+}				t_winsize;
 
 typedef struct	s_img
 {
@@ -142,6 +146,7 @@ typedef struct	s_info
 	t_map map;
 	int err_m;
 	int **fullmap;
+	t_winsize	winsize;
 
 	int map_width;
 	int	map_height;
@@ -183,6 +188,8 @@ typedef struct	s_info
 	int bmpheigth;
 	// test
 	int		**skybox;
+
+	int	texturecount;
 }				t_info;
 
 int save_bmp(t_info *info);
@@ -191,4 +198,8 @@ int dot_cub_test(char **text, t_info *info);
 int dot_mapset(char **text, t_info *info);
 int ft_map(t_info *info, char *line, int *i);
 int ft_errorprint(int a, t_info *info);
+
+void    ft_input_texture_free(t_info *info);
+int ft_map_info(t_info *info);
+void ft_tool_mem_free(t_info *info);
 #endif

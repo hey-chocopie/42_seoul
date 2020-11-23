@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/13 15:58:50 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/18 19:06:29 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/23 13:08:11 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		bmp_pixel_date(int file, t_info *info)
 	{
 		while (++x < info -> bmpwidth)
 		{
-			color = info->img.data[info -> bmpwidth * y + x];
+			color = info->img.data[(info->img).size_l / (info->img.bpp / 8) *y  + x];
 			write(file, &color, 4);
 		}
 		x = -1;

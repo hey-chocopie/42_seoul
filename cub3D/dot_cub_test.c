@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 20:11:44 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/21 20:02:07 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/23 18:04:04 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,21 @@ int ft_R(t_info *info, char **text)
 		if ((*text)[i] == ' ')
 			i++;
 		if (((*text)[i] != ' ' && (*text)[i] < '0' && (*text)[i] > '9' && (*text)[i] != 0) || flag == 3)
+		{
+			info->err_m = -22;
+			ft_printf("check R");
 			return (-1);
+		}
+		printf("info -> width %d, info-> height %d\n", info ->width, info->height);
 	}
-	return (0);
+	if((info->winsize.size_x) < info->width)
+		info->width =  info->winsize.size_x;
+	if((info->winsize.size_y) < info->height)
+		info->height = info->winsize.size_y;
+	info->bmpwidth = info->width;
+	info->bmpheigth = info->height;
+return (0);
+
 }
 
 int		 texture_value(t_info *info, int adr, char *textsave)
@@ -188,7 +200,6 @@ int ft_diretion(t_info *info, char **text, int jump, int adr)
 int	dot_cub_test(char **text, t_info *info)
 {
 	int i;
-
 	i = 0;
 	if(((*text)[i] == '1' ||  info->err_m == 1) && (*text)[i] != 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:30:20 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/21 20:39:36 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/23 20:06:44 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,16 +141,15 @@ void	draw(t_info *info)
 	{
 		for (int x = 0; x < info->width; x++)
 		{
-		//	printf("y = %d, x = %d\n", y, x);
 			info->img.data[(info->img).size_l / (info->img.bpp / 8)	*y  + x] = info->buf[y][x];		
-			//* info->width
 		}
 	}
-	mlx_put_image_to_window(info->mlx, info->win, info->img.img, 0, 0);
-	mlx_string_put(info->mlx, info->win, 20, (*info).height - 20, 16711680, "hoylee_cub3d");
 	if(info->bmpflag == 0)
 		save_bmp(info);
-	info->bmpflag = 1;
+	info->bmpflag =1;
+	mlx_put_image_to_window(info->mlx, info->win, info->img.img, 0, 0);
+	mlx_string_put(info->mlx, info->win, 20, (*info).height - 20, 16711680, "hoylee_cub3d");
+
 }
 
 void	calc(t_info *info)
@@ -594,72 +593,72 @@ void	load_texture(t_info *info)
 
 }
 
-void	ft_input_texture_free(t_info *info)
-{
-	if(info->no_texture != 0)
-	{
-		free(info -> no_texture);
-		info->no_texture = 0;
-	}
-	else if(info->so_texture != 0)
-	{
-		free(info -> so_texture);
-		info->so_texture = 0;
-	}
-	else if(info->we_texture != 0)
-	{
-		free(info -> we_texture);
-		info->we_texture = 0;
-	}
-	else if(info->ea_texture != 0)
-	{
-		free(info -> ea_texture);
-		info->ea_texture = 0;
-	}
-	else if(info->s_texture != 0)
-	{
-		free(info -> s_texture);
-		info->s_texture = 0;
-	}
-	else if(info->ft_texture != 0)
-	{
-		free(info -> ft_texture);
-		info->ft_texture = 0;
-	}
-	else if(info->ct_texture != 0)
-	{
-		free(info -> ct_texture);
-		info->ct_texture = 0;
-	}
-}
+//void	ft_input_texture_free(t_info *info)
+//{
+//	if(info->no_texture != 0)
+//	{
+//		free(info -> no_texture);
+//		info->no_texture = 0;
+//	}
+//	else if(info->so_texture != 0)
+//	{
+//		free(info -> so_texture);
+//		info->so_texture = 0;
+//	}
+//	else if(info->we_texture != 0)
+//	{
+//		free(info -> we_texture);
+//		info->we_texture = 0;
+//	}
+//	else if(info->ea_texture != 0)
+//	{
+//		free(info -> ea_texture);
+//		info->ea_texture = 0;
+//	}
+//	else if(info->s_texture != 0)
+//	{
+//		free(info -> s_texture);
+//		info->s_texture = 0;
+//	}
+//	else if(info->ft_texture != 0)
+//	{
+//		free(info -> ft_texture);
+//		info->ft_texture = 0;
+//	}
+//	else if(info->ct_texture != 0)
+//	{
+//		free(info -> ct_texture);
+//		info->ct_texture = 0;
+//	}
+//}
 
-int		ft_mapcheck(t_info *info)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-
-	while (i < info->map.y)
-	{
-		j = 0;
-		while (j < info->map.x)
-		{
-			if (info->map.tab[i][j] != '1' && i == 0)
-				return (-1);
-			else if (info->map.tab[i][j] != '1' && i == info->map.y - 1)
-				return (-1);
-			else if (info->map.tab[i][j] != '1' && j == 0)
-				return (-1);
-			else if (info->map.tab[i][j] != '1' && j == info->map.x - 1)
-				return (-1);
-			j++;
-		}
-		i++;
-	}
-	return (0);
-}
+//int		ft_mapcheck(t_info *info)
+//{
+//	int		i;
+//	int		j;
+//
+//	i = 0;
+//	j = 0;
+//
+//	while (i < info->map.y)
+//	{
+//		j = 0;
+//		while (j < info->map.x)
+//		{
+//			if (info->map.tab[i][j] != '1' && i == 0)
+//				return (-1);
+//			else if (info->map.tab[i][j] != '1' && i == info->map.y - 1)
+//				return (-1);
+//			else if (info->map.tab[i][j] != '1' && j == 0)
+//				return (-1);
+//			else if (info->map.tab[i][j] != '1' && j == info->map.x - 1)
+//				return (-1);
+//			j++;
+//		}
+//		i++;
+//	}
+//	return (0);
+//}
 
 void	ft_pos(t_info *info)
 {
@@ -692,102 +691,103 @@ void	ft_pos(t_info *info)
 		}
 		j = -1;
 	}
+	info->planeX = info->dirY * (0.66);
+	info->planeY = info->dirX * (-0.66);
+
+
 }
 
-int ft_mapcp(t_info *info)
-{
-	int		**mapsave;
-	int		i;
-	int		j;
-
-	if(!(mapsave = (int **)malloc(sizeof(int *) * (info->map.y))))
-		return(-12);
-	i = 0;
-	while(i < info->map.y)
-	{
-		if(!(mapsave[i] = (int *)malloc(sizeof(int) * (info->map.x))))
-		{
-			free(mapsave);
-			return(-12);
-		}
-		i++;
-	}
-	i = 0;
-	while(i < info->map.y)
-	{
-		j = 0;
-		while(j < info->map.x)
-		{
-			if(info->map.tab[i][j] > '2')
-				mapsave[i][j] = 0;
-			else
-				mapsave[i][j] = info->map.tab[i][j] - 48;
-			j++;
-		}
-		i++;
-	}
-	info->fullmap = mapsave;
-	i = -1;
-	j = 0;
-	while(i++ < info-> map.y)
-	{
-		free(info->map.tab[i]);
-		info->map.tab[i] = 0;
-	}
-	free(info->map.tab);
-	info->map.tab = 0;
-	return(0);
-}
+//int ft_mapcp(t_info *info)
+//{
+//	int		**mapsave;
+//	int		i;
+//	int		j;
+//
+//	if(!(mapsave = (int **)malloc(sizeof(int *) * (info->map.y))))
+//		return(-12);
+//	i = 0;
+//	while(i < info->map.y)
+//	{
+//		if(!(mapsave[i] = (int *)malloc(sizeof(int) * (info->map.x))))
+//		{
+//			free(mapsave);
+//			return(-12);
+//		}
+//		i++;
+//	}
+//	i = 0;
+//	while(i < info->map.y)
+//	{
+//		j = 0;
+//		while(j < info->map.x)
+//		{
+//			if(info->map.tab[i][j] > '2')
+//				mapsave[i][j] = 0;
+//			else
+//				mapsave[i][j] = info->map.tab[i][j] - 48;
+//			j++;
+//		}
+//		i++;
+//	}
+//	info->fullmap = mapsave;
+//	i = -1;
+//	j = 0;
+//	while(i++ < info-> map.y)
+//	{
+//		free(info->map.tab[i]);
+//		info->map.tab[i] = 0;
+//	}
+//	free(info->map.tab);
+//	info->map.tab = 0;
+//	return(0);
+//}
 
 	int ft_errorprint(int a, t_info *info)
 	{
 		info->err_m = -a;
 		return (-1);
 	}
-
-int	main(void)
+void ft_setinfo(t_info *info)
 {
-	t_info info;
-	int sizexx;
-	int	sizeyy;
+	info->map.x = 0;
+	info->map.y = 0;
 
-	info.map.x = 0;
-	info.map.y = 0;
+	info->map.spr = 0;
+	info->map.tab = NULL;
+	info->no_texture = 0;
+	info->so_texture = 0;
+	info->we_texture = 0;
+	info->ea_texture = 0;
+	info->s_texture = 0;
+	info->ft_texture = 0;
+	info->ct_texture = 0;
 
-	info.map.spr = 0;
-	info.map.tab = NULL;
-	info.no_texture = 0;
-	info.so_texture = 0;
-	info.we_texture = 0;
-	info.ea_texture = 0;
-	info.s_texture = 0;
-	info.ft_texture = 0;
-	info.ct_texture = 0;
+	info->f_texture = -1;
+	info->c_texture = -1;
 
-	info.f_texture = -1;
-	info.c_texture = -1;
+	info->bmpflag = 0;
+	info->posX = 22.0;
+	info->posY = 11.5;
+	info->dirX = 1.0;
+	info->dirY = 0.0;
+	info->planeX = 0.66;
+	info->planeY = 0.0;
+	info->key_a = 0;
+	info->key_w = 0;
+	info->key_s = 0;
+	info->key_d = 0;
+	info->key_esc = 0;
 
-	info.bmpflag = 0;
-	info.posX = 22.0;
-	info.posY = 11.5;
-	info.dirX = 1.0;
-	info.dirY = 0.0;
-	info.planeX = 0.66;
-	info.planeY = 0.0;
-	info.key_a = 0;
-	info.key_w = 0;
-	info.key_s = 0;
-	info.key_d = 0;
-	info.key_esc = 0;
+	info->err_m = 0;
+	info->texturecount = 15;
 
-	info.err_m = 0;
-	int texturecount = 15;
-	int x = 0;
 
-	info.mlx = mlx_init();
-	mlx_get_screen_size(info.mlx, &sizexx, &sizeyy);
-	info.width = 600;
-	info.height = 600;
+	info->width = 600;
+	info->height = 600;
+}
+
+int ft_mapparse(t_info *info)
+{
 	int fd;
 	char *text;
 	int check;
@@ -805,63 +805,87 @@ int	main(void)
 			i++;
 		text = i + text;	
 		aa = text;
-		if(0 > (errno =  dot_cub_test(&text, &info)))
+		if(0 > (errno = dot_cub_test(&text, info)))
 		{
-			ft_input_texture_free(&info);
-			if(info.err_m != 0)
-				ft_printf("%d : %s", info.err_m*(-1), strerror(info.err_m));		
+			printf("dural;");
+			ft_input_texture_free(info);
+			if(info->err_m != 0)
+				ft_printf("%d : %s", info->err_m*(-1), strerror(info->err_m));
 			ft_printf("%d : %s" , errno*(-1),  strerror(errno));
 			return (-1);
 		}
 		free(aa);
 	}
 	close(fd);
-	ft_pos(&info);
-	if(-1 == ft_mapcheck(&info))
-	{
-		ft_printf("please map check \n %d : %s", -22*(-1), strerror(-22));		
-		ft_input_texture_free(&info);
-		return(-1);
-	}
-	if(0 > (info.err_m =ft_mapcp(&info)))
-	{
-		ft_printf("Cannot allocate memory \n %d : %s", info.err_m*(-1), strerror(info.err_m));		
-		ft_input_texture_free(&info);
-		return(-1);
-	}
-	info.planeX = info.dirY * (0.66);
-	info.planeY = info.dirX * (-0.66);
 
-	if(sizexx <info.width)
-	{
-		info.width =  sizexx;	
-	}
-	if(sizeyy <info.height)
-	{
-		info.height = sizeyy;
-	}
-	info.bmpwidth = info.width;
-	info.bmpheigth = info.height;
+	return(0);
+}
 
-	if (!(info.buf = (int **)malloc(sizeof(int *) * info.height)))
+int ft_buf_malloc(t_info *info)
+{
+	int i = 0;
+	if (!(info->buf = (int **)malloc(sizeof(int *) * info->height)))
 	{
-		ft_printf("%d : %s", errno, strerror(info.err_m));		
+		ft_input_texture_free(info);
+		ft_printf("%d : %s", 12, strerror(-12));		
 		return (-1);
 	}
-	while(x < info.height)
+	while(i < info->height)
 	{
-		if (!(info.buf[x++] = (int *)malloc(sizeof(int) * (info.width))))
-			return (-1);
-	}
-	if (!(info.zBuffer = (double *)malloc(sizeof(double) * (info.width))))
-		return (-1);
-	for (int i = 0; i < info.height; i++)
-	{
-		for (int j = 0; j < info.width; j++)
+		if (!(info->buf[i] = (int *)malloc(sizeof(int) * (info->width))))
 		{
-			info.buf[i][j] = 0;
+			ft_input_texture_free(info);
+			free(info->buf);
+			info->buf = 0;
+			ft_printf("%d : %s", 12, strerror(-12));		
+			return (-1);
 		}
+		i++;
 	}
+	i = 0;
+//	while (i < info->width)
+//	{
+//		info->buf[i] = 0;
+//		i++;
+//	}
+	if (!(info->zBuffer = (double *)malloc(sizeof(double) * (info->width))))
+	{	
+		ft_input_texture_free(info);
+		free(info->buf);
+		info->buf = 0;
+		ft_tool_mem_free(info);
+		return (-1);
+	}
+	i = 0;
+	int j = 0;
+	while(i < info->height)
+	{
+		j = 0;
+		while(j < info->width)
+		{
+			info->buf[i][j] = 0;
+			j++;
+		}
+		i++;
+	}
+
+	return(0);
+}
+
+int	main(void)
+{
+	t_info info;
+	ft_setinfo(&info);
+
+	info.mlx = mlx_init();
+	mlx_get_screen_size(info.mlx, &info.winsize.size_x, &info.winsize.size_y);
+	if(-1 == ft_mapparse(&info))
+		return(-1);
+	ft_pos(&info);
+	if(-1 == ft_map_info(&info))
+		return (-1);
+
+	ft_buf_malloc(&info);
 	if (!(info.skybox = (int **)malloc(sizeof(int *) * 1)))
 		return (-1);
 	if (!(info.skybox[0] = (int *)malloc(sizeof(int) * (642 * 360))))
@@ -874,15 +898,15 @@ int	main(void)
 		}
 	}
 
-	if (!(info.texture = (int **)malloc(sizeof(int *) * texturecount)))
+	if (!(info.texture = (int **)malloc(sizeof(int *) * info.texturecount)))
 		return (-1);
 
-	for (int i = 0; i < texturecount ; i++)
+	for (int i = 0; i < info.texturecount ; i++)
 	{
 		if (!(info.texture[i] = (int *)malloc(sizeof(int) * (texHeight * texWidth))))
 			return (-1);
 	}
-	for (int i = 0; i < texturecount ; i++)
+	for (int i = 0; i < info.texturecount ; i++)
 	{
 		for (int j = 0; j < texHeight * texWidth; j++)
 		{
@@ -899,8 +923,10 @@ int	main(void)
 	info.win = mlx_new_window(info.mlx,  info.width, info.height,"mlx");
 	info.img.img = mlx_new_image(info.mlx,  info.width ,info.height);
 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
+
 	mlx_loop_hook(info.mlx, &main_loop, &info);
 	mlx_hook(info.win, X_EVENT_KEY_PRESS, 0, &key_press, &info);
 	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 0, &key_release, &info);
 	mlx_loop(info.mlx);
+	printf("1");
 }
