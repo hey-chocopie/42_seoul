@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:30:20 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/23 20:06:44 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/25 14:10:50 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 
 struct Sprite	sprite[numSprites] =
 {
-	{20.5, 11.5, 10}, //green light in front of playerstart
+//	{20.5, 11.5, 10}, //green light in front of playerstart
 	//green lights in every room
-	{18.5,4.5, 10},
-	{10.0,4.5, 10},
-	{10.0,12.5,10},
-	{3.5, 6.5, 10},
-	{3.5, 20.5,10},
-	{3.5, 14.5,10},
-	{14.5,20.5,10},
+//	{18.5,4.5, 10},
+//	{10.0,4.5, 10},
+//	{10.0,12.5,10},
+//	{3.5, 6.5, 10},
+//	{3.5, 20.5,10},
+//	{3.5, 14.5,10},
+//	{14.5,20.5,10},
 
 	//row of pillars in front of wall: fisheye test
 //	{18.5, 10.5, 1},
@@ -32,14 +32,14 @@ struct Sprite	sprite[numSprites] =
 //	{18.5, 12.5, 1},
 
 	//some barrels around the map
-	{21.5, 1.5, 8},
-	{15.5, 1.5, 8},
-	{16.0, 1.8, 8},
-	{16.2, 1.2, 8},
-	{3.5,  2.5, 8},
-	{9.5, 15.5, 8},
-	{10.0, 15.1,8},
-	{10.5, 15.8,8},
+//	{21.5, 1.5, 8},
+//	{15.5, 1.5, 8},
+//	{16.0, 1.8, 8},
+//	{16.2, 1.2, 8},
+//	{3.5,  2.5, 8},
+//	{9.5, 15.5, 8},
+//	{10.0, 15.1,8},
+//	{10.5, 15.8,8},
 };
 
 int		spriteOrder[numSprites];
@@ -152,62 +152,12 @@ void	draw(t_info *info)
 
 }
 
+
 void	calc(t_info *info)
 {
-	//FLOOR CASTING
-	for(int y = info->height / 2 + 1; y < info->height; ++y)
-	{
-		// rayDir for leftmost ray (x = 0) and rightmost ray (x = w)
-		float rayDirX0 = info->dirX - info->planeX;
-		float rayDirY0 = info->dirY - info->planeY;
-		float rayDirX1 = info->dirX + info->planeX;
-		float rayDirY1 = info->dirY + info->planeY;
-		// Current y position compared to the center of the screen (the horizon)
-		int p = y - info->height / 2;
-		// Vertical position of the camera.
-		float posZ = 0.5 * info->height;
-		// Horizontal distance from the camera to the floor for the current row.
-		// 0.5 is the z position exactly in the middle between floor and ceiling.
-		float rowDistance = posZ / p;
-		// calculate the real world step vector we have to add for each x (parallel to camera plane)
-		// adding step by step avoids multiplications with a weight in the inner loop
-		float floorStepX = rowDistance * (rayDirX1 - rayDirX0) / info->width;
-		float floorStepY = rowDistance * (rayDirY1 - rayDirY0) / info->width;
-		// real world coordinates of the leftmost column. This will be updated as we step to the right.
-		float floorX = info->posX + rowDistance * rayDirX0;
-		float floorY = info->posY + rowDistance * rayDirY0;
-		for(int x = 0; x < info->width; ++x)
-		{
-			// the cell coord is simply got from the integer parts of floorX and floorY
-			int cellX = (int)(floorX);
-			int cellY = (int)(floorY);
-			// get the texture coordinate from the fractional part
-			int tx = (int)(texWidth * (floorX - cellX)) & (texWidth - 1);
-			int ty = (int)(texHeight * (floorY - cellY)) & (texHeight - 1);
-
-			floorX += floorStepX;
-			floorY += floorStepY;
-
-			int color;
-	//texWidth
-//(info->img).size_l / (info->img.bpp / 8)	*y  + x
-// 또여기.
-
-			color = info->texture[5][ texWidth *ty + tx];
-			color = (color >> 1) & 8355711; // make a bit darker
-			info->buf[y][x] = color;
-			//ceiling (symmetrical, at height - y - 1 instead of y)
-			color = info->texture[6][texWidth * ty + tx];
-			color = (color >> 1) & 8355711; // make a bit darker
-			info->buf[info->height - y - 1][x] = color;
-
-
-		}
-	}
-	// WALL CASTING
+	ft_calc_fc(info);
 	for(int x = 0; x < info->width; x++)
 	{
-		//calculate ray position and direction
 		double cameraX = 2 * x / (double)info->width - 1; //x-coordinate in camera space
 		double rayDirX = info->dirX + info->planeX * cameraX;
 		double rayDirY = info->dirY + info->planeY * cameraX;
@@ -226,7 +176,6 @@ void	calc(t_info *info)
 		int stepY;
 		int hit = 0; //was there a wall hit?
 		int side; //was a NS or a EW wall hit?
-		//calculate step and initial sideDist
 		if(rayDirX < 0)
 		{
 			stepX = -1;
@@ -284,24 +233,24 @@ void	calc(t_info *info)
 		else           wallX = info->posX + perpWallDist * rayDirX;
 		wallX -= floor((wallX));
 		//x coordinate on the texture
-		int texX = (int)(wallX * (double)texWidth);
-		if(side == 0 && rayDirX > 0) texX = texWidth - texX - 1;
-		if(side == 1 && rayDirY < 0) texX = texWidth - texX - 1;
+		int texX = (int)(wallX * (double)info->texture_x_size);
+		if(side == 0 && rayDirX > 0) texX = info->texture_x_size - texX - 1;
+		if(side == 1 && rayDirY < 0) texX = info->texture_x_size - texX - 1;
 		// TODO: an integer-only bresenham or DDA like algorithm could make the texture coordinate stepping faster
 		// How much to increase the texture coordinate per screen pixel
-		double step = 1.0 * texHeight / lineHeight;
+		double step = 1.0 * info->texture_y_size / lineHeight;
 		// Starting texture coordinate
 		double texPos = (drawStart - info->height / 2 + lineHeight / 2) * step;
 		for(int y = drawStart; y < drawEnd; y++)
 		{
-			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-			int texY = (int)texPos & (texHeight - 1);
+			// Cast the texture coordinate to integer, and mask with (info->texture_y_size - 1) in case of overflow
+			int texY = (int)texPos & (info->texture_y_size - 1);
 			texPos += step;
 			// hoyleetest
 			if (texNum < 4)
 				texNum = 0;
 			// 이거 바꿔서 코드 짜야함. 
-			int color = info->texture[texNum][texHeight * texY + texX];
+			int color = info->texture[texNum][info->texture_y_size * texY + texX];
 			if(side == 1) color = (color >> 1) & 8355711;
 			info->buf[y][x] = color;
 		}
@@ -365,7 +314,7 @@ void	calc(t_info *info)
 		//loop through every vertical stripe of the sprite on screen
 		for(int stripe = drawStartX; stripe < drawEndX; stripe++)
 		{
-			int texX = (int)((256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * texWidth / spriteWidth) / 256);
+			int texX = (int)((256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * info->texture_x_size / spriteWidth) / 256);
 			//the conditions in the if are:
 			//1) it's in front of camera plane so you don't see things behind you
 			//2) it's on the screen (left)
@@ -375,17 +324,17 @@ void	calc(t_info *info)
 			for(int y = drawStartY; y < drawEndY; y++) //for every pixel of the current stripe
 			{
 				int d = (y-vMoveScreen) * 256 - info->height * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
-				int texY = ((d * texHeight) / spriteHeight) / 256;
+				int texY = ((d * info->texture_y_size) / spriteHeight) / 256;
 				int color;
-				color = info->texture[sprite[spriteOrder[i]].texture][texWidth * texY + texX];
+				color = info->texture[sprite[spriteOrder[i]].texture][info->texture_x_size * texY + texX];
 				if(spriteflag < 5000000 && sprite[spriteOrder[i]].texture == 4)
 				{
-				color = info->texture[sprite[spriteOrder[i]].texture][texWidth * texY + texX]; //get current color from the texture
+				color = info->texture[sprite[spriteOrder[i]].texture][info->texture_x_size * texY + texX]; //get current color from the texture
 					spriteflag++;
 				}
 				else if(sprite[spriteOrder[i]].texture == 4)
 				{
-				color = info->texture[9][texWidth * texY + texX];
+				color = info->texture[7][info->texture_x_size * texY + texX];
 					spriteflag++;
 					if(spriteflag >10000000)
 						spriteflag = 0;
@@ -503,31 +452,38 @@ void	load_image(t_info *info, int *texture, char *path, t_img *img)
 
 void	load_hoyleetexture(t_info *info)
 {
+	int i;
+	int j;
 
-	for (int x = 0; x < texWidth; x++)
+	i = 0;
+	j = 0;
+	while(i < info->texture_x_size)
 	{
-		for (int y = 0; y < texHeight; y++)
+		while(j < info->texture_y_size)
 		{
-//			int xorcolor = (x * 256 / texWidth) ^ (y * 256 / texHeight);
-//			int ycolor = y * 256 / texHeight;
-//			int xycolor = y * 128 / texHeight + x * 128 / texWidth;
-			(*info).texture[11][texWidth * y + x] = 65536 * 254 * (x != y && x != texWidth - y); //flat red texture with black cross
-//			info.texture[1][texWidth * y + x] = xycolor + 256 * xycolor + 65536 * xycolor; //sloped greyscale
-//			info.texture[2][texWidth * y + x] = 256 * xycolor + 65536 * xycolor; //sloped yellow gradient
-//			info.texture[3][texWidth * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor; //xor greyscale
-//			info.texture[4][texWidth * y + x] = 256 * xorcolor; //xor green
-//			info.texture[5][texWidth * y + x] = 65536 * 192 * (x % 16 && y % 16); //red bricks
-//			info.texture[6][texWidth * y + x] = 65536 * ycolor; //red gradient
-//			info.texture[7][texWidth * y + x] = 128 + 256 * 128 + 65536 * 128; //flat grey texture
+			(*info).texture[0][info->texture_x_size * j + i] = 65536 * 0 + 254 * 248 + 223;
+			(*info).texture[1][info->texture_x_size * j + i] = 65536 * 254 + 254 * 236 + 2;
+			(*info).texture[2][info->texture_x_size * j + i] = 65536 * 239 + 254 * 194 + 233;
+			(*info).texture[3][info->texture_x_size * j + i] = 65536 * 172 + 254 * 161 + 232;
+			(*info).texture[5][info->texture_x_size * j + i] = 65536 * 1 + 254 * 42 + 45;
+			(*info).texture[6][info->texture_x_size * j + i] = 65536 * 110 + 254 * 58 + 108;
+			if(info->f_texture != 0)
+				(*info).texture[5][info->texture_x_size * j + i] = info->f_texture;
+			if(info->c_texture != 0)
+				(*info).texture[6][info->texture_x_size * j + i] = info->c_texture;
+			j++;
 		}
+		j = 0;
+		i++;
 	}
-
 }
 
 void	map_texture(t_info *info)
 {
 	t_img	img;
 
+	load_image(info, info->texture[4], "textures/sprite8smallgom.xpm", &img);
+	load_image(info, info->texture[7], "textures/sprite7biggom.xpm", &img);
 	if(info -> no_texture != 0)
 		load_image(info, info->texture[0], info -> no_texture, &img);
 	if(info -> so_texture != 0)
@@ -542,7 +498,8 @@ void	map_texture(t_info *info)
 		load_image(info, info->texture[5], info -> ft_texture, &img);
 	if(info -> ct_texture != 0)
 		load_image(info, info->texture[6], info -> ct_texture, &img);
-
+	if(info -> s_texture != 0)
+		load_image(info, info->texture[7], info -> s_texture, &img);
 }
 
 void	load_texture(t_info *info)
@@ -550,13 +507,12 @@ void	load_texture(t_info *info)
 	t_img	img;
 
 //	load_image(info, info->texture[0], "textures/eagle.xpm", &img);
-	//textures/eagle.xpm"
 //	load_image(info, info->texture[1], "textures/sprite8smallgom.xpm", &img);
-	load_image(info, info->texture[2], "textures/purplestone.xpm", &img);
-	load_image(info, info->texture[3], "textures/greystone.xpm", &img);
-	load_image(info, info->texture[4], "textures/bluestone.xpm", &img);
-	load_image(info, info->texture[5], "textures/mossy.xpm", &img);
-	load_image(info, info->texture[6], "textures/wood.xpm", &img);
+//	load_image(info, info->texture[2], "textures/purplestone.xpm", &img);
+//	load_image(info, info->texture[3], "textures/greystone.xpm", &img);
+//	load_image(info, info->texture[4], "textures/bluestone.xpm", &img);
+//	load_image(info, info->texture[5], "textures/mossy.xpm", &img);
+//	load_image(info, info->texture[6], "textures/wood.xpm", &img);
 	load_image(info, info->texture[7], "textures/colorstone.xpm", &img);
 	load_image(info, info->texture[8], "textures/barrel.xpm", &img);
 	load_image(info, info->texture[9], "textures/pillar.xpm", &img);
@@ -568,8 +524,6 @@ void	load_texture(t_info *info)
 
 	load_image(info, info->texture[9], "textures/sprite7biggom.xpm", &img);
 	load_image(info, info->texture[14], "textures/test4whitewall.xpm", &img);
-	
-	load_image(info, info->skybox[0], "textures/22.xpm", &img);
 
 
 //	printf("dlrpanjswl?==%sfin\n", info -> so_texture);
@@ -779,11 +733,19 @@ void ft_setinfo(t_info *info)
 	info->key_esc = 0;
 
 	info->err_m = 0;
-	info->texturecount = 15;
-
+	info->texturecount = 8;
+	info->texture = 0;
+	info->zBuffer = 0;
 
 	info->width = 600;
 	info->height = 600;
+
+	info->moveSpeed = 0.05;
+	info->rotSpeed = 0.05;
+
+	info->texture_x_size = 64;
+	info->texture_y_size = 64;
+//info->texture_x_size
 }
 
 int ft_mapparse(t_info *info)
@@ -842,17 +804,8 @@ int ft_buf_malloc(t_info *info)
 		}
 		i++;
 	}
-	i = 0;
-//	while (i < info->width)
-//	{
-//		info->buf[i] = 0;
-//		i++;
-//	}
 	if (!(info->zBuffer = (double *)malloc(sizeof(double) * (info->width))))
 	{	
-		ft_input_texture_free(info);
-		free(info->buf);
-		info->buf = 0;
 		ft_tool_mem_free(info);
 		return (-1);
 	}
@@ -868,8 +821,41 @@ int ft_buf_malloc(t_info *info)
 		}
 		i++;
 	}
-
 	return(0);
+}
+
+int ft_texture_malloc(t_info *info)
+{
+	if (!(info->texture = (int **)malloc(sizeof(int *) * info->texturecount)))
+	{
+		ft_tool_mem_free(info);
+		return (-1);
+	}
+	for (int i = 0; i < info->texturecount ; i++)
+	{
+		if (!(info->texture[i] = (int *)malloc(sizeof(int) * (info->texture_y_size * info->texture_x_size))))
+		{
+			ft_tool_mem_free(info);
+			return (-1);
+		}
+	}
+	for (int i = 0; i < info->texturecount ; i++)
+	{
+		for (int j = 0; j < info->texture_y_size * info->texture_x_size; j++)
+		{
+			info->texture[i][j] = 0;
+		}
+	}
+	return(0);
+}
+
+void ft_display_set(t_info *info)
+{
+	info->win = mlx_new_window(info->mlx,  info->width, info->height,"mlx");
+	info->img.img = mlx_new_image(info->mlx,  info->width ,info->height);
+	info->img.data = (int *)mlx_get_data_addr(info->img.img, &info->img.bpp, &info->img.size_l, &info->img.endian);
+
+//	mlx_clear_window(info->mlx, info->win);
 }
 
 int	main(void)
@@ -884,46 +870,13 @@ int	main(void)
 	ft_pos(&info);
 	if(-1 == ft_map_info(&info))
 		return (-1);
-
-	ft_buf_malloc(&info);
-	if (!(info.skybox = (int **)malloc(sizeof(int *) * 1)))
+	if(-1 == ft_buf_malloc(&info))
 		return (-1);
-	if (!(info.skybox[0] = (int *)malloc(sizeof(int) * (642 * 360))))
-		return (-1);
-	for (int i = 0; i <  1; i++)
-	{
-		for (int j = 0; j < 642*360; j++)
-		{
-			info.skybox[i][j] = 0;
-		}
-	}
-
-	if (!(info.texture = (int **)malloc(sizeof(int *) * info.texturecount)))
-		return (-1);
-
-	for (int i = 0; i < info.texturecount ; i++)
-	{
-		if (!(info.texture[i] = (int *)malloc(sizeof(int) * (texHeight * texWidth))))
-			return (-1);
-	}
-	for (int i = 0; i < info.texturecount ; i++)
-	{
-		for (int j = 0; j < texHeight * texWidth; j++)
-		{
-			info.texture[i][j] = 0;
-		}
-	}
+	if(-1 == ft_texture_malloc(&info))
+		return(-1);
 	load_hoyleetexture(&info);
-	load_texture(&info);
 	map_texture(&info);
-	info.moveSpeed = 0.05;
-	info.rotSpeed = 0.05;
-	
-
-	info.win = mlx_new_window(info.mlx,  info.width, info.height,"mlx");
-	info.img.img = mlx_new_image(info.mlx,  info.width ,info.height);
-	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
-
+	ft_display_set(&info);
 	mlx_loop_hook(info.mlx, &main_loop, &info);
 	mlx_hook(info.win, X_EVENT_KEY_PRESS, 0, &key_press, &info);
 	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 0, &key_release, &info);

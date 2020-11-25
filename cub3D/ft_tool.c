@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 11:42:18 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/23 14:00:18 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/24 11:07:58 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,18 @@ void    ft_input_texture_free(t_info *info)
 void	ft_tool_mem_free(t_info *info)
 {
 	int i = -1;
-	ft_input_texture_free(info);
 	while(++i < info->width)
+	{
+		if(info->buf[i] != 0)
 		free(info->buf[i]);
+	}
+	if(info->buf != 0)
+		free(info->buf);
+	ft_input_texture_free(info);
+	if(info -> zBuffer != 0)
+		free(info->zBuffer);
+	if(info->texture != 0)
+		free(info->texture);
+
 	ft_printf("%d : %s", 12, strerror(-12));
 }

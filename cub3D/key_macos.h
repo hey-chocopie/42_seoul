@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:40:13 by oouklich          #+#    #+#             */
-/*   Updated: 2020/11/23 13:59:20 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/24 13:44:07 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,22 +88,11 @@
 # define K_ESC 53
 # define K_TAB 48
 
-/*
-** Mouse
-*/
-# define M_CLK_L 1
-# define M_CLK_R 3
-# define M_CLK_M 2
-# define M_SCR_U 4
-# define M_SCR_D 5
-
 #define X_EVENT_KEY_PRESS	2
 # define X_EVENT_KEY_RELEASE	3
 #define X_EVENT_KEY_EXIT	17
 #define texWidth 64
 #define texHeight 64
-#define mapWidth 24
-#define mapHeight 24
 
 #define numSprites 19
 typedef struct s_winsize
@@ -189,7 +178,10 @@ typedef struct	s_info
 	// test
 	int		**skybox;
 
+	int texture_x_size;
+	int texture_y_size;
 	int	texturecount;
+
 }				t_info;
 
 int save_bmp(t_info *info);
@@ -202,4 +194,5 @@ int ft_errorprint(int a, t_info *info);
 void    ft_input_texture_free(t_info *info);
 int ft_map_info(t_info *info);
 void ft_tool_mem_free(t_info *info);
+int		ft_calc_fc(t_info *info);
 #endif
