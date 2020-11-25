@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:30:20 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/25 14:10:50 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/25 21:08:29 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include "key_macos.h"
 #include "./printf/ft_printf.h"
 
-struct Sprite	sprite[numSprites] =
-{
+
+//struct Sprite	sprite[numSprites] =
+//{
 //	{20.5, 11.5, 10}, //green light in front of playerstart
 	//green lights in every room
 //	{18.5,4.5, 10},
@@ -28,7 +29,7 @@ struct Sprite	sprite[numSprites] =
 
 	//row of pillars in front of wall: fisheye test
 //	{18.5, 10.5, 1},
-	{18.5, 11.5, 4},
+//	{18.5, 11.5, 4},
 //	{18.5, 12.5, 1},
 
 	//some barrels around the map
@@ -40,10 +41,8 @@ struct Sprite	sprite[numSprites] =
 //	{9.5, 15.5, 8},
 //	{10.0, 15.1,8},
 //	{10.5, 15.8,8},
-};
+//};
 
-int		spriteOrder[numSprites];
-double	spriteDistance[numSprites];
 int spriteflag = 0;
 
 
@@ -152,113 +151,143 @@ void	draw(t_info *info)
 
 }
 
+//----------------------
+
+void	ft_calc_w_set(t_info *info, int x)
+{
+	info->cwall.raydir_xy[0] = info->dirX + info->planeX * (2 * x / (double)info->width - 1);
+	info->cwall.raydir_xy[1] = info->dirY + info->planeY * (2 * x / (double)info->width - 1);
+	info->cwall.map_xy[0] = (int)info->posX;
+	info->cwall.map_xy[1] = (int)info->posY;
+	info->cwall.deltadist_xy[0] = fabs(1 / info->cwall.raydir_xy[0]);
+	info->cwall.deltadist_xy[1] = fabs(1 / info->cwall.raydir_xy[1]);
+	info->cwall.hit = 0;
+}
+
+void	ft_calc_w_step_set_info(t_info *info)
+{
+		if(info->cwall.raydir_xy[0] < 0)
+		{
+			info->cwall.step_xy[0] = -1;
+			info->cwall.sidedist_xy[0] = (info->posX - info->cwall.map_xy[0]) * info->cwall.deltadist_xy[0];
+		}
+		else
+		{
+			info->cwall.step_xy[0] = 1;
+			info->cwall.sidedist_xy[0] = (info->cwall.map_xy[0] + 1.0 - info->posX) * info->cwall.deltadist_xy[0];
+		}
+		if(info->cwall.raydir_xy[1] < 0)
+		{
+			info->cwall.step_xy[1] = -1;
+			info->cwall.sidedist_xy[1] = (info->posY - info->cwall.map_xy[1]) * info->cwall.deltadist_xy[1];
+		}
+		else
+		{
+			info->cwall.step_xy[1] = 1;
+			info->cwall.sidedist_xy[1] = (info->cwall.map_xy[1] + 1.0 - info->posY) * info->cwall.deltadist_xy[1];
+		}
+
+}
+
+void	ft_calc_w_ps_map(t_info *info)
+{
+		while (info->cwall.hit == 0)
+		{
+			if(info->cwall.sidedist_xy[0] < info->cwall.sidedist_xy[1])
+			{
+			info->cwall.sidedist_xy[0] += info->cwall.deltadist_xy[0];
+			info->cwall.map_xy[0] += info->cwall.step_xy[0];
+			info->cwall.side = 0;
+			}
+			else
+			{
+			info->cwall.sidedist_xy[1] += info->cwall.deltadist_xy[1];
+			info->cwall.map_xy[1] += info->cwall.step_xy[1];
+			info->cwall.side = 1;
+			}
+			if(info->fullmap[info->cwall.map_xy[0]][info->cwall.map_xy[1]] > 0) info->cwall.hit = 1;
+		}
+		if(info->cwall.side == 0) info->cwall.perpwalldist = (info->cwall.map_xy[0] - info->posX + (1 - info->cwall.step_xy[0]) / 2) / info->cwall.raydir_xy[0];
+		else          info->cwall.perpwalldist = (info->cwall.map_xy[1] - info->posY + (1 - info->cwall.step_xy[1]) / 2) / info->cwall.raydir_xy[1];
+}
+
+
+void	ft_calc_w_set_psline(t_info *info)
+{
+		info->cwall.lineheight = (int)(info->height / info->cwall.perpwalldist);
+		info->cwall.drawstart = -info->cwall.lineheight / 2 + info->height / 2;
+		if(info->cwall.drawstart < 0) info->cwall.drawstart = 0;
+		info->cwall.drawend = info->cwall.lineheight / 2 + info->height / 2;
+		if(info->cwall.drawend >= info->height) info->cwall.drawend = info->height - 1;
+		info->cwall.texnum = info->fullmap[info->cwall.map_xy[0]][info->cwall.map_xy[1]] - 1;
+		if(info->cwall.map_xy[0] == 0)
+			info->cwall.texnum =0;
+		if(info->cwall.map_xy[0] == info->map.y - 1)
+			info->cwall.texnum =1;
+		if(info->cwall.map_xy[1] == 0)
+			info->cwall.texnum =2;
+		if(info->cwall.map_xy[1] == info->map.x - 1)
+			info->cwall.texnum =3;
+
+}
+void	ft_calc_w_set_pstexture(t_info *info)
+{
+		if (info->cwall.side == 0) info->cwall.wall_x = info->posY + info->cwall.perpwalldist * info->cwall.raydir_xy[1];
+		else           info->cwall.wall_x = info->posX + info->cwall.perpwalldist * info->cwall.raydir_xy[0];
+		info->cwall.wall_x -= floor(info->cwall.wall_x);
+		info->cwall.tex_x = (int)(info->cwall.wall_x * (double)info->texture_x_size);
+		if(info->cwall.side == 0 && info->cwall.raydir_xy[0] > 0) info->cwall.tex_x = info->texture_x_size - info->cwall.tex_x - 1;
+		if(info->cwall.side == 1 && info->cwall.raydir_xy[1] < 0) info->cwall.tex_x = info->texture_x_size - info->cwall.tex_x - 1;
+		info->cwall.step = 1.0 * info->texture_y_size / info->cwall.lineheight;
+		info->cwall.texpos = (info->cwall.drawstart - info->height / 2 + info->cwall.lineheight / 2) * info->cwall.step;
+
+}
+
+void	ft_calc_w_put_colr(t_info *info, int x)
+{
+	int j;
+
+	j = info->cwall.drawstart;
+	while(j < info->cwall.drawend)
+	{
+		info->cwall.tex_y = (int) info->cwall.texpos & (info->texture_y_size - 1);
+		info->cwall.texpos += info->cwall.step;
+		int color = info->texture[info->cwall.texnum][info->texture_y_size * info->cwall.tex_y + info->cwall.tex_x];
+		if(info->cwall.side == 1) color = (color / 2) & 8355711;
+		info->buf[j][x] = color;
+		j++;
+	}
+}
+
+void	ft_calc_wall(t_info *info)
+{
+	int x;
+
+	x = 0;
+	while(x < info->width)
+	{
+		ft_calc_w_set(info, x);
+		ft_calc_w_step_set_info(info);
+		ft_calc_w_ps_map(info);
+		ft_calc_w_set_psline(info);
+		ft_calc_w_set_pstexture(info);
+		ft_calc_w_put_colr(info, x);
+		info->zBuffer[x] = info->cwall.perpwalldist;
+		x++;
+	}
+}
 
 void	calc(t_info *info)
 {
 	ft_calc_fc(info);
-	for(int x = 0; x < info->width; x++)
-	{
-		double cameraX = 2 * x / (double)info->width - 1; //x-coordinate in camera space
-		double rayDirX = info->dirX + info->planeX * cameraX;
-		double rayDirY = info->dirY + info->planeY * cameraX;
-		//which box of the map we're in
-		int mapX = (int)info->posX;
-		int mapY = (int)info->posY;
-		//length of ray from current position to next x or y-side
-		double sideDistX;
-		double sideDistY;
-		//length of ray from one x or y-side to next x or y-side
-		double deltaDistX = fabs(1 / rayDirX);
-		double deltaDistY = fabs(1 / rayDirY);
-		double perpWallDist;
-		//what direction to step in x or y-direction (either +1 or -1)
-		int stepX;
-		int stepY;
-		int hit = 0; //was there a wall hit?
-		int side; //was a NS or a EW wall hit?
-		if(rayDirX < 0)
-		{
-			stepX = -1;
-			sideDistX = (info->posX - mapX) * deltaDistX;
-		}
-		else
-		{
-			stepX = 1;
-			sideDistX = (mapX + 1.0 - info->posX) * deltaDistX;
-		}
-		if(rayDirY < 0)
-		{
-			stepY = -1;
-			sideDistY = (info->posY - mapY) * deltaDistY;
-		}
-		else
-		{
-			stepY = 1;
-			sideDistY = (mapY + 1.0 - info->posY) * deltaDistY;
-		}
-		//perform DDA
-		while (hit == 0)
-		{
-			//jump to next map square, OR in x-direction, OR in y-direction
-			if(sideDistX < sideDistY)
-			{
-			sideDistX += deltaDistX;
-			mapX += stepX;
-			side = 0;
-			}
-			else
-			{
-			sideDistY += deltaDistY;
-			mapY += stepY;
-			side = 1;
-			}
-			//Check if ray has hit a wall
-			if(info->fullmap[mapX][mapY] > 0) hit = 1;
-		}
-		//Calculate distance of perpendicular ray (Euclidean distance will give fisheye effect!)
-		if(side == 0) perpWallDist = (mapX - info->posX + (1 - stepX) / 2) / rayDirX;
-		else          perpWallDist = (mapY - info->posY + (1 - stepY) / 2) / rayDirY;
-		//Calculate height of line to draw on screen
-		int lineHeight = (int)(info->height / perpWallDist);
-		//calculate lowest and highest pixel to fill in current stripe
-		int drawStart = -lineHeight / 2 + info->height / 2;
-		if(drawStart < 0) drawStart = 0;
-		int drawEnd = lineHeight / 2 + info->height / 2;
-		if(drawEnd >= info->height) drawEnd = info->height - 1;
-		//texturing calculations
-		int texNum = info->fullmap[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
-		//calculate value of wallX
-		double wallX; //where exactly the wall was hit
-		if (side == 0) wallX = info->posY + perpWallDist * rayDirY;
-		else           wallX = info->posX + perpWallDist * rayDirX;
-		wallX -= floor((wallX));
-		//x coordinate on the texture
-		int texX = (int)(wallX * (double)info->texture_x_size);
-		if(side == 0 && rayDirX > 0) texX = info->texture_x_size - texX - 1;
-		if(side == 1 && rayDirY < 0) texX = info->texture_x_size - texX - 1;
-		// TODO: an integer-only bresenham or DDA like algorithm could make the texture coordinate stepping faster
-		// How much to increase the texture coordinate per screen pixel
-		double step = 1.0 * info->texture_y_size / lineHeight;
-		// Starting texture coordinate
-		double texPos = (drawStart - info->height / 2 + lineHeight / 2) * step;
-		for(int y = drawStart; y < drawEnd; y++)
-		{
-			// Cast the texture coordinate to integer, and mask with (info->texture_y_size - 1) in case of overflow
-			int texY = (int)texPos & (info->texture_y_size - 1);
-			texPos += step;
-			// hoyleetest
-			if (texNum < 4)
-				texNum = 0;
-			// 이거 바꿔서 코드 짜야함. 
-			int color = info->texture[texNum][info->texture_y_size * texY + texX];
-			if(side == 1) color = (color >> 1) & 8355711;
-			info->buf[y][x] = color;
-		}
+	ft_calc_wall(info);
 
-		//SET THE ZBUFFER FOR THE SPRITE CASTING
-		info->zBuffer[x] = perpWallDist; //perpendicular distance is used
-	}
+	int		numSprites = info->map.spr;
+	int		spriteOrder[numSprites];
+	double	spriteDistance[numSprites];
+	struct	Sprite *sprite;
 
+	sprite	= 	info->s_save;
 	//SPRITE CASTING
 	//sort sprites from far to close
 	for(int i = 0; i < numSprites; i++)
@@ -355,7 +384,7 @@ int	main_loop(t_info *info)
 	calc(info);
 	draw(info);
 	key_update(info);
-	mlx_hook((*info).win, 17, 1L << 17, mouseexit, info);
+	//mlx_hook((*info).win, 17, 1L << 17, mouseexit, info);
 	return (0);
 }
 
@@ -467,9 +496,9 @@ void	load_hoyleetexture(t_info *info)
 			(*info).texture[3][info->texture_x_size * j + i] = 65536 * 172 + 254 * 161 + 232;
 			(*info).texture[5][info->texture_x_size * j + i] = 65536 * 1 + 254 * 42 + 45;
 			(*info).texture[6][info->texture_x_size * j + i] = 65536 * 110 + 254 * 58 + 108;
-			if(info->f_texture != 0)
+			if(info->f_texture != -1)
 				(*info).texture[5][info->texture_x_size * j + i] = info->f_texture;
-			if(info->c_texture != 0)
+			if(info->c_texture != -1)
 				(*info).texture[6][info->texture_x_size * j + i] = info->c_texture;
 			j++;
 		}
@@ -482,8 +511,6 @@ void	map_texture(t_info *info)
 {
 	t_img	img;
 
-	load_image(info, info->texture[4], "textures/sprite8smallgom.xpm", &img);
-	load_image(info, info->texture[7], "textures/sprite7biggom.xpm", &img);
 	if(info -> no_texture != 0)
 		load_image(info, info->texture[0], info -> no_texture, &img);
 	if(info -> so_texture != 0)
@@ -500,6 +527,9 @@ void	map_texture(t_info *info)
 		load_image(info, info->texture[6], info -> ct_texture, &img);
 	if(info -> s_texture != 0)
 		load_image(info, info->texture[7], info -> s_texture, &img);
+
+	load_image(info, info->texture[4], "textures/sprite8smallgom.xpm", &img);
+	load_image(info, info->texture[7], "textures/sprite7biggom.xpm", &img);
 }
 
 void	load_texture(t_info *info)
@@ -635,12 +665,6 @@ void	ft_pos(t_info *info)
 				info->dirX *= (c == 'W') ? -1 : 1;
 				info->dirY = (c == 'S' || c == 'N') ? 1 : 0;
 				info->dirY *= (c == 'N') ? -1 : 1;
-				
-				info->posY = 5 + 0.5;
-				info->posX = 2 + 0.5;
-				//rintf("pos x %f, pos Y,%f " ,info->posX, info->posY);
-
-				//info->err.p++;
 			}
 		}
 		j = -1;
@@ -745,6 +769,8 @@ void ft_setinfo(t_info *info)
 
 	info->texture_x_size = 64;
 	info->texture_y_size = 64;
+	info-> s_save = 0;
+	info-> s_tmp = 0;
 //info->texture_x_size
 }
 

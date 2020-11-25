@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_macos.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yohlee <yohlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/19 17:40:13 by oouklich          #+#    #+#             */
-/*   Updated: 2020/11/24 13:44:07 by hoylee           ###   ########.fr       */
+/*   Created: 2020/11/25 15:27:39 by hoylee            #+#    #+#             */
+/*   Updated: 2020/11/25 20:53:02 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@
 #define texWidth 64
 #define texHeight 64
 
-#define numSprites 19
+//#define numSprites 19
 typedef struct s_winsize
 {
 	int size_x;
@@ -129,6 +129,34 @@ typedef struct	s_map
 	int				spr;
 }				t_map;
 
+typedef struct	s_cwall
+{
+	double raydir_xy[2];
+	int     map_xy[2];
+	double  sidedist_xy[2];
+	double deltadist_xy[2];
+	double perpwalldist;
+	int		step_xy[2];
+	int		hit;
+	int		side;
+	
+	int		lineheight;
+	int		drawstart;
+	int		drawend;
+	int		texnum;
+
+	double	wall_x;
+	double	step;
+	double	texpos;
+	int		tex_y;
+	int		tex_x;
+}				t_cwall;
+
+
+typedef struct	s_csp
+{
+	int	numsprites;
+}				t_cspr;
 
 typedef struct	s_info
 {
@@ -181,7 +209,10 @@ typedef struct	s_info
 	int texture_x_size;
 	int texture_y_size;
 	int	texturecount;
-
+	
+	struct Sprite *s_save;
+	struct Sprite *s_tmp;
+	t_cwall cwall;
 }				t_info;
 
 int save_bmp(t_info *info);

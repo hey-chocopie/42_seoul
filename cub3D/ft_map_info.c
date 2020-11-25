@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 11:41:41 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/23 11:44:22 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/25 20:46:52 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int ft_mapcp(t_info *info)
         j = 0;
         while(j < info->map.x)
         {
-            if(info->map.tab[i][j] > '2')
+            if(info->map.tab[i][j] >= '2')
                 mapsave[i][j] = 0;
             else
                 mapsave[i][j] = info->map.tab[i][j] - 48;

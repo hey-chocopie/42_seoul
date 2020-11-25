@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 12:40:54 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/23 18:22:04 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/25 21:07:35 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "key_macos.h"
@@ -34,6 +34,35 @@ int		ft_slablen(t_info *info, char *line)
 	return (count);
 }
 
+void	ft_spr_save(t_info *info, int j)
+{
+	if(info->map.spr != 1)
+		info->s_tmp =(info->s_save);
+	(info->s_save) = (struct Sprite *)malloc(sizeof(struct Sprite) * info->map.spr);
+	int a;
+	a = 0;
+	printf("\n%d\n", info->map.y);
+	while(a < info->map.spr)
+	{
+		if(a == (info->map.spr - 1))
+		{
+			(info->s_save)[a].x = (info->map.y)+0.5;
+			(info->s_save)[a].y = j+0.5;
+			(info->s_save)[a].texture = 2;
+		}
+		else
+		{
+			(info->s_save)[a].x = (info->s_tmp)[a].x;
+			(info->s_save)[a].y = (info->s_tmp)[a].y;
+			(info->s_save)[a].texture = (info->s_tmp)[a].texture;
+		}
+		a++;
+	}
+	if(info->map.spr > 1)
+		free(info->s_tmp);
+
+}
+
 char	*ft_slab(t_info *info, char *line, int *i)
 {
 	char	*slab;
@@ -55,8 +84,9 @@ char	*ft_slab(t_info *info, char *line, int *i)
 			slab[j++] = line[*i];
 		else if (line[*i] == '2')
 		{
-			slab[j++] = line[*i];
 			info->map.spr++;
+			ft_spr_save(info, j);
+			slab[j++] = line[*i];
 		}
 		else if (line[*i] != ' ')
 		{
