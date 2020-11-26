@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:30:20 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/26 17:18:54 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/26 19:29:16 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -590,94 +590,9 @@ void	load_texture(t_info *info)
 	load_image(info, info->texture[9], "textures/sprite7biggom.xpm", &img);
 	load_image(info, info->texture[14], "textures/test4whitewall.xpm", &img);
 
-
-//	printf("dlrpanjswl?==%sfin\n", info -> so_texture);
-
-
-//	if(info -> no_texture != 0)
-//		load_image(info, info->texture[0], info -> no_texture, &img);
 	if(info -> so_texture != 0)
 		load_image(info, info->texture[1], info -> so_texture, &img);
-//	if(info -> we_texture != 0)
-//		load_image(info, info->texture[2], info -> no_texture, &img);
-//	if(info -> ea_texture != 0)
-//		load_image(info, info->texture[3], info -> no_texture, &img);
-//	if(info -> s_texture != 0)
-//		load_image(info, info->texture[4], info -> no_texture, &img);
-//	if(info -> ft_texture != 0)
-//		load_image(info, info->texture[5], info -> no_texture, &img);
-//	if(info -> ct_texture != 0)
-//		load_image(info, info->texture[6], info -> no_texture, &img);
-
-
 }
-
-//void	ft_input_texture_free(t_info *info)
-//{
-//	if(info->no_texture != 0)
-//	{
-//		free(info -> no_texture);
-//		info->no_texture = 0;
-//	}
-//	else if(info->so_texture != 0)
-//	{
-//		free(info -> so_texture);
-//		info->so_texture = 0;
-//	}
-//	else if(info->we_texture != 0)
-//	{
-//		free(info -> we_texture);
-//		info->we_texture = 0;
-//	}
-//	else if(info->ea_texture != 0)
-//	{
-//		free(info -> ea_texture);
-//		info->ea_texture = 0;
-//	}
-//	else if(info->s_texture != 0)
-//	{
-//		free(info -> s_texture);
-//		info->s_texture = 0;
-//	}
-//	else if(info->ft_texture != 0)
-//	{
-//		free(info -> ft_texture);
-//		info->ft_texture = 0;
-//	}
-//	else if(info->ct_texture != 0)
-//	{
-//		free(info -> ct_texture);
-//		info->ct_texture = 0;
-//	}
-//}
-
-//int		ft_mapcheck(t_info *info)
-//{
-//	int		i;
-//	int		j;
-//
-//	i = 0;
-//	j = 0;
-//
-//	while (i < info->map.y)
-//	{
-//		j = 0;
-//		while (j < info->map.x)
-//		{
-//			if (info->map.tab[i][j] != '1' && i == 0)
-//				return (-1);
-//			else if (info->map.tab[i][j] != '1' && i == info->map.y - 1)
-//				return (-1);
-//			else if (info->map.tab[i][j] != '1' && j == 0)
-//				return (-1);
-//			else if (info->map.tab[i][j] != '1' && j == info->map.x - 1)
-//				return (-1);
-//			j++;
-//		}
-//		i++;
-//	}
-//	return (0);
-//}
 
 void	ft_pos(t_info *info)
 {
@@ -694,12 +609,12 @@ void	ft_pos(t_info *info)
 			c = info->map.tab[i][j];
 			if (c == 'N' || c == 'E' || c == 'S' || c == 'W')
 			{
-				info->posY = (double)i + 0.5;
-				info->posX = (double)j + 0.5;
-				info->dirX = (c == 'E' || c == 'W') ? 1 : 0;
-				info->dirX *= (c == 'W') ? -1 : 1;
-				info->dirY = (c == 'S' || c == 'N') ? 1 : 0;
-				info->dirY *= (c == 'N') ? -1 : 1;
+				info->posY = (double)j + 0.5;
+				info->posX = (double)i + 0.5;
+				info->dirY = (c == 'E' || c == 'W') ? 1 : 0;
+				info->dirY *= (c == 'W') ? -1 : 1;
+				info->dirX = (c == 'S' || c == 'N') ? 1 : 0;
+				info->dirX *= (c == 'N') ? -1 : 1;
 			}
 		}
 		j = -1;
@@ -708,50 +623,6 @@ void	ft_pos(t_info *info)
 	info->planeY = info->dirX * (-0.66);
 }
 
-//int ft_mapcp(t_info *info)
-//{
-//	int		**mapsave;
-//	int		i;
-//	int		j;
-//
-//	if(!(mapsave = (int **)malloc(sizeof(int *) * (info->map.y))))
-//		return(-12);
-//	i = 0;
-//	while(i < info->map.y)
-//	{
-//		if(!(mapsave[i] = (int *)malloc(sizeof(int) * (info->map.x))))
-//		{
-//			free(mapsave);
-//			return(-12);
-//		}
-//		i++;
-//	}
-//	i = 0;
-//	while(i < info->map.y)
-//	{
-//		j = 0;
-//		while(j < info->map.x)
-//		{
-//			if(info->map.tab[i][j] > '2')
-//				mapsave[i][j] = 0;
-//			else
-//				mapsave[i][j] = info->map.tab[i][j] - 48;
-//			j++;
-//		}
-//		i++;
-//	}
-//	info->fullmap = mapsave;
-//	i = -1;
-//	j = 0;
-//	while(i++ < info-> map.y)
-//	{
-//		free(info->map.tab[i]);
-//		info->map.tab[i] = 0;
-//	}
-//	free(info->map.tab);
-//	info->map.tab = 0;
-//	return(0);
-//}
 
 	int ft_errorprint(int a, t_info *info)
 	{
@@ -842,46 +713,7 @@ int ft_mapparse(t_info *info)
 	return(0);
 }
 
-int ft_buf_malloc(t_info *info)
-{
-	int i = 0;
-	if (!(info->buf = (int **)malloc(sizeof(int *) * info->height)))
-	{
-		ft_input_texture_free(info);
-		ft_printf("%d : %s", 12, strerror(-12));		
-		return (-1);
-	}
-	while(i < info->height)
-	{
-		if (!(info->buf[i] = (int *)malloc(sizeof(int) * (info->width))))
-		{
-			ft_input_texture_free(info);
-			free(info->buf);
-			info->buf = 0;
-			ft_printf("%d : %s", 12, strerror(-12));		
-			return (-1);
-		}
-		i++;
-	}
-	if (!(info->zBuffer = (double *)malloc(sizeof(double) * (info->width))))
-	{	
-		ft_tool_mem_free(info);
-		return (-1);
-	}
-	i = 0;
-	int j = 0;
-	while(i < info->height)
-	{
-		j = 0;
-		while(j < info->width)
-		{
-			info->buf[i][j] = 0;
-			j++;
-		}
-		i++;
-	}
-	return(0);
-}
+
 
 int ft_texture_malloc(t_info *info)
 {

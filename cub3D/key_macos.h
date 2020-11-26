@@ -6,14 +6,15 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 15:27:39 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/26 15:50:28 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/26 19:36:59 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef KEY_MACOS_H
 # define KEY_MACOS_H
 
-
+#include "./mlxfolder/mlx.h"
+#include "./printf/ft_printf.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <math.h>
@@ -242,4 +243,5 @@ void    ft_input_texture_free(t_info *info);
 int ft_map_info(t_info *info);
 void ft_tool_mem_free(t_info *info);
 int		ft_calc_fc(t_info *info);
+int ft_buf_malloc(t_info *info);
 #endif
