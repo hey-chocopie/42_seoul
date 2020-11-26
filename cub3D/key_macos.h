@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 15:27:39 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/25 20:53:02 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/26 15:50:28 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,13 +113,13 @@ typedef struct	s_img
 	int		img_height;
 }				t_img;
 
-struct	Sprite
+typedef	struct	s_sprite
 {
 	double		x;
 	double		y;
 	int			texture;
 
-};
+}				t_sprite;
 
 typedef struct	s_map
 {
@@ -155,8 +155,23 @@ typedef struct	s_cwall
 
 typedef struct	s_csp
 {
-	int	numsprites;
+	double	sprite_x;
+	double	sprite_y;
+	double	invdet;
+	double	transform_x;
+	double	transform_y;
+	int		screen_x;
+
+	int		v_movescreen;
+	int		sp_height;
+	int		drawstart_y;
+	int		drawend_y;
+	int		drawstart_x;
+	int		drawend_x;
+	int		sprite_width;
+	int		tex_x;	
 }				t_cspr;
+
 
 typedef struct	s_info
 {
@@ -210,9 +225,10 @@ typedef struct	s_info
 	int texture_y_size;
 	int	texturecount;
 	
-	struct Sprite *s_save;
-	struct Sprite *s_tmp;
+	t_sprite *s_save;
+	t_sprite *s_tmp;
 	t_cwall cwall;
+	t_cspr	spr;
 }				t_info;
 
 int save_bmp(t_info *info);

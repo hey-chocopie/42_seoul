@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 11:42:18 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/24 11:07:58 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/26 11:11:42 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,12 @@ void    ft_input_texture_free(t_info *info)
         free(info -> ct_texture);
         info->ct_texture = 0;
     }
+
+	if(info->s_tmp != 0)
+	{
+		free(info->s_tmp);
+		info->s_tmp = 0;
+	}
 }
 
 void	ft_tool_mem_free(t_info *info)
@@ -61,6 +67,7 @@ void	ft_tool_mem_free(t_info *info)
 		if(info->buf[i] != 0)
 		free(info->buf[i]);
 	}
+
 	if(info->buf != 0)
 		free(info->buf);
 	ft_input_texture_free(info);

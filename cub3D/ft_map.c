@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 12:40:54 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/25 21:07:35 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/26 11:51:07 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "key_macos.h"
@@ -34,11 +34,20 @@ int		ft_slablen(t_info *info, char *line)
 	return (count);
 }
 
-void	ft_spr_save(t_info *info, int j)
+int		ft_spr_save(t_info *info, int j)
 {
 	if(info->map.spr != 1)
 		info->s_tmp =(info->s_save);
-	(info->s_save) = (struct Sprite *)malloc(sizeof(struct Sprite) * info->map.spr);
+	if(!((info->s_save) = (t_sprite *)malloc(sizeof(t_sprite) * info->map.spr)))
+	{
+		if(info->s_tmp != 0)
+		{
+			free(info->s_tmp);
+			info->s_tmp = 0;
+		}
+		info->err_m = -12;
+		return(-1);
+	}
 	int a;
 	a = 0;
 	printf("\n%d\n", info->map.y);
@@ -59,8 +68,11 @@ void	ft_spr_save(t_info *info, int j)
 		a++;
 	}
 	if(info->map.spr > 1)
+	{
 		free(info->s_tmp);
-
+		info ->s_tmp = 0;
+	}
+	return(0);
 }
 
 char	*ft_slab(t_info *info, char *line, int *i)

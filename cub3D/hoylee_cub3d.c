@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:30:20 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/25 21:08:29 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/26 17:18:54 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "./printf/ft_printf.h"
 
 
-//struct Sprite	sprite[numSprites] =
+//struct Sprite	sprite[info->map.spr] =
 //{
 //	{20.5, 11.5, 10}, //green light in front of playerstart
 	//green lights in every room
@@ -67,10 +67,15 @@ void	key_update(t_info *info);
 void	sort_order(t_pair *orders, int amount)
 {
 	t_pair	tmp;
+	int i;
+	int j;
 
-	for (int i = 0; i < amount; i++)
+	i = 0;
+	j = 0;
+	while(i < amount)
 	{
-		for (int j = 0; j < amount - 1; j++)
+		j=0;
+		while(j < amount - 1)
 		{
 			if (orders[j].first > orders[j + 1].first)
 			{
@@ -81,29 +86,39 @@ void	sort_order(t_pair *orders, int amount)
 				orders[j + 1].first = tmp.first;
 				orders[j + 1].second = tmp.second;
 			}
+			j++;
 		}
+		i++;
 	}
 }
 
-void	sortSprites(int *order, double *dist, int amount)
+int		sortSprites(t_info *info,int *order, double *dist, int amount)
 {
-	t_pair	*sprites;
+	int i;
 
-	//std::vector<std::pair<double, int>> sprites(amount);
-	sprites = (t_pair*)malloc(sizeof(t_pair) * amount);
-	for (int i = 0; i < amount; i++)
+	i = 0;
+	t_pair	*sprites;
+	if(!(sprites = (t_pair*)malloc(sizeof(t_pair) * amount)))
+	{
+		info->err_m = -12;
+		return(-1);
+	}
+	while(i < amount)
 	{
 		sprites[i].first = dist[i];
 		sprites[i].second = order[i];
+		i++;
 	}
 	sort_order(sprites, amount);
-	//std::sort(sprites.begin(), sprites.end());
-	for (int i = 0; i < amount; i++)
+	i = 0;
+	while(i < amount)
 	{
 		dist[i] = sprites[amount - i - 1].first;
 		order[i] = sprites[amount - i - 1].second;
+		i++;
 	}
 	free(sprites);
+	return(0);
 }
 
 //int	info->fullmap[mapWidth][mapHeight] =
@@ -225,7 +240,7 @@ void	ft_calc_w_set_psline(t_info *info)
 		if(info->cwall.map_xy[0] == info->map.y - 1)
 			info->cwall.texnum =1;
 		if(info->cwall.map_xy[1] == 0)
-			info->cwall.texnum =2;
+			info->cwall.texnum =4;
 		if(info->cwall.map_xy[1] == info->map.x - 1)
 			info->cwall.texnum =3;
 
@@ -276,102 +291,122 @@ void	ft_calc_wall(t_info *info)
 		x++;
 	}
 }
+int		ft_calc_sp_info(t_info *info, int *sp_order)
+{
+	int i;
+	double	sp_distance[info->map.spr];
+
+	i = 0;
+	while(i < info->map.spr)
+	{
+		sp_order[i] = i;
+		sp_distance[i] = ((info->posX - info->s_save[i].x) * (info->posX - info->s_save[i].x) + (info->posY - info->s_save[i].y) * (info->posY - info->s_save[i].y));
+		i++;
+	}
+	if(-1 == sortSprites(info, sp_order, sp_distance, info->map.spr))
+		return (-1);
+	return(0);
+}
+
+void	ft_calc_sp_set(t_info *info, int *sp_order, int i)
+{
+	info->spr.sprite_x = info->s_save[sp_order[i]].x - info->posX;
+	info->spr.sprite_y = info->s_save[sp_order[i]].y - info->posY;
+	info->spr.invdet = 1.0 / (info->planeX * info->dirY - info->dirX * info->planeY);
+	info->spr.transform_x = info->spr.invdet * (info->dirY * info->spr.sprite_x - info->dirX * info->spr.sprite_y);
+	info->spr.transform_y = info->spr.invdet * (-info->planeY * info->spr.sprite_x + info->planeX * info->spr.sprite_y);
+	info->spr.screen_x = (int)((info->width / 2) * (1 + info->spr.transform_x / info->spr.transform_y));
+
+}
+
+void	ft_calc_sp_ps_draw(t_info *info, int *sp_order, int i)
+{
+		int vMove = 0.0;
+		if(spriteflag < 7000000 && info->s_save[sp_order[i]].texture== 2 && (info->s_texture == 0))
+			vMove = 0;
+		else if(spriteflag >= 7000000 && spriteflag <= 10000000&& info->s_save[sp_order[i]].texture== 2 && (info->s_texture == 0))
+			vMove = 150;
+		info->spr.v_movescreen = (int)(vMove / info->spr.transform_y);
+		info->spr.sp_height = (int)fabs((info->height / info->spr.transform_y) / 1);
+		info->spr.drawstart_y = -info->spr.sp_height / 2 + info->height / 2 + info->spr.v_movescreen;
+		if(info->spr.drawstart_y < 0) info->spr.drawstart_y = 0;
+		info->spr.drawend_y = info->spr.sp_height / 2 + info->height / 2 + info->spr.v_movescreen;
+		if(info->spr.drawend_y >= info->height) info->spr.drawend_y = info->height - 1;
+
+		info->spr.sprite_width = (int)fabs((info->height / info->spr.transform_y) / 1);
+		info->spr.drawstart_x = -info->spr.sprite_width / 2 + info->spr.screen_x;
+		if(info->spr.drawstart_x < 0) info->spr.drawstart_x = 0;
+		info->spr.drawend_x = info->spr.sprite_width / 2 + info->spr.screen_x;
+		if(info->spr.drawend_x >= info->width) info->spr.drawend_x = info->width - 1;
+
+
+}
+
+int		ft_calc_sp_input(t_info *info, int i, int *sp_order, int y)
+{
+	int d;
+	int tex_y;
+	int color;
+
+	d = (y-info->spr.v_movescreen) * 256 - info->height * 128 + info->spr.sp_height * 128;
+	tex_y = ((d * info->texture_y_size) / info->spr.sp_height) / 256;
+	color = info->texture[info->s_save[sp_order[i]].texture][info->texture_x_size * tex_y + info->spr.tex_x];
+	if(spriteflag < 7000000 && info->s_save[sp_order[i]].texture == 2)
+	{
+		color = info->texture[info->s_save[sp_order[i]].texture][info->texture_x_size * tex_y + info->spr.tex_x];
+		spriteflag++;
+	}
+	else if(info->s_save[sp_order[i]].texture == 2)
+	{
+		color = info->texture[7][info->texture_x_size * tex_y + info->spr.tex_x];
+		spriteflag++;
+		if(spriteflag >10000000)
+			spriteflag = 0;
+	}	
+	return(color);		
+}
+
+void	ft_calc_sp_draw(t_info *info, int *sp_order, int i)
+{
+	int stripe;
+	int color;
+	stripe = info->spr.drawstart_x;
+		while(stripe < info->spr.drawend_x)
+		{
+			info->spr.tex_x = (int)((256 * (stripe - (-info->spr.sprite_width / 2 + info->spr.screen_x)) * info->texture_x_size / info->spr.sprite_width) / 256);
+			if(info->spr.transform_y > 0 && stripe > 0 && stripe < info->width && info->spr.transform_y < info->zBuffer[stripe])
+			for(int y = info->spr.drawstart_y; y < info->spr.drawend_y; y++)
+			{
+				color = ft_calc_sp_input(info, i, sp_order, y);
+				if((color & 0x00FFFFFF) != 0) info->buf[y][stripe] = color;
+			}
+			stripe++;
+		}
+}
+
+int		ft_cal_sp(t_info *info)
+{
+	int		sp_order[info->map.spr];
+	int		i;
+
+	i = 0;
+	ft_calc_sp_info(info, sp_order);
+	for(int i = 0; i < info->map.spr; i++)
+	{
+		ft_calc_sp_set(info, sp_order, i);
+		ft_calc_sp_ps_draw(info, sp_order, i);
+		ft_calc_sp_draw(info, sp_order, i);
+
+	}
+	return(0);
+}
 
 void	calc(t_info *info)
 {
 	ft_calc_fc(info);
 	ft_calc_wall(info);
+	ft_cal_sp(info);
 
-	int		numSprites = info->map.spr;
-	int		spriteOrder[numSprites];
-	double	spriteDistance[numSprites];
-	struct	Sprite *sprite;
-
-	sprite	= 	info->s_save;
-	//SPRITE CASTING
-	//sort sprites from far to close
-	for(int i = 0; i < numSprites; i++)
-	{
-		spriteOrder[i] = i;
-		spriteDistance[i] = ((info->posX - sprite[i].x) * (info->posX - sprite[i].x) + (info->posY - sprite[i].y) * (info->posY - sprite[i].y)); //sqrt not taken, unneeded
-	}
-	sortSprites(spriteOrder, spriteDistance, numSprites);
-	//after sorting the sprites, do the projection and draw them
-	for(int i = 0; i < numSprites; i++)
-	{
-		//translate sprite position to relative to camera
-		double spriteX = sprite[spriteOrder[i]].x - info->posX;
-		double spriteY = sprite[spriteOrder[i]].y - info->posY;
-
-		//transform sprite with the inverse camera matrix
-		// [ planeX   dirX ] -1                                       [ dirY      -dirX ]
-		// [               ]       =  1/(planeX*dirY-dirX*planeY) *   [                 ]
-		// [ planeY   dirY ]                                          [ -planeY  planeX ]
-
-		double invDet = 1.0 / (info->planeX * info->dirY - info->dirX * info->planeY); //required for correct matrix multiplication
-
-		double transformX = invDet * (info->dirY * spriteX - info->dirX * spriteY);
-		double transformY = invDet * (-info->planeY * spriteX + info->planeX * spriteY); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(spriteDistance[i])
-
-		int spriteScreenX = (int)((info->width / 2) * (1 + transformX / transformY));
-
-		//parameters for scaling and moving the sprites
-		#define uDiv 1
-		#define vDiv 1
-		int vMove = 0.0;
-		if(spriteflag < 5000000 && sprite[spriteOrder[i]].texture== 4)
-			vMove = 150;
-		else if(spriteflag >= 5000000 && spriteflag <= 10000000&& sprite[spriteOrder[i]].texture== 4)
-			vMove = 50;
-		int vMoveScreen = (int)(vMove / transformY);
-
-		//calculate height of the sprite on screen
-		int spriteHeight = (int)fabs((info->height / transformY) / vDiv); //using "transformY" instead of the real distance prevents fisheye
-		//calculate lowest and highest pixel to fill in current stripe
-		int drawStartY = -spriteHeight / 2 + info->height / 2 + vMoveScreen;
-		if(drawStartY < 0) drawStartY = 0;
-		int drawEndY = spriteHeight / 2 + info->height / 2 + vMoveScreen;
-		if(drawEndY >= info->height) drawEndY = info->height - 1;
-
-		//calculate width of the sprite
-		int spriteWidth = (int)fabs((info->height / transformY) / uDiv);
-		int drawStartX = -spriteWidth / 2 + spriteScreenX;
-		if(drawStartX < 0) drawStartX = 0;
-		int drawEndX = spriteWidth / 2 + spriteScreenX;
-		if(drawEndX >= info->width) drawEndX = info->width - 1;
-
-		//loop through every vertical stripe of the sprite on screen
-		for(int stripe = drawStartX; stripe < drawEndX; stripe++)
-		{
-			int texX = (int)((256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * info->texture_x_size / spriteWidth) / 256);
-			//the conditions in the if are:
-			//1) it's in front of camera plane so you don't see things behind you
-			//2) it's on the screen (left)
-			//3) it's on the screen (right)
-			//4) ZBuffer, with perpendicular distance
-			if(transformY > 0 && stripe > 0 && stripe < info->width && transformY < info->zBuffer[stripe])
-			for(int y = drawStartY; y < drawEndY; y++) //for every pixel of the current stripe
-			{
-				int d = (y-vMoveScreen) * 256 - info->height * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
-				int texY = ((d * info->texture_y_size) / spriteHeight) / 256;
-				int color;
-				color = info->texture[sprite[spriteOrder[i]].texture][info->texture_x_size * texY + texX];
-				if(spriteflag < 5000000 && sprite[spriteOrder[i]].texture == 4)
-				{
-				color = info->texture[sprite[spriteOrder[i]].texture][info->texture_x_size * texY + texX]; //get current color from the texture
-					spriteflag++;
-				}
-				else if(sprite[spriteOrder[i]].texture == 4)
-				{
-				color = info->texture[7][info->texture_x_size * texY + texX];
-					spriteflag++;
-					if(spriteflag >10000000)
-						spriteflag = 0;
-				}			
-				if((color & 0x00FFFFFF) != 0) info->buf[y][stripe] = color;
-			}
-		}
-	}
 }
 int	mouseexit()
 {
@@ -384,7 +419,6 @@ int	main_loop(t_info *info)
 	calc(info);
 	draw(info);
 	key_update(info);
-	//mlx_hook((*info).win, 17, 1L << 17, mouseexit, info);
 	return (0);
 }
 
@@ -511,16 +545,19 @@ void	map_texture(t_info *info)
 {
 	t_img	img;
 
+
+	load_image(info, info->texture[2], "textures/barrel.xpm", &img);
+	load_image(info, info->texture[7], "textures/sprite8smallgom.xpm", &img);
 	if(info -> no_texture != 0)
 		load_image(info, info->texture[0], info -> no_texture, &img);
 	if(info -> so_texture != 0)
 		load_image(info, info->texture[1], info -> so_texture, &img);
 	if(info -> we_texture != 0)
-		load_image(info, info->texture[2], info -> we_texture, &img);
+		load_image(info, info->texture[4], info -> we_texture, &img);
 	if(info -> ea_texture != 0)
 		load_image(info, info->texture[3], info -> ea_texture, &img);
 	if(info -> s_texture != 0)
-		load_image(info, info->texture[4], info -> s_texture, &img);
+		load_image(info, info->texture[2], info -> s_texture, &img);
 	if(info -> ft_texture != 0)
 		load_image(info, info->texture[5], info -> ft_texture, &img);
 	if(info -> ct_texture != 0)
@@ -528,8 +565,6 @@ void	map_texture(t_info *info)
 	if(info -> s_texture != 0)
 		load_image(info, info->texture[7], info -> s_texture, &img);
 
-	load_image(info, info->texture[4], "textures/sprite8smallgom.xpm", &img);
-	load_image(info, info->texture[7], "textures/sprite7biggom.xpm", &img);
 }
 
 void	load_texture(t_info *info)
@@ -671,8 +706,6 @@ void	ft_pos(t_info *info)
 	}
 	info->planeX = info->dirY * (0.66);
 	info->planeY = info->dirX * (-0.66);
-
-
 }
 
 //int ft_mapcp(t_info *info)
