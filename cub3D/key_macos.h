@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 15:27:39 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/26 19:36:59 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/27 19:52:59 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,12 @@ typedef struct	s_map
 	int				spr;
 }				t_map;
 
+typedef struct      s_pair
+{
+    double  first;
+    int     second;
+}                   t_pair;
+
 typedef struct	s_cwall
 {
 	double raydir_xy[2];
@@ -225,6 +231,7 @@ typedef struct	s_info
 	int texture_x_size;
 	int texture_y_size;
 	int	texturecount;
+	int	spriteflag;
 	
 	t_sprite *s_save;
 	t_sprite *s_tmp;
@@ -243,5 +250,12 @@ void    ft_input_texture_free(t_info *info);
 int ft_map_info(t_info *info);
 void ft_tool_mem_free(t_info *info);
 int		ft_calc_fc(t_info *info);
-int ft_buf_malloc(t_info *info);
+int		ft_buf_texture_malloc(t_info *info);
+void    ft_texture_input(t_info *info);
+void    ft_calc_wall(t_info *info);
+void    ft_calc_w_colr(t_info *info, int x);
+int     ft_cal_sp(t_info *info);
+int     ft_calc_sp_info(t_info *info, int *sp_order);
+int		ft_main_loop(t_info *info);
+void	ft_keypress(t_info *info);
 #endif
