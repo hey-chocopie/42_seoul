@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 16:55:02 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 20:33:46 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 22:30:19 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ int		ft_calc_sp_info(t_info *info, int *sp_order)
 	while (i < info->map.spr)
 	{
 		sp_order[i] = i;
-		sp_distance[i] = ((info->posX - info->s_save[i].x) *
-		(info->posX - info->s_save[i].x) + (info->posY - info->s_save[i].y)
-		* (info->posY - info->s_save[i].y));
+		sp_distance[i] = ((info->pos_x - info->s_save[i].x) *
+		(info->pos_x - info->s_save[i].x) + (info->pos_y - info->s_save[i].y)
+		* (info->pos_y - info->s_save[i].y));
 		i++;
 	}
 	if (-1 == sortsprites(info, sp_order, sp_distance, info->map.spr))

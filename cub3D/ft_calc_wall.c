@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 15:20:14 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 20:33:47 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 22:31:13 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 void	ft_calc_w_set(t_info *info, int x)
 {
 	info->cwall.raydir_xy[0] =
-	info->dirX + info->planeX * (2 * x / (double)info->width - 1);
+	info->dir_x + info->plane_x * (2 * x / (double)info->width - 1);
 	info->cwall.raydir_xy[1] =
-	info->dirY + info->planeY * (2 * x / (double)info->width - 1);
-	info->cwall.map_xy[0] = (int)info->posX;
-	info->cwall.map_xy[1] = (int)info->posY;
+	info->dir_y + info->plane_y * (2 * x / (double)info->width - 1);
+	info->cwall.map_xy[0] = (int)info->pos_x;
+	info->cwall.map_xy[1] = (int)info->pos_y;
 	info->cwall.deltadist_xy[0] = fabs(1 / info->cwall.raydir_xy[0]);
 	info->cwall.deltadist_xy[1] = fabs(1 / info->cwall.raydir_xy[1]);
 	info->cwall.hit = 0;
@@ -31,25 +31,25 @@ void	ft_calc_w_step_set_info(t_info *info)
 	{
 		info->cwall.step_xy[0] = -1;
 		info->cwall.sidedist_xy[0] =
-		(info->posX - info->cwall.map_xy[0]) * info->cwall.deltadist_xy[0];
+		(info->pos_x - info->cwall.map_xy[0]) * info->cwall.deltadist_xy[0];
 	}
 	else
 	{
 		info->cwall.step_xy[0] = 1;
-		info->cwall.sidedist_xy[0] = (info->cwall.map_xy[0] + 1.0 - info->posX)
+		info->cwall.sidedist_xy[0] = (info->cwall.map_xy[0] + 1.0 - info->pos_x)
 		* info->cwall.deltadist_xy[0];
 	}
 	if (info->cwall.raydir_xy[1] < 0)
 	{
 		info->cwall.step_xy[1] = -1;
 		info->cwall.sidedist_xy[1] =
-		(info->posY - info->cwall.map_xy[1])
+		(info->pos_y - info->cwall.map_xy[1])
 		* info->cwall.deltadist_xy[1];
 	}
 	else
 	{
 		info->cwall.step_xy[1] = 1;
-		info->cwall.sidedist_xy[1] = (info->cwall.map_xy[1] + 1.0 - info->posY)
+		info->cwall.sidedist_xy[1] = (info->cwall.map_xy[1] + 1.0 - info->pos_y)
 		* info->cwall.deltadist_xy[1];
 	}
 }
@@ -75,11 +75,11 @@ void	ft_calc_w_ps_map(t_info *info)
 	}
 	if (info->cwall.side == 0)
 		info->cwall.perpwalldist =
-		(info->cwall.map_xy[0] - info->posX +
+		(info->cwall.map_xy[0] - info->pos_x +
 		(1 - info->cwall.step_xy[0]) / 2) / info->cwall.raydir_xy[0];
 	else
 		info->cwall.perpwalldist =
-		(info->cwall.map_xy[1] - info->posY +
+		(info->cwall.map_xy[1] - info->pos_y +
 		(1 - info->cwall.step_xy[1]) / 2) / info->cwall.raydir_xy[1];
 }
 

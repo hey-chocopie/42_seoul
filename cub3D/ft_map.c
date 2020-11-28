@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 12:40:54 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 21:01:56 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 22:32:24 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ int		ft_slablen(t_info *info, char *line)
 		return (-22);
 	return (count);
 }
-
-
 
 int		ft_map(t_info *info, char *line, int *i)
 {

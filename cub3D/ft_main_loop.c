@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 18:12:24 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 20:33:47 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 22:31:14 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,29 +46,29 @@ void	draw(t_info *info)
 
 void	key_update_da_esc(t_info *info, double *olddir_x, double *oldplane_x)
 {
-	(*olddir_x) = info->dirX;
-	(*oldplane_x) = info->planeX;
+	(*olddir_x) = info->dir_x;
+	(*oldplane_x) = info->plane_x;
 	if (info->key_d)
 	{
-		info->dirX = info->dirX * cos(-info->rotSpeed)
-						- info->dirY * sin(-info->rotSpeed);
-		info->dirY = (*olddir_x) * sin(-info->rotSpeed)
-						+ info->dirY * cos(-info->rotSpeed);
-		info->planeX = info->planeX * cos(-info->rotSpeed)
-						- info->planeY * sin(-info->rotSpeed);
-		info->planeY = (*oldplane_x) * sin(-info->rotSpeed)
-						+ info->planeY * cos(-info->rotSpeed);
+		info->dir_x = info->dir_x * cos(-info->rotSpeed)
+						- info->dir_y * sin(-info->rotSpeed);
+		info->dir_y = (*olddir_x) * sin(-info->rotSpeed)
+						+ info->dir_y * cos(-info->rotSpeed);
+		info->plane_x = info->plane_x * cos(-info->rotSpeed)
+						- info->plane_y * sin(-info->rotSpeed);
+		info->plane_y = (*oldplane_x) * sin(-info->rotSpeed)
+						+ info->plane_y * cos(-info->rotSpeed);
 	}
 	if (info->key_a)
 	{
-		info->dirX = info->dirX * cos(info->rotSpeed)
-						- info->dirY * sin(info->rotSpeed);
-		info->dirY = (*olddir_x) * sin(info->rotSpeed)
-						+ info->dirY * cos(info->rotSpeed);
-		info->planeX = info->planeX * cos(info->rotSpeed)
-						- info->planeY * sin(info->rotSpeed);
-		info->planeY = (*oldplane_x) * sin(info->rotSpeed)
-						+ info->planeY * cos(info->rotSpeed);
+		info->dir_x = info->dir_x * cos(info->rotSpeed)
+						- info->dir_y * sin(info->rotSpeed);
+		info->dir_y = (*olddir_x) * sin(info->rotSpeed)
+						+ info->dir_y * cos(info->rotSpeed);
+		info->plane_x = info->plane_x * cos(info->rotSpeed)
+						- info->plane_y * sin(info->rotSpeed);
+		info->plane_y = (*oldplane_x) * sin(info->rotSpeed)
+						+ info->plane_y * cos(info->rotSpeed);
 	}
 }
 
@@ -76,23 +76,23 @@ void	key_update_ws(t_info *info)
 {
 	if (info->key_w)
 	{
-		if (!info->fullmap[(int)(info->posX + info->dirX
-					* info->moveSpeed)][(int)(info->posY)])
-			info->posX += info->dirX * info->moveSpeed;
+		if (!info->fullmap[(int)(info->pos_x + info->dir_x
+					* info->moveSpeed)][(int)(info->pos_y)])
+			info->pos_x += info->dir_x * info->moveSpeed;
 		if (!info->fullmap
-			[(int)(info->posX)][(int)(info->posY + info->dirY
+			[(int)(info->pos_x)][(int)(info->pos_y + info->dir_y
 					* info->moveSpeed)])
-			info->posY += info->dirY * info->moveSpeed;
+			info->pos_y += info->dir_y * info->moveSpeed;
 	}
 	if (info->key_s)
 	{
-		if (!info->fullmap[(int)(info->posX - info->dirX
-					* info->moveSpeed)][(int)(info->posY)])
-			info->posX -= info->dirX * info->moveSpeed;
+		if (!info->fullmap[(int)(info->pos_x - info->dir_x
+					* info->moveSpeed)][(int)(info->pos_y)])
+			info->pos_x -= info->dir_x * info->moveSpeed;
 		if (!info->fullmap
-			[(int)(info->posX)][(int)(info->posY - info->dirY
+			[(int)(info->pos_x)][(int)(info->pos_y - info->dir_y
 					* info->moveSpeed)])
-			info->posY -= info->dirY * info->moveSpeed;
+			info->pos_y -= info->dir_y * info->moveSpeed;
 	}
 	if (info->key_esc)
 		exit(0);

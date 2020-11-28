@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 16:45:44 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 20:33:46 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 22:31:12 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	ft_calc_sp_set(t_info *info, int *sp_order, int i)
 {
-	info->spr.sprite_x = info->s_save[sp_order[i]].x - info->posX;
-	info->spr.sprite_y = info->s_save[sp_order[i]].y - info->posY;
+	info->spr.sprite_x = info->s_save[sp_order[i]].x - info->pos_x;
+	info->spr.sprite_y = info->s_save[sp_order[i]].y - info->pos_y;
 	info->spr.invdet = 1.0 /
-	(info->planeX * info->dirY - info->dirX * info->planeY);
+	(info->plane_x * info->dir_y - info->dir_x * info->plane_y);
 	info->spr.transform_x = info->spr.invdet *
-	(info->dirY * info->spr.sprite_x - info->dirX * info->spr.sprite_y);
+	(info->dir_y * info->spr.sprite_x - info->dir_x * info->spr.sprite_y);
 	info->spr.transform_y = info->spr.invdet *
-	(-info->planeY * info->spr.sprite_x + info->planeX * info->spr.sprite_y);
+	(-info->plane_y * info->spr.sprite_x + info->plane_x * info->spr.sprite_y);
 	info->spr.screen_x = (int)((info->width / 2) *
 		(1 + info->spr.transform_x / info->spr.transform_y));
 }

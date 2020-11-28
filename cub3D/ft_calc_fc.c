@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:41:10 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 22:21:03 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 22:31:13 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@ void	ft_set_fc(t_info *info, float *fl_step_xy, int y, float *floor_xy)
 {
 	float		raydir_xx[2];
 	float		raydir_yy[2];
-	float		rowDistance;
+	float		rowdistance;
 
-	raydir_xx[0] = info->dirX - info->planeX;
-	raydir_xx[1] = info->dirX + info->planeX;
-	raydir_yy[0] = info->dirY - info->planeY;
-	raydir_yy[1] = info->dirY + info->planeY;
-	rowDistance = (0.5 * info->height) / (y - info->height / 2);
-	fl_step_xy[0] = rowDistance
+	raydir_xx[0] = info->dir_x - info->plane_x;
+	raydir_xx[1] = info->dir_x + info->plane_x;
+	raydir_yy[0] = info->dir_y - info->plane_y;
+	raydir_yy[1] = info->dir_y + info->plane_y;
+	rowdistance = (0.5 * info->height) / (y - info->height / 2);
+	fl_step_xy[0] = rowdistance
 					* (raydir_xx[1] - raydir_xx[0]) / info->width;
-	fl_step_xy[1] = rowDistance
+	fl_step_xy[1] = rowdistance
 					* (raydir_yy[1] - raydir_yy[0]) / info->width;
-	floor_xy[0] = info->posX + rowDistance * raydir_xx[0];
-	floor_xy[1] = info->posY + rowDistance * raydir_yy[0];
+	floor_xy[0] = info->pos_x + rowdistance * raydir_xx[0];
+	floor_xy[1] = info->pos_y + rowdistance * raydir_yy[0];
 }
 
 void	ft_colr_fc(t_info *info, float *floor_xy, float *fl_step_xy, int y)

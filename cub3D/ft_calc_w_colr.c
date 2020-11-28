@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 16:00:49 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 20:33:46 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 22:30:19 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	ft_calc_w_set_pstexture(t_info *info)
 {
 	if (info->cwall.side == 0)
 		info->cwall.wall_x =
-			info->posY + info->cwall.perpwalldist * info->cwall.raydir_xy[1];
+			info->pos_y + info->cwall.perpwalldist * info->cwall.raydir_xy[1];
 	else
 		info->cwall.wall_x =
-			info->posX + info->cwall.perpwalldist * info->cwall.raydir_xy[0];
+			info->pos_x + info->cwall.perpwalldist * info->cwall.raydir_xy[0];
 	info->cwall.wall_x -= floor(info->cwall.wall_x);
 	info->cwall.tex_x =
 		(int)(info->cwall.wall_x * (double)info->texture_x_size);

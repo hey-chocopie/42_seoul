@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 15:27:39 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 21:12:42 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 23:41:17 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,12 +192,12 @@ typedef struct	s_info
 	int	map_height;
 	int width;
 	int height;
-	double posX;
-	double posY;
-	double dirX;
-	double dirY;
-	double planeX;
-	double planeY;
+	double pos_x;
+	double pos_y;
+	double dir_x;
+	double dir_y;
+	double plane_x;
+	double plane_y;
 	void	*mlx;
 	void	*win;
 	int		key_a;
@@ -266,4 +266,6 @@ int ft_floor_celing_texture(t_info *info, char **text, int jump, int adr);
 int ft_r(t_info *info, char **text);
 int     ft_slablen(t_info *info, char *line);
 char    *ft_slab(t_info *info, char *line, int *i);
+void	ft_setinfo(t_info *info);
+void    ft_pos(t_info *info);
 #endif
