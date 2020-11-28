@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:30:20 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/27 19:55:22 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 20:41:54 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,6 @@ void	ft_pos(t_info *info)
 }
 
 
-	int ft_errorprint(int a, t_info *info)
-	{
-		info->err_m = -a;
-		return (-1);
-	}
 void ft_setinfo(t_info *info)
 {
 	info->map.x = 0;
@@ -94,9 +89,9 @@ void ft_setinfo(t_info *info)
 
 	info->texture_x_size = 64;
 	info->texture_y_size = 64;
-	info-> s_save = 0;
-	info-> s_tmp = 0;
-
+	info->s_save = 0;
+	info->s_tmp = 0;
+	info->dot_i = 0;
 	info->spriteflag = 0;
 }
 
@@ -112,18 +107,18 @@ int ft_mapparse(t_info *info)
 	i = 0;
 	check = 1;
     fd=open("./map/2.cub",O_RDONLY);
-	while(check != 0 && check != -1 )
+	while (check != 0 && check != -1 )
 	{
 		check = get_next_line(fd, &text);
-		while(text[i] == ' ')
+		while (text[i] == ' ')
 			i++;
 		text = i + text;	
 		aa = text;
-		if(0 > (errno = dot_cub_test(&text, info)))
+		if (0 > (errno = dot_cub_test(&text, info)))
 		{
 			printf("dural;");
 			ft_input_texture_free(info);
-			if(info->err_m != 0)
+			if (info->err_m != 0)
 				ft_printf("%d : %s", info->err_m*(-1), strerror(info->err_m));
 			ft_printf("%d : %s" , errno*(-1),  strerror(errno));
 			return (-1);
@@ -132,7 +127,7 @@ int ft_mapparse(t_info *info)
 	}
 	close(fd);
 
-	return(0);
+	return (0);
 }
 
 
@@ -153,13 +148,11 @@ int	main(void)
 
 	info.mlx = mlx_init();
 	mlx_get_screen_size(info.mlx, &info.winsize.size_x, &info.winsize.size_y);
-	if(-1 == ft_mapparse(&info))
-		return(-1);
-	ft_pos(&info);
-	if(-1 == ft_map_info(&info) || -1 == ft_buf_texture_malloc(&info))
+	if (-1 == ft_mapparse(&info))
 		return (-1);
-//	if()
-//		return (-1);
+	ft_pos(&info);
+	if (-1 == ft_map_info(&info) || -1 == ft_buf_texture_malloc(&info))
+		return (-1);
 	ft_texture_input(&info);
 	ft_display_set(&info);
 	mlx_loop_hook(info.mlx, &ft_main_loop, &info);

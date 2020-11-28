@@ -6,14 +6,13 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/13 15:58:50 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/23 13:08:11 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 22:11:41 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "key_macos.h"
-static void
-	set_int_in_char(unsigned char *start, int value)
+
+void		set_int_in_char(unsigned char *start, int value)
 {
 	start[0] = (unsigned char)(value);
 	start[1] = (unsigned char)(value >> 8);
@@ -21,8 +20,7 @@ static void
 	start[3] = (unsigned char)(value >> 24);
 }
 
-static int
-	write_bmp_header(int fd, int filesize, t_info *info)
+int			write_bmp_header(int fd, int filesize, t_info *info)
 {
 	int				i;
 	int				tmp;
@@ -47,35 +45,35 @@ static int
 	return (!(write(fd, bmpfileheader, 54) < 0));
 }
 
-
 void		bmp_pixel_date(int file, t_info *info)
 {
 	int				x;
 	int				y;
 	unsigned int	color;
 
-	y = info -> bmpheigth;
+	y = info->bmpheigth;
 	x = -1;
 	while (--y >= 0)
 	{
-		while (++x < info -> bmpwidth)
+		while (++x < info->bmpwidth)
 		{
-			color = info->img.data[(info->img).size_l / (info->img.bpp / 8) *y  + x];
+			color = info->img.data[(info->img).size_l /
+							(info->img.bpp / 8) * y  + x];
 			write(file, &color, 4);
 		}
 		x = -1;
 	}
 }
 
-int		save_bmp(t_info *info)
+int			save_bmp(t_info *info)
 {
-	t_info	*w;
-	int			filesize;
-	int			file;
+	t_info			*w;
+	int				filesize;
+	int				file;
 
 	w = info;
-	filesize = 2 + 54 + (info -> bmpwidth * info -> bmpheigth) * 4;
-	if (!(file = open("screenshot.bmp" , O_CREAT | O_RDWR | O_TRUNC, 0666)))
+	filesize = 2 + 54 + (info->bmpwidth * info->bmpheigth) * 4;
+	if (!(file = open("screenshot.bmp", O_CREAT | O_RDWR | O_TRUNC, 0666)))
 		return (0);
 	if (!write_bmp_header(file, filesize, info))
 		return (0);

@@ -6,12 +6,14 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 15:27:39 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/27 19:52:59 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/11/28 21:12:42 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef KEY_MACOS_H
 # define KEY_MACOS_H
+
+
 
 #include "./mlxfolder/mlx.h"
 #include "./printf/ft_printf.h"
@@ -21,7 +23,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 
 /*
 ** Keyboard LETTERS
@@ -232,7 +233,8 @@ typedef struct	s_info
 	int texture_y_size;
 	int	texturecount;
 	int	spriteflag;
-	
+	int dot_i;
+
 	t_sprite *s_save;
 	t_sprite *s_tmp;
 	t_cwall cwall;
@@ -258,4 +260,10 @@ int     ft_cal_sp(t_info *info);
 int     ft_calc_sp_info(t_info *info, int *sp_order);
 int		ft_main_loop(t_info *info);
 void	ft_keypress(t_info *info);
+int		ft_tool_errorprintf(int a, t_info *info);
+int		ft_diretion(t_info *info, char **text, int jump, int adr);
+int ft_floor_celing_texture(t_info *info, char **text, int jump, int adr);
+int ft_r(t_info *info, char **text);
+int     ft_slablen(t_info *info, char *line);
+char    *ft_slab(t_info *info, char *line, int *i);
 #endif
