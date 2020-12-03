@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 16:45:44 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 22:31:12 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/02 21:50:07 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	ft_calc_sp_draw(t_info *info, int *sp_order, int i)
 			(stripe - (-info->spr.sprite_width / 2 + info->spr.screen_x))
 		* info->texture_x_size / info->spr.sprite_width) / 256);
 		if (info->spr.transform_y > 0 &&
-			info->spr.transform_y < info->zBuffer[stripe])
+			info->spr.transform_y < info->zbuffer[stripe])
 		{
 			y = info->spr.drawstart_y;
 			while (y < info->spr.drawend_y)

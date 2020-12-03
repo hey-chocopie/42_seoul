@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 15:20:14 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 22:31:13 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/02 21:50:07 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	ft_calc_wall(t_info *info)
 		ft_calc_w_ps_map(info);
 		ft_calc_w_set_psline(info);
 		ft_calc_w_colr(info, x);
-		info->zBuffer[x] = info->cwall.perpwalldist;
+		info->zbuffer[x] = info->cwall.perpwalldist;
 		x++;
 	}
 }

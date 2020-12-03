@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:48:46 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 20:33:18 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/02 22:23:15 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 int		key_press(int key, t_info *info)
 {
 	if (key == K_ESC)
+	{
+		ft_all_free(info);
 		exit(0);
+	}
 	else if (key == K_W)
 		info->key_w = 1;
 	else if (key == K_A)
@@ -30,7 +33,10 @@ int		key_press(int key, t_info *info)
 int		key_release(int key, t_info *info)
 {
 	if (key == K_ESC)
+	{
+		ft_all_free(info);
 		exit(0);
+	}
 	else if (key == K_W)
 		info->key_w = 0;
 	else if (key == K_A)

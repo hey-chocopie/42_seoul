@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 20:12:56 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 20:40:26 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/02 18:36:12 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_r_input_size(char *textsave, int *flag, t_info *info)
 {
 	if (textsave[0] != 0)
 	{
-		if (flag == 0)
+		if ((*flag) == 0)
 			info->width = ft_atoi(textsave);
 		else if ((*flag) == 1)
 			info->height = ft_atoi(textsave);

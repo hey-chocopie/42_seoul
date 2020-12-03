@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 16:55:02 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 22:30:19 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/02 18:43:24 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	sort_order(t_pair *orders, int amount)
 	}
 }
 
-int		sortsprites(t_info *info, int *order, double *dist, int amount)
+int		sortsprites(int *order, double *dist, int amount)
 {
 	int		i;
 	t_pair	*sprites;
@@ -48,8 +48,8 @@ int		sortsprites(t_info *info, int *order, double *dist, int amount)
 	i = 0;
 	if (!(sprites = (t_pair*)malloc(sizeof(t_pair) * amount)))
 	{
-		info->err_m = -12;
-		return (-1);
+		ft_printf("sprites memorry fail\n%s : %d\n", strerror(12), 12);
+		exit(-1);
 	}
 	while (i < amount)
 	{
@@ -83,7 +83,7 @@ int		ft_calc_sp_info(t_info *info, int *sp_order)
 		* (info->pos_y - info->s_save[i].y));
 		i++;
 	}
-	if (-1 == sortsprites(info, sp_order, sp_distance, info->map.spr))
+	if (-1 == sortsprites(sp_order, sp_distance, info->map.spr))
 		return (-1);
 	return (0);
 }

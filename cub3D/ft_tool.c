@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 11:42:18 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 20:56:57 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/02 23:05:20 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,24 +61,37 @@ void	ft_input_texture_free(t_info *info)
 	}
 }
 
-void	ft_tool_mem_free(t_info *info)
+void	ft_tool_mem_free(t_info *info, int flag)
 {
 	int		i;
 
 	i = -1;
-	while (++i < info->width)
+	while (++i < info->height)
 	{
-		if (info->buf[i] != 0)
-			free(info->buf[i]);
+		if (info->buf != 0)
+			if (info->buf[i] != 0)
+				free(info->buf[i]);
 	}
 	if (info->buf != 0)
 		free(info->buf);
 	ft_input_texture_free(info);
-	if (info->zBuffer != 0)
-		free(info->zBuffer);
+	if (info->zbuffer != 0)
+		free(info->zbuffer);
 	if (info->texture != 0)
 		free(info->texture);
-	ft_printf("%d : %s", 12, strerror(-12));
+	if (flag == 1)
+		ft_printf("%s : %d", strerror(12), 12);
+}
+
+void	ft_all_free(t_info *info)
+{
+	int		i;
+
+	i = -1;
+	while (++i < info->texturecount)
+		if (info->texture != 0)
+			free(info->texture[i]);
+	ft_tool_mem_free(info, 0);
 }
 
 int		ft_tool_errorprintf(int a, t_info *info)

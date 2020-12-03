@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 22:57:07 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 23:45:44 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/03 01:44:03 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_setinfo_key_text(t_info *info)
 	info->c_texture = -1;
 	info->texturecount = 8;
 	info->texture = 0;
-	info->zBuffer = 0;
+	info->zbuffer = 0;
 	info->texture_x_size = 64;
 	info->texture_y_size = 64;
 }
@@ -39,6 +39,7 @@ void	ft_set_basic_info(t_info *info)
 {
 	info->map.x = 0;
 	info->map.y = 0;
+	info->map.xx = 0;
 	info->map.spr = 0;
 	info->map.tab = 0;
 	info->pos_x = 22.0;
@@ -49,14 +50,15 @@ void	ft_set_basic_info(t_info *info)
 	info->plane_y = 0.0;
 	info->width = 600;
 	info->height = 600;
-	info->moveSpeed = 0.05;
-	info->rotSpeed = 0.05;
+	info->movespeed = 0.05;
+	info->rotspeed = 0.05;
 	info->bmpflag = 0;
 	info->err_m = 0;
 	info->s_save = 0;
 	info->s_tmp = 0;
 	info->dot_i = 0;
 	info->spriteflag = 0;
+	info->map_start_flag = 0;
 }
 
 void	ft_setinfo(t_info *info)

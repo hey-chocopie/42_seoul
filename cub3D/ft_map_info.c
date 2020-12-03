@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 22:34:00 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 22:50:42 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/02 20:11:44 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,43 +66,70 @@ int		ft_mapcheck(t_info *info)
 {
 	int		i;
 	int		j;
+	char	tab;
 
-	i = 0;
-	j = 0;
-	while (i < info->map.y)
+	i = -1;
+	while (++i < info->map.y)
 	{
-		j = 0;
-		while (j < info->map.x)
+		j = -1;
+		while (++j < info->map.x)
 		{
-			if (info->map.tab[i][j] != '1' && i == 0)
+			tab = info->map.tab[i][j];
+			if ((tab != '1' && tab != ' ') && i == 0)
 				return (-1);
-			else if (info->map.tab[i][j] != '1' && i == info->map.y - 1)
+			else if ((tab != '1' && tab != ' ') && i == info->map.y - 1)
 				return (-1);
-			else if (info->map.tab[i][j] != '1' && j == 0)
+			else if ((tab != '1' && tab != ' ') && j == 0)
 				return (-1);
-			else if (info->map.tab[i][j] != '1' && j == info->map.x - 1)
+			else if ((tab != '1' && tab != ' ') && j == info->map.x - 1)
 				return (-1);
-			j++;
 		}
-		i++;
+	}
+	return (0);
+}
+
+int		ft_mep_zero_ceck(t_info *info)
+{
+	int i;
+	int j;
+
+	i = -1;
+	while (++i < info->map.y)
+	{
+		j = -1;
+		while (++j < info->map.x)
+		{
+			if (info->map.tab[i][j] == '0')
+			{
+				if (info->map.tab[i - 1][j] == ' '
+	|| info->map.tab[i + 1][j] == ' '
+	|| info->map.tab[i][j - 1] == ' ' || info->map.tab[i][j + 1] == ' ')
+				{
+					ft_printf("map error\n");
+					ft_printf("%d : %s", 22, strerror(22));
+					exit(-1);
+				}
+			}
+		}
 	}
 	return (0);
 }
 
 int		ft_map_info(t_info *info)
 {
-	if (-1 == ft_mapcheck(info))
+	if (-1 == ft_mapcheck(info) || -1 == ft_mep_zero_ceck(info)
+		|| -1 == ft_back_check(info))
 	{
-		ft_printf("please map check \n %d : %s", -22 * (-1), strerror(-22));
+		ft_printf("please map check \n %d : %s", -22 * (-1), strerror(22));
 		ft_input_texture_free(info);
-		return (-1);
+		exit(-1);
 	}
 	if (0 > (info->err_m = ft_mapcp(info)))
 	{
 		ft_printf("Cannot allocate memory \n %d : %s",
 				info->err_m * (-1), strerror(info->err_m));
 		ft_input_texture_free(info);
-		return (-1);
+		exit(-1);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:41:10 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 22:31:13 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/03 01:31:09 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_colr_fc(t_info *info, float *floor_xy, float *fl_step_xy, int y)
 		tx = (int)(info->texture_x_size
 			* (floor_xy[0] - (int)(floor_xy[0]))) & (info->texture_x_size - 1);
 		ty = (int)(info->texture_y_size
-			* (floor_xy[1] - (int)(floor_xy[1]))) & (texHeight - 1);
+			* (floor_xy[1] - (int)(floor_xy[1]))) & (info->texture_x_size - 1);
 		floor_xy[0] += fl_step_xy[0];
 		floor_xy[1] += fl_step_xy[1];
 		color = info->texture[5][info->texture_x_size * ty + tx];
