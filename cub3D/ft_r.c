@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 20:12:56 by hoylee            #+#    #+#             */
-/*   Updated: 2020/12/02 18:36:12 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/03 15:53:21 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 void	ft_r_input_size(char *textsave, int *flag, t_info *info)
 {
+	textsave[99] = 0;
 	if (textsave[0] != 0)
 	{
 		if ((*flag) == 0)
@@ -28,7 +29,7 @@ void	ft_r_input_size(char *textsave, int *flag, t_info *info)
 
 int		ft_r_err_check(char **text, int *i, int *flag, t_info *info)
 {
-	if ((*text)[(*i)] == ' ')
+	while ((*text)[(*i)] == ' ')
 		(*i)++;
 	if (((*text)[(*i)] != ' ' && (*text)[(*i)] < '0'
 		&& (*text)[(*i)] > '9' && (*text)[(*i)] != 0) || (*flag) == 3)
@@ -40,6 +41,13 @@ int		ft_r_err_check(char **text, int *i, int *flag, t_info *info)
 	return (0);
 }
 
+void	ft_r_text_set(int *flag, int *i, char *textsave)
+{
+	(*flag) = 0;
+	(*i) = 1;
+	ft_memset(textsave, 0, 100);
+}
+
 int		ft_r_text_read(t_info *info, char **text)
 {
 	int		i;
@@ -47,21 +55,24 @@ int		ft_r_text_read(t_info *info, char **text)
 	int		flag;
 	char	textsave[100];
 
-	flag = 0;
-	i = 1;
-	ft_memset(textsave, 0, 100);
+	ft_r_text_set(&flag, &i, textsave);
 	while ((*text)[i] != 0)
 	{
 		j = 0;
-		while ((*text)[i] >= '0' && (*text)[i] <= '9')
+		while ((*text)[i] >= '0' && (*text)[i] <= '9' && i < 100)
 		{
-			textsave[j] = (*text)[i];
+			textsave[j] = (*text)[i++];
 			j++;
-			i++;
 		}
 		ft_r_input_size(textsave, &flag, info);
 		if (-1 == ft_r_err_check(text, &i, &flag, info))
 			return (-1);
+		if ((((*text)[i] < '0' || (*text)[i] > '9')
+						&& (*text)[i] != 0) || i >= 100)
+		{
+			ft_printf("R input check\n%s : %d\n", strerror(22), 22);
+			exit(-1);
+		}
 	}
 	return (0);
 }

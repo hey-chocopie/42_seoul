@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 19:19:11 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/28 20:33:47 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/03 15:44:58 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 int		ft_rgv_int_convers(t_info *info, char *value, int *save, int *flag)
 {
-	if ((*flag) == 1 && value[0] != 0)
+	if ((*flag) == 1)
 		(*save) = ft_atoi(value) * 16 * 16 * 16 * 16;
-	if ((*flag) == 2 && value[0] != 0)
+	if ((*flag) == 2)
 		(*save) = (*save) + ft_atoi(value) * 16 * 16;
-	if ((*flag) == 3 && value[0] != 0)
+	if ((*flag) == 3)
 		(*save) = (*save) + ft_atoi(value);
 	if ((*flag) > 3 || (ft_atoi(value) > 255 && ft_atoi(value) < 0))
 	{
@@ -29,27 +29,47 @@ int		ft_rgv_int_convers(t_info *info, char *value, int *save, int *flag)
 	return (0);
 }
 
-int		ft_rgv_value(char **text, int *jump, int *flag, char *value)
+int		ft_rgv_error(int *jump, int i, char **text, int *flag)
 {
-	int		i;
-
-	i = 0;
-	while ((*text)[(*jump) + i] >= '0' && (*text)[(*jump) + i] <= '9')
+	if (i == 0 && (*text)[(*jump) + i] != 0)
 	{
-		if (i > 3)
-			return (-1);
-		value[i] = (*text)[(*jump) + i];
-		i++;
+		ft_printf("FC input check\n%s : %d\n", strerror(22), 22);
+		exit(-1);
 	}
-	value[i] = 0;
-	if (i == 0)
-		(*jump)++;
 	else if (i != 0)
 	{
 		(*jump) = (*jump) + i;
 		(*flag)++;
 	}
 	return (0);
+}
+
+int		ft_rgv_value(char **text, int *jump, int *flag, char *value)
+{
+	int		i;
+
+	i = 0;
+	while ((*text)[(*jump) + i] == ' ' || (*text)[(*jump) + i] == ',')
+		(*jump)++;
+	while ((*text)[(*jump) + i] >= '0' && (*text)[(*jump) + i] <= '9')
+	{
+		if (i >= 3)
+		{
+			ft_printf("FC input check\n%s : %d\n", strerror(22), 22);
+			exit(-1);
+		}
+		value[i] = (*text)[(*jump) + i];
+		i++;
+	}
+	if (((*text)[(*jump) + i] < '0' || (*text)[(*jump) + i] > 9) && (*text)
+		[(*jump) + 1] != 0 && (*text)[(*jump) + 1] == ' '
+		&& (*text)[(*jump) + 1] != ',')
+	{
+		ft_printf("FC input check\n%s : %d\n", strerror(22), 22);
+		exit(-1);
+	}
+	value[i] = 0;
+	return (ft_rgv_error(jump, i, text, flag));
 }
 
 int		ft_floor_celing_texture(t_info *info, char **text, int jump, int adr)
@@ -65,7 +85,7 @@ int		ft_floor_celing_texture(t_info *info, char **text, int jump, int adr)
 		if (-1 == ft_rgv_int_convers(info, value, &save, &flag))
 			return (-1);
 	}
-	if (flag != 3)
+	if (flag > 3)
 	{
 		ft_printf("check rgb input value\n");
 		return (ft_tool_errorprintf(-22, info));

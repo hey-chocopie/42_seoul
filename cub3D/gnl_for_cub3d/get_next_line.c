@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 22:29:17 by hoylee            #+#    #+#             */
-/*   Updated: 2020/11/16 22:22:36 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/03 15:54:20 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int		ft_read_print(int fd, char *buf, char **result_save, char **line)
 
 int		get_next_line(int fd, char **line)
 {
-	char			buf[BUFFER_SIZE + 1]; //malloc으로 선언해서 사이즈를 주어주면 더 많이 가능함. 
+	char			buf[BUFFER_SIZE + 1];
 	int				check;
 	static	char	*result_save[1200];
 

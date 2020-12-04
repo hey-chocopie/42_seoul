@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 18:12:24 by hoylee            #+#    #+#             */
-/*   Updated: 2020/12/03 01:37:23 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/03 20:01:27 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int		ft_main_loop(t_info *info)
 	double olddir_x;
 	double oldplane_x;
 
+	mlx_hook(info->win, 17, 0, ft_tool2_close, info);
 	olddir_x = 0;
 	oldplane_x = 0;
 	calc(info);

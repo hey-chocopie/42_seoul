@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 22:57:07 by hoylee            #+#    #+#             */
-/*   Updated: 2020/12/03 01:44:03 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/03 18:45:59 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	ft_setinfo_key_text(t_info *info)
 	info->key_s = 0;
 	info->key_d = 0;
 	info->key_esc = 0;
+	info->key_save_ad = 0;
+	info->key_save_ws = 0;
 	info->no_texture = 0;
 	info->so_texture = 0;
 	info->we_texture = 0;

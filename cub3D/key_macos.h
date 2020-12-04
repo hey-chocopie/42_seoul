@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 15:27:39 by hoylee            #+#    #+#             */
-/*   Updated: 2020/12/03 01:54:04 by hoylee           ###   ########.fr       */
+/*   Updated: 2020/12/03 19:54:29 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ typedef	struct		s_info
 	int				key_s;
 	int				key_d;
 	int				key_esc;
+	char			key_save_ad;
+	char			key_save_ws;
 	t_img			img;
 	int				**buf;
 	double			*zbuffer;
@@ -193,4 +195,7 @@ void				ft_pos(t_info *info);
 int					ft_back_check(t_info *info);
 int					tool_fd_return(void);
 void				ft_all_free(t_info *info);
+void				ft_tool2_keysave_set(int *key_adws,
+					char *key_save_adws, int i, char j);
+int					ft_tool2_close(t_info *info);
 #endif
