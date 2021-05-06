@@ -74,7 +74,7 @@ minikube_setup()
 	minikube start --driver=virtualbox --cpus=2 #2
 	minikube addons enable metrics-server #3
 	minikube addons enable dashboard &> /dev/null
-	#minikube addons enable metallb
+	### minikube addons enable metallb
 	minikube addons list
 	more_addons #addons 활성화
 	echo 😻- complete addons..!
