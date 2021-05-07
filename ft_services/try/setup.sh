@@ -74,10 +74,14 @@ minikube_setup()
 	minikube start --driver=virtualbox --cpus=2 #2
 	minikube addons enable metrics-server #3
 	minikube addons enable dashboard &> /dev/null
-	### minikube addons enable metallb
+	minikube addons enable metallb
 	minikube addons list
 	more_addons #addons 활성화
 	echo 😻- complete addons..!
+#	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+#	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+#	# On first install only
+#	kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
 	# On first install only
@@ -85,7 +89,7 @@ minikube_setup()
 
 	MINIKUBE_IP=$(minikube ip)
 	#sed "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/yaml_metallb/metallb.yaml > srcs/yaml_metallb/metallb_complete.yaml
-	kubectl apply -f srcs/yaml_metallb/metallb_complete.yaml
+	kubectl apply -f srcs/yaml_metallb/djeon_metallb_complete.yaml
 	eval $(minikube docker-env)
 	echo $DOCKER_HOST
 	echo -en $GREEN
@@ -116,7 +120,7 @@ make_images()
 
 yaml_services()
 {
-	kubectl apply -f srcs/yaml_services/nginx.yaml
+	kubectl apply -f srcs/yaml_services/nginx_format.yaml
 }
 
 main()
