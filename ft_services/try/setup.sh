@@ -89,7 +89,7 @@ minikube_setup()
 
 	MINIKUBE_IP=$(minikube ip)
 	#sed "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/yaml_metallb/metallb.yaml > srcs/yaml_metallb/metallb_complete.yaml
-	kubectl apply -f srcs/yaml_metallb/djeon_metallb_complete.yaml
+	kubectl apply -f srcs/yaml_metallb/metallb_complete.yaml
 	eval $(minikube docker-env)
 	echo $DOCKER_HOST
 	echo -en $GREEN
@@ -120,7 +120,7 @@ make_images()
 
 yaml_services()
 {
-	kubectl apply -f srcs/yaml_services/nginx_format.yaml
+	kubectl apply -f srcs/yaml_services/nginx.yaml
 }
 
 main()
