@@ -40,3 +40,4 @@ spec:
       port: 443
       targetPort: 443
   type: LoadBalancer
+  #  loadBalancerIP: 172.17.0.2

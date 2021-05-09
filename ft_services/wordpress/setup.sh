@@ -74,10 +74,14 @@ minikube_setup()
 	minikube start --driver=virtualbox --cpus=2 #2
 	minikube addons enable metrics-server #3
 	minikube addons enable dashboard &> /dev/null
-	### minikube addons enable metallb
+	minikube addons enable metallb
 	minikube addons list
 	more_addons #addons 활성화
 	echo 😻- complete addons..!
+#	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+#	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+#	# On first install only
+#	kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
 	# On first install only
@@ -95,7 +99,7 @@ minikube_setup()
 
 make_images()
 {
-	images_kind=("nginx" "wordpress")
+	images_kind=("nginx"  "wordpress")
 	#  "mysql" "phpmyadmin" "ftps" "grafana" "influxdb")
 
 	for kind in "${images_kind[@]}"
@@ -115,13 +119,8 @@ make_images()
 }
 
 yaml_services()
-{	
-	images_kind=("nginx" "wordpress")
-	#  "mysql" "phpmyadmin" "ftps" "grafana" "influxdb")
-	for kind in "${images_kind[@]}"
-	do
-		kubectl apply -f srcs/yaml_services/$kind.yaml
-	done
+{
+	kubectl apply -f srcs/yaml_services/nginx.yaml
 }
 
 main()
