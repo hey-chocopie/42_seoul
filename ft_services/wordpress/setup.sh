@@ -131,7 +131,6 @@ main()
 	minikube_setup
 	make_images
 	yaml_services
-
 }
 
 main

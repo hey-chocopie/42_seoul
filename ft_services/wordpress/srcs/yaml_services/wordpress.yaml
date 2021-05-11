@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: wordpress-container
-          image: wordpress:latest
+          image: wordpress
           imagePullPolicy: Never
           ports:
             - containerPort: 5050
@@ -39,5 +39,6 @@ spec:
       protocol: TCP
       targetPort: 5050
         # 셀렉터에 해당하는 라벨로트래픽을 보내준다.
-        #  targetport는 특정포드로 접근하기 위핸 포트 넘버, (deployment 에서 설정한 pod의 포트 넘버) selector:
+        #  targetport는 특정포드로 접근하기 위핸 포트 넘버, (deployment 에서 설정한 pod의 포트 넘버) 
+  selector:
     app: wordpress
