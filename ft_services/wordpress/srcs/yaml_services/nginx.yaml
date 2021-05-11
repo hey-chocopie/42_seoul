@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx-alpine
+        image: nginx
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80

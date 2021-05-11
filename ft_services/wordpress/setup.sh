@@ -107,7 +107,7 @@ make_images()
 		echo -en $WHITE
 		echo "📲 Building $kind image..."
 		echo -en $YELLOW
-		docker build -t $kind-alpine srcs/$kind/
+		docker build -t $kind srcs/$kind/
 		echo "$kind === "
 		# -t옵션은 tag임, 이름을 정해줄수 있음.
 		echo -en $GREEN
@@ -121,7 +121,9 @@ make_images()
 yaml_services()
 {
 	kubectl apply -f srcs/yaml_services/nginx.yaml
+	kubectl apply -f srcs/yaml_services/wordpress.yaml
 }
+
 
 main()
 {
