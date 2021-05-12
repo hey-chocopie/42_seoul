@@ -99,8 +99,8 @@ minikube_setup()
 
 make_images()
 {
-	images_kind=("nginx"  "wordpress")
-	#  "mysql" "phpmyadmin" "ftps" "grafana" "influxdb")
+	images_kind=("nginx"  "wordpress" )
+	# "MySQL" "mysql" "phpmyadmin" "ftps" "grafana" "influxdb")
 
 	for kind in "${images_kind[@]}"
 	do
