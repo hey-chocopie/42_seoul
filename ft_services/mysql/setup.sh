@@ -71,7 +71,8 @@ minikube_setup()
 {
 
 	minikube delete
-	minikube start --driver=virtualbox --cpus=2 #2
+	minikube start --driver=virtualbox --cpus=2
+#virtualbox --cpus=2 #2
 	minikube addons enable metrics-server #3
 	minikube addons enable dashboard &> /dev/null
 	minikube addons enable metallb
@@ -99,7 +100,7 @@ minikube_setup()
 
 make_images()
 {
-	images_kind=("nginx"  "wordpress" "MySQL")
+	images_kind=("nginx"  "wordpress" "mysql")
 	#  "mysql" "phpmyadmin" "ftps" "grafana" "influxdb")
 
 	for kind in "${images_kind[@]}"
@@ -122,6 +123,7 @@ yaml_services()
 {
 	kubectl apply -f srcs/yaml_services/nginx.yaml
 	kubectl apply -f srcs/yaml_services/wordpress.yaml
+	kubectl apply -f srcs/yaml_services/mysql.yaml
 }
 
 
