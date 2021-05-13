@@ -18,7 +18,7 @@ COPY start_mariadb.sh .
 COPY my_db.sql .
 COPY create_db .
 #
-#VOLUME ["/var/lib/mysql"]
+VOLUME ["/var/lib/mysql"]
 #
 EXPOSE 3306
 #
