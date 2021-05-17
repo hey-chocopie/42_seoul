@@ -16,7 +16,6 @@ COPY supervisord.conf /etc/
 COPY my.cnf /etc/
 COPY start_mariadb.sh .
 COPY my_db.sql .
-COPY hoylee_db.sql .
 COPY create_db .
 #
 VOLUME ["/var/lib/mysql"]

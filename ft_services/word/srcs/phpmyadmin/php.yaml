@@ -1,0 +1,43 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+spec:
+  selector:
+    matchLabels:
+      app: php
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: php
+    spec:
+      containers:
+        - name: php
+          image: php:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-php
+  labels:
+    app: php
+  annotations:
+    metallb.universe.tf/allow-shared-ip: wp
+spec:
+  externalTrafficPolicy: Cluster
+  type: LoadBalancer
+  loadBalancerIP: 192.168.99.101
+  ports:
+    - port: 5000
+      name: http
+      protocol: TCP
+      targetPort: 5000
+  selector:
+    app: php
