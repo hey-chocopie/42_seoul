@@ -5,14 +5,13 @@ RUN	echo "http://dl-2.alpinelinux.org/alpine/edge/community" >> /etc/apk/reposit
 RUN apk update && apk add curl supervisor influxdb libc6-compat telegraf \
 	&& rm -rf /var/cache/apk/*
 
-#RUN wget https://dl.influxdata.com/telegraf/releases/telegraf-1.17.0_linux_amd64.tar.gz \
-#	&& tar -xf telegraf-1.17.0_linux_amd64.tar.gz --strip-components=2 -C / \
-#	&& rm telegraf-1.17.0_linux_amd64.tar.gz
-#COPY srcs/telegraf.conf /etc/telegraf/
+RUN wget https://dl.influxdata.com/telegraf/releases/telegraf-1.17.0_linux_amd64.tar.gz \
+	&& tar -xf telegraf-1.17.0_linux_amd64.tar.gz --strip-components=2 -C / \
+	&& rm telegraf-1.17.0_linux_amd64.tar.gz
+COPY telegraf.conf /etc/telegraf/
 
-COPY srcs/supervisord.conf /etc/
-COPY srcs/start.sh /
-COPY srcs/telegraf.conf /etc/
+COPY supervisord.conf /etc/
+COPY start.sh /
 
 EXPOSE 8086
 

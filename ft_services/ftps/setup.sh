@@ -100,7 +100,7 @@ minikube_setup()
 
 make_images()
 {
-	images_kind=("nginx"  "wordpress" "mysql" "phpmyadmin" "ftps" "grafana")
+	images_kind=("nginx"  "wordpress" "mysql" "phpmyadmin" "ftps" "grafana" "influxdb")
 
 	#  "mysql" "phpmyadmin" "ftps" "grafana" "influxdb")
 
@@ -128,6 +128,7 @@ yaml_services()
 	kubectl apply -f srcs/yaml_services/phpmyadmin.yaml
 	kubectl apply -f srcs/yaml_services/ftps.yaml
 	kubectl apply -f srcs/yaml_services/grafana.yaml
+	kubectl apply -f srcs/yaml_services/influxdb.yaml
 }
 
 
@@ -136,7 +137,7 @@ main()
 	introduce
 	minikube_setup
 #eval $(minikube docker-env)
-#docker build -t mysql srcs/mysql/
+#docker build -t nginx srcs/nginx/
 	make_images
 	yaml_services
 }

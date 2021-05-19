@@ -11,7 +11,8 @@ chmod 600 etc/ssl/certs/localhost.dev.crt etc/ssl/private/localhost.dev.key
 #mv nginx.conf /etc/nginx
 cp -rp ./default.conf /etc/nginx/conf.d
 mv index.html /var/www/localhost/htdocs
-
-nginx -g "daemon off;"
+mv ./supervisord.conf /etc/supervisord.conf
+supervisord -c /etc/supervisord.conf
+#nginx -g "daemon off;"
 #bash
 #/bin/sh
