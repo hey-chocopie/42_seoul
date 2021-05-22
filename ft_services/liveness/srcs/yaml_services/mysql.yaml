@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-volume-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: mariadb-deploy
+spec:
+  selector:
+    matchLabels:
+      app: mariadb
+  replicas: 1 
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb-container
+          image: mysql
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              name: mariadb-volume
+          livenessProbe:
+            exec:
+                command:
+                - sh
+                - ./../mysql/healthy.sh
+            initialDelaySeconds: 20
+            periodSeconds: 5
+      volumes:
+        - name: mariadb-volume
+          persistentVolumeClaim:
+            claimName: mariadb-volume-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cip-mariadb
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306
+      name: mariadb
+      targetPort: 3306
+  selector:
+    app: mariadb

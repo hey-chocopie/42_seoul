@@ -7,15 +7,14 @@ mv localhost.dev.crt etc/ssl/certs/
 mv localhost.dev.key etc/ssl/private/
 chmod 600 etc/ssl/certs/localhost.dev.crt etc/ssl/private/localhost.dev.key
 
-
-#mv nginx.conf /etc/nginx
 echo "hellow word" >> index.html
 mv index.html /var/www/localhost/htdocs
 cp -rp ./default.conf /etc/nginx/conf.d
 mv ./supervisord.conf /etc/supervisord.conf
 #/bin/sh
-
-supervisord -c /etc/supervisord.conf
+nginx -g 'daemon off;' & telegraf & sleep infinity
+#supervisord -c /etc/supervisord.conf
 #nginx -g "daemon off;"
 #bash
+
 #/bin/sh
