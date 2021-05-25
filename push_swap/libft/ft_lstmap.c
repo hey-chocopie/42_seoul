@@ -20,7 +20,7 @@ void	ft_resultaddres(t_list **lst,
 	*new = savene;
 }
 
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *))
 {
 	t_list	*savels;
 	t_list	*savene;
@@ -37,7 +37,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	{
 		if (!(((*new).next) = (t_list *)malloc(sizeof(t_list) * 1)))
 		{
-			ft_lstclear(&savene, del);
+			ft_lstclear(&savene);
 			return (0);
 		}
 		new = (new->next);
