@@ -354,6 +354,43 @@ void		two_three_optimization(t_list **stackA, t_sd *s_data, int range)
 		}
 	}
 }
+int		lst_state_check(t_list **stack, int i, int range, int pivot)
+{
+	int j;
+	t_list *tmp;
+
+	j = i + 1;
+	tmp = (*stack);
+	while (j < range)
+	{
+		if(tmp->content <= pivot || tmp->content > tmp->next->content)
+			break;
+		tmp = tmp->next;
+		j++;
+	}
+	if (tmp->next == *stack)
+		return 1;
+	return 0;
+}
+
+int		lst2_state_check(t_list **stack, int i, int range)
+{
+	int j;
+	t_list *tmp;
+
+	j = i + 1;
+	tmp = (*stack);
+	while (j < range)
+	{
+		if(tmp->content < tmp->next->content)
+			break;
+		tmp = tmp->next;
+		j++;
+	}
+	if (tmp->next == *stack)
+		return (range - i);
+	return 0;
+}
 
 void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 {
@@ -362,7 +399,7 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	int ra_count = 0;
 	int pb_count = 0;
 
-	if (range == 1)
+	if (range == 1 || range == 0)
 		return ;
 	else if (range == 2 || range == 3)
 	{
@@ -374,6 +411,8 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 
 	while (i < range)
 	{
+		if (1 == lst_state_check(stackA, i, range, pivot))
+			break;
 		if ((*stackA)->content > pivot)
 		{
 			ra(stackA);
@@ -388,7 +427,7 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 		i++;
 	}
 	i = 0;
-	while(i < ra_count)
+	while(i < ra_count && ra_count != s_data->ca)
 	{
 		rra(stackA, s_data);
 		i++;
@@ -397,10 +436,6 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	A_to_B(stackA, stackB, s_data, ra_count);
 	//stack_d_check(*stackA, *stackB, s_data);
 	B_to_A(stackA, stackB, s_data, pb_count);
-//	for ra_호출 횟수
-//		rra #ra로 넘어간 원소들을 다시 스택 상단으로 되감기
-//	A_to_B(ra_호출_횟수) #A를 최대한 가볍게 만든다
-//	B_to_A(pb_호출_횟수) #A의 정렬이 끝나면 B로 넘어간 것들을 A로 올린다.
 	return ;
 }
 
@@ -411,7 +446,7 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	int pivot;
 	int rb_count = 0;
 	int pa_count = 0;
-
+	//int save = 0;
 	if (range == 1)
 	{
 		pa(stackA, stackB, s_data);
@@ -422,6 +457,12 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 
 	while (i < range)
 	{
+//		if (0 != (save =  lst2_state_check(stackB, i, range)))
+//		{
+//			write(1, &save, 20);
+//			printf("====%d====", save);
+//			break;
+//		}
 		if ((*stackB)->content <= pivot)
 		{
 			rb(stackB);
@@ -436,7 +477,7 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 		i++;
 	}
 	i = 0;
-	while(i < rb_count)
+	while(i < rb_count && rb_count != s_data->cb)
 	{
 		rrb(stackB, s_data);
 		i++;
@@ -445,6 +486,9 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	A_to_B(stackA, stackB, s_data, pa_count);
 	//stack_d_check(*stackA, *stackB, s_data);
 	B_to_A(stackA, stackB, s_data, rb_count);
+//	if (save != 0)
+//		while (save-- > 0)
+//			pa(stackA, stackB, s_data);
 //	A_to_B(ra_호출_횟수) #A를 최대한 가볍게 만든다
 //	B_to_A(pb_호출_횟수) #A의 정렬이 끝나면 B로 넘어간 것들을 A로 올린다.
 	return ;
