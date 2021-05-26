@@ -274,9 +274,9 @@ int		avr_value(t_list **stack, int range, int min_value)
 
 int		select_pivot(t_list **stack, int range)
 {
-	int i = 0;
+	//int i = 0;
 	int avr;
-	t_list *tmp;
+	//t_list *tmp;
 
 	avr = avr_value(stack, range, min_value(stack, range));
 	return avr;
