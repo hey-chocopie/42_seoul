@@ -373,7 +373,7 @@ int		lst_state_check(t_list **stack, int i, int range, int pivot)
 	return 0;
 }
 
-int		lst2_state_check(t_list **stack, int i, int range)
+int		lst2_state_check(t_list **stack, int i, int range, int pivot)
 {
 	int j;
 	t_list *tmp;
@@ -382,7 +382,7 @@ int		lst2_state_check(t_list **stack, int i, int range)
 	tmp = (*stack);
 	while (j < range)
 	{
-		if(tmp->content < tmp->next->content)
+		if(tmp->content > pivot || tmp->content < tmp->next->content)
 			break;
 		tmp = tmp->next;
 		j++;
@@ -408,34 +408,47 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	}
 	pivot = select_pivot(stackA, range);
 	//스택A의 depth개의 원소 중에서 "적절한" 피봇을 선택한다
-
-	while (i < range)
+	//lst_all_check(stackA, range);
+	t_list *tmp;
+	tmp = *stackA;
+	while (i + 1 < range)
 	{
-		if (1 == lst_state_check(stackA, i, range, pivot))
+		if(tmp->content > tmp->next->content)
 			break;
-		if ((*stackA)->content > pivot)
-		{
-			ra(stackA);
-			ra_count++;
-		}
-		else
-		{
-			pb(stackA, stackB, s_data);
-			pb_count++;
-			//pb_호출_횟수++
-		}
+		tmp = tmp->next;
 		i++;
 	}
-	i = 0;
-	while(i < ra_count && ra_count != s_data->ca)
+	if(tmp->next != *stackA)
 	{
-		rra(stackA, s_data);
-		i++;
+		i = 0;
+		while (i < range)
+		{
+			if (1 == lst_state_check(stackA, i, range, pivot))
+				break;
+			if ((*stackA)->content > pivot)
+			{
+				ra(stackA);
+				ra_count++;
+			}
+			else
+			{
+				pb(stackA, stackB, s_data);
+				pb_count++;
+				//pb_호출_횟수++
+			}
+			i++;
+		}
+		i = 0;
+		while(i < ra_count && ra_count != s_data->ca)
+		{
+			rra(stackA, s_data);
+			i++;
+		}
+		//stack_d_check(*stackA, *stackB, s_data);
+		A_to_B(stackA, stackB, s_data, ra_count);
+		//stack_d_check(*stackA, *stackB, s_data);
+		B_to_A(stackA, stackB, s_data, pb_count);
 	}
-	//stack_d_check(*stackA, *stackB, s_data);
-	A_to_B(stackA, stackB, s_data, ra_count);
-	//stack_d_check(*stackA, *stackB, s_data);
-	B_to_A(stackA, stackB, s_data, pb_count);
 	return ;
 }
 
@@ -446,7 +459,9 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	int pivot;
 	int rb_count = 0;
 	int pa_count = 0;
-	//int save = 0;
+	int save = 0;
+	if (range == 0)
+		return ;
 	if (range == 1)
 	{
 		pa(stackA, stackB, s_data);
@@ -457,12 +472,10 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 
 	while (i < range)
 	{
-//		if (0 != (save =  lst2_state_check(stackB, i, range)))
-//		{
-//			write(1, &save, 20);
-//			printf("====%d====", save);
-//			break;
-//		}
+		if (0 != (save =  lst2_state_check(stackB, i, range, pivot)))
+		{
+			break;
+		}
 		if ((*stackB)->content <= pivot)
 		{
 			rb(stackB);
@@ -486,9 +499,9 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	A_to_B(stackA, stackB, s_data, pa_count);
 	//stack_d_check(*stackA, *stackB, s_data);
 	B_to_A(stackA, stackB, s_data, rb_count);
-//	if (save != 0)
-//		while (save-- > 0)
-//			pa(stackA, stackB, s_data);
+	if (save != 0)
+		while (save-- > 0)
+			pa(stackA, stackB, s_data);
 //	A_to_B(ra_호출_횟수) #A를 최대한 가볍게 만든다
 //	B_to_A(pb_호출_횟수) #A의 정렬이 끝나면 B로 넘어간 것들을 A로 올린다.
 	return ;
