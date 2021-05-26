@@ -282,6 +282,79 @@ int		select_pivot(t_list **stack, int range)
 	return avr;
 }
 
+void		two_three_optimization(t_list **stackA, t_sd *s_data, int range)
+{
+	t_list *tmp;
+	int flag[3] = { 0, }; 
+	if (range == 2)
+	{
+		if((*stackA) -> next -> content < ((*stackA) -> content))
+			sa(stackA);
+	}
+	else if (range == 3)
+	{
+		tmp = (*stackA);
+		tmp = tmp -> next;
+		if ((*stackA) -> next -> content > (*stackA) -> content)
+			flag[0] = 1;
+		if (tmp -> next -> content > tmp -> content)
+			flag[1] = 1;
+		if (tmp -> next -> content > (*stackA) -> content)
+			flag[2] = 1;
+
+		if(flag[0] == 1 && flag[1] == 1 && flag[2] == 1)//#1
+			return ;
+		else if(flag[0] == 1 && flag[1] == 0 && flag[2] == 1)//#2
+		{
+			ra(stackA);
+			sa(stackA);
+			rra(stackA, s_data);
+		}
+		else if(flag[0] == 0 && flag[1] == 1 && flag[2] == 1)
+			sa(stackA);
+		else if(flag[0] == 1 && flag[1] == 0 && flag[2] == 0)
+		{
+			if(s_data -> ca == 3)
+				rra(stackA, s_data);
+			else
+			{
+				ra(stackA);
+				sa(stackA);
+				rra(stackA, s_data);
+				sa(stackA);
+			}
+		}
+		else if(flag[0] == 0 && flag[1] == 1 && flag[2] == 0)
+		{
+			if(s_data -> ca == 3)
+				ra(stackA);
+			else
+			{
+				sa(stackA);
+				ra(stackA);
+				sa(stackA);
+				rra(stackA, s_data);
+			}
+		}
+		else if(flag[0] == 0 && flag[1] == 0 && flag[2] == 0)
+		{
+			if(s_data -> ca ==3)
+			{
+				sa(stackA);
+				rra(stackA, s_data);
+			}
+			else
+			{
+				sa(stackA);
+				ra(stackA);
+				sa(stackA);
+				rra(stackA, s_data);
+				sa(stackA);
+			}
+		}
+	}
+}
+
 void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 {
 	int i = 0;
@@ -291,6 +364,11 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 
 	if (range == 1)
 		return ;
+	else if (range == 2 || range == 3)
+	{
+		two_three_optimization(stackA, s_data, range);
+		return ;
+	}
 	pivot = select_pivot(stackA, range);
 	//스택A의 depth개의 원소 중에서 "적절한" 피봇을 선택한다
 
@@ -445,7 +523,7 @@ int main(int argc, char **argv)
 //	//-----------------------------------------
 	A_to_B(&stackA, &stackB, &s_data, s_data.ca);
 	
-//	//stack_d_check(stackA, stackB, &s_data);
+//	stack_d_check(stackA, stackB, &s_data);
 //	//stack_d_check(stackA, stackB, &s_data);
 	return 0;
 }
