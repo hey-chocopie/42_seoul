@@ -8,6 +8,7 @@ typedef struct		s_sd
 {
 	int		ca;
 	int		cb;
+	char	*s;
 }					t_sd;
 
 //void			sa(t_list **stackA);

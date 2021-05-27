@@ -18,6 +18,7 @@ typedef struct		s_sd
 {
 	int		ca;
 	int		cb;
+	char	*s;
 }					t_sd;
 
 void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range);
@@ -113,6 +114,8 @@ void		setup_data(t_sd	*s_data)
 {
 	s_data->ca = 0;
 	s_data->cb = 0;
+	s_data->s = malloc(4);
+	(s_data->s)[0] = 'o';
 }
 
 void		circle_lst(t_list **stack, int lst_depth)
@@ -134,66 +137,120 @@ void		circle_lst(t_list **stack, int lst_depth)
 	}
 }
 
-void		sa(t_list **stackA)
+void		input_string(t_sd *s_data, char *tmp)
 {
-	swap(stackA);
-	write(1, "sa\n", 3);
+	int i = 0;
+
+	while(tmp[i])
+	{
+		(s_data->s)[i] = tmp[i];
+		i++;
+	}
+	tmp[i] = '\0';
+	return ;
 }
 
-void		sb(t_list **stackB)
+
+void		sa(t_list **stackA, t_sd *s_data)
 {
-	swap(stackB);
-	write(1, "sb\n", 3);
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "sa");
+	else
+	{
+		swap(stackA);
+		write(1, "sa\n", 3);
+	}
 }
 
-void		ss(t_list **stackA, t_list **stackB)
+void		sb(t_list **stackB, t_sd *s_data)
 {
-	sa(stackA);
-	sb(stackB);
-	write(1, "ss\n", 3);
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "sb");
+	else
+	{
+		swap(stackB);
+		write(1, "sb\n", 3);
+	}
+}
+
+void		ss(t_list **stackA, t_list **stackB, t_sd *s_data)
+{
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "ss");
+	else
+	{
+		swap(stackA);
+		swap(stackB);
+		write(1, "ss\n", 3);
+	}
 }
 
 void		pa(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
 	if(*stackB == 0)
 		return ;
-	s_data -> cb--;
-	s_data -> ca++;
-	push(stackB, stackA);
-	circle_lst(stackA, s_data -> ca);
-	circle_lst(stackB, s_data -> cb);
-	write(1, "pa\n", 3);
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "pa");
+	else
+	{
+		s_data -> cb--;
+		s_data -> ca++;
+		push(stackB, stackA);
+		circle_lst(stackA, s_data -> ca);
+		circle_lst(stackB, s_data -> cb);
+		write(1, "pa\n", 3);
+	}
 }
 
 void		pb(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
 	if(*stackA == 0)
 		return ;
-	s_data -> cb++;
-	s_data -> ca--;
-	push(stackA, stackB);
-	circle_lst(stackA, s_data -> ca);
-	circle_lst(stackB, s_data -> cb);
-	write(1, "pb\n", 3);
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "pb");
+	else
+	{
+		s_data -> cb++;
+		s_data -> ca--;
+		push(stackA, stackB);
+		circle_lst(stackA, s_data -> ca);
+		circle_lst(stackB, s_data -> cb);
+		write(1, "pb\n", 3);
+	}
 }
 
-void	ra(t_list **stackA)
+void	ra(t_list **stackA, t_sd *s_data)
 {
-	(*stackA) = (*stackA) -> next;
-	write(1, "ra\n", 3);
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "ra");
+	else
+	{
+		(*stackA) = (*stackA) -> next;
+		write(1, "ra\n", 3);
+	}
 }
 
-void	rb(t_list **stackB)
-{
-	(*stackB) = (*stackB) -> next;
-	write(1, "rb\n", 3);
+void	rb(t_list **stackB, t_sd *s_data)
+{	
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "rb");
+	else
+	{
+		(*stackB) = (*stackB) -> next;
+		write(1, "rb\n", 3);
+	}
 }
 
-void	rr(t_list **stackA, t_list **stackB)
+void	rr(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
-	ra(stackA);
-	rb(stackB);
-	write(1, "rr\n", 3);
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "rr");
+	else
+	{
+		ra(stackA, s_data);
+		rb(stackB, s_data);
+		write(1, "rr\n", 3);
+	}
 	// 수정..
 }
 
@@ -201,31 +258,45 @@ void	rra(t_list **stackA, t_sd *s_data)
 {
 	int i = 1;
 
-	while (i < s_data -> ca)
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "rra");
+	else
 	{
-		*stackA = (*stackA) -> next;
-		i++;
+		while (i < s_data -> ca)
+		{
+			*stackA = (*stackA) -> next;
+			i++;
+		}
+		write(1, "rra\n", 4);
 	}
-	write(1, "rra\n", 4);
 }
 
 void	rrb(t_list **stackB, t_sd *s_data)
 {
 	int i = 1;
-
-	while (i < s_data -> cb)
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "rrb");
+	else
 	{
-		*stackB = (*stackB) -> next;
-		i++;
+		while (i < s_data -> cb)
+		{
+			*stackB = (*stackB) -> next;
+			i++;
+		}
+		write(1, "rrb\n", 4);
 	}
-	write(1, "rrb\n", 4);
 }
 
 void	rrr(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
-	rra(stackA, s_data);
-	rrb(stackB, s_data);
-	write(1, "rrr\n", 4);
+	if((s_data->s)[0] == 0)
+		input_string(s_data, "rrr");
+	else
+	{
+		rra(stackA, s_data);
+		rrb(stackB, s_data);
+		write(1, "rrr\n", 4);
+	}
 }
 
 int		min_value(t_list **stack, int depth)
@@ -274,9 +345,7 @@ int		avr_value(t_list **stack, int range, int min_value)
 
 int		select_pivot(t_list **stack, int range)
 {
-	//int i = 0;
 	int avr;
-	//t_list *tmp;
 
 	avr = avr_value(stack, range, min_value(stack, range));
 	return avr;
@@ -289,7 +358,7 @@ void		two_three_optimization(t_list **stackA, t_sd *s_data, int range)
 	if (range == 2)
 	{
 		if((*stackA) -> next -> content < ((*stackA) -> content))
-			sa(stackA);
+			sa(stackA, s_data);
 	}
 	else if (range == 3)
 	{
@@ -306,33 +375,33 @@ void		two_three_optimization(t_list **stackA, t_sd *s_data, int range)
 			return ;
 		else if(flag[0] == 1 && flag[1] == 0 && flag[2] == 1)//#2
 		{
-			ra(stackA);
-			sa(stackA);
+			ra(stackA, s_data);
+			sa(stackA, s_data);
 			rra(stackA, s_data);
 		}
 		else if(flag[0] == 0 && flag[1] == 1 && flag[2] == 1)
-			sa(stackA);
+			sa(stackA, s_data);
 		else if(flag[0] == 1 && flag[1] == 0 && flag[2] == 0)
 		{
 			if(s_data -> ca == 3)
 				rra(stackA, s_data);
 			else
 			{
-				ra(stackA);
-				sa(stackA);
+				ra(stackA, s_data);
+				sa(stackA, s_data);
 				rra(stackA, s_data);
-				sa(stackA);
+				sa(stackA, s_data);
 			}
 		}
 		else if(flag[0] == 0 && flag[1] == 1 && flag[2] == 0)
 		{
 			if(s_data -> ca == 3)
-				ra(stackA);
+				ra(stackA, s_data);
 			else
 			{
-				sa(stackA);
-				ra(stackA);
-				sa(stackA);
+				sa(stackA, s_data);
+				ra(stackA, s_data);
+				sa(stackA, s_data);
 				rra(stackA, s_data);
 			}
 		}
@@ -340,16 +409,16 @@ void		two_three_optimization(t_list **stackA, t_sd *s_data, int range)
 		{
 			if(s_data -> ca ==3)
 			{
-				sa(stackA);
+				sa(stackA, s_data);
 				rra(stackA, s_data);
 			}
 			else
 			{
-				sa(stackA);
-				ra(stackA);
-				sa(stackA);
+				sa(stackA, s_data);
+				ra(stackA, s_data);
+				sa(stackA, s_data);
 				rra(stackA, s_data);
-				sa(stackA);
+				sa(stackA, s_data);
 			}
 		}
 	}
@@ -398,7 +467,6 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	int pivot;
 	int ra_count = 0;
 	int pb_count = 0;
-
 	if (range == 1 || range == 0)
 		return ;
 	else if (range == 2 || range == 3)
@@ -406,49 +474,29 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 		two_three_optimization(stackA, s_data, range);
 		return ;
 	}
+
 	pivot = select_pivot(stackA, range);
-	//스택A의 depth개의 원소 중에서 "적절한" 피봇을 선택한다
-	//lst_all_check(stackA, range);
-	t_list *tmp;
-	tmp = *stackA;
-	while (i + 1 < range)
+	while (i < range)
 	{
-		if(tmp->content > tmp->next->content)
+		if (1 ==  lst_state_check(stackA, i, range, pivot))
 			break;
-		tmp = tmp->next;
+		if ((*stackA)->content > pivot)
+		{
+			ra(stackA, s_data);
+			ra_count++;
+		}
+		else
+		{
+			pb(stackA, stackB, s_data);
+			pb_count++;
+		}
 		i++;
 	}
-	if(tmp->next != *stackA)
-	{
-		i = 0;
-		while (i < range)
-		{
-			if (1 == lst_state_check(stackA, i, range, pivot))
-				break;
-			if ((*stackA)->content > pivot)
-			{
-				ra(stackA);
-				ra_count++;
-			}
-			else
-			{
-				pb(stackA, stackB, s_data);
-				pb_count++;
-				//pb_호출_횟수++
-			}
-			i++;
-		}
-		i = 0;
-		while(i < ra_count && ra_count != s_data->ca)
-		{
-			rra(stackA, s_data);
-			i++;
-		}
-		//stack_d_check(*stackA, *stackB, s_data);
-		A_to_B(stackA, stackB, s_data, ra_count);
-		//stack_d_check(*stackA, *stackB, s_data);
-		B_to_A(stackA, stackB, s_data, pb_count);
-	}
+	i = 0;
+	while(i++ < ra_count && ra_count != s_data->ca)
+		rra(stackA, s_data);
+	A_to_B(stackA, stackB, s_data, ra_count);
+	B_to_A(stackA, stackB, s_data, pb_count);
 	return ;
 }
 
@@ -467,25 +515,31 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 		pa(stackA, stackB, s_data);
 		return ;
 	}
-	pivot = select_pivot(stackB, range);
-	//스택B의 depth개의 원소 중에서 "적절한" 피봇을 선택한다
+	if (range <4)
+	{
+		while(i < range)
+		{
+			pa(stackA, stackB, s_data);
 
+			i++;
+		}
+		A_to_B(stackA, stackB, s_data, range);
+		return ;
+	}
+	pivot = select_pivot(stackB, range);
 	while (i < range)
 	{
 		if (0 != (save =  lst2_state_check(stackB, i, range, pivot)))
-		{
 			break;
-		}
 		if ((*stackB)->content <= pivot)
 		{
-			rb(stackB);
+			rb(stackB, s_data);
 			rb_count++;
 		}
 		else
 		{
 			pa(stackA, stackB, s_data);
 			pa_count++;
-			//pa_호출_횟수++
 		}
 		i++;
 	}
@@ -495,40 +549,13 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 		rrb(stackB, s_data);
 		i++;
 	}
-	//stack_d_check(*stackA, *stackB, s_data);
 	A_to_B(stackA, stackB, s_data, pa_count);
-	//stack_d_check(*stackA, *stackB, s_data);
 	B_to_A(stackA, stackB, s_data, rb_count);
 	if (save != 0)
 		while (save-- > 0)
 			pa(stackA, stackB, s_data);
-//	A_to_B(ra_호출_횟수) #A를 최대한 가볍게 만든다
-//	B_to_A(pb_호출_횟수) #A의 정렬이 끝나면 B로 넘어간 것들을 A로 올린다.
 	return ;
 }
-
-
-//void	def B_to_A(범위의 크기r)
-//{
-//	if r == 1
-//		pa호출
-//		return
-//	스택B의 r개의 원소 중에서 "적절한" 피봇을 선택한다
-//	for r개의 원소에 대해서
-//		if (스택B의 top) > 피봇
-//			rb명령으로 뒤로 넘긴다
-//			rb_호출_횟수++
-//		else
-//			pa명령으로 a로 보낸다
-//			pa_호출_횟수++
-//	for ra_호출 횟수
-//		rra #ra로 넘어간 원소들을 다시 스택 상단으로 되감기
-//	A_to_B(pa_호출_횟수) #A로 넘어간 그룹
-//	B_to_A(pb_호출_횟수) #B에 남은 그룹
-//}
-
-// ps 
-// stack_d_check : 값들이 잘 들어가있는지 확인
 
 void arg_string(char ***argv, int *argc, int *i)
 {
@@ -559,28 +586,8 @@ int main(int argc, char **argv)
 		i++;
 	}
 	circle_lst(&stackA, s_data.ca);
-//
-//	//printf("%d", s_data.ca);
-//	//------------- testzone ------------------
-//	//sa(&stackA);
-//	//sb(&stackB);
-//	//ss(&stackA, &stackB);
-//	//pa(&stackA, &stackB, &s_data);
-//
-//	//ra, rb 테스트
-////	pb(&stackA, &stackB, &s_data);
-////	pb(&stackA, &stackB, &s_data);
-////	pb(&stackA, &stackB, &s_data);
-////	ra(&stackA);
-////	rb(&stackB);
-////
-////	rra(&stackA, &s_data);
-////	rrb(&stackB, &s_data);
-////	rrr(&stackA, &stackB, &s_data);
-//	//-----------------------------------------
 	A_to_B(&stackA, &stackB, &s_data, s_data.ca);
 	
 //	stack_d_check(stackA, stackB, &s_data);
-//	//stack_d_check(stackA, stackB, &s_data);
 	return 0;
 }
