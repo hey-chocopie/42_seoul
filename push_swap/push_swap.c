@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 18:09:05 by hoylee            #+#    #+#             */
-/*   Updated: 2021/05/22 22:59:21 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/05/31 23:00:44 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,11 +149,17 @@ void		input_string(t_sd *s_data, char *tmp)
 	return ;
 }
 
+//void		pre_value(t_list **stackA, t_sd *s_data, int pre_vf)
+//{
+//	;
+//}
 
 void		sa(t_list **stackA, t_sd *s_data)
 {
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "sa");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		swap(stackA);
@@ -165,6 +171,8 @@ void		sb(t_list **stackB, t_sd *s_data)
 {
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "sb");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		swap(stackB);
@@ -176,6 +184,8 @@ void		ss(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "ss");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		swap(stackA);
@@ -190,6 +200,8 @@ void		pa(t_list **stackA, t_list **stackB, t_sd *s_data)
 		return ;
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "pa");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		s_data -> cb--;
@@ -207,6 +219,8 @@ void		pb(t_list **stackA, t_list **stackB, t_sd *s_data)
 		return ;
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "pb");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		s_data -> cb++;
@@ -222,6 +236,8 @@ void	ra(t_list **stackA, t_sd *s_data)
 {
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "ra");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		(*stackA) = (*stackA) -> next;
@@ -233,6 +249,8 @@ void	rb(t_list **stackB, t_sd *s_data)
 {	
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "rb");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		(*stackB) = (*stackB) -> next;
@@ -244,6 +262,8 @@ void	rr(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "rr");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		(*stackA) = (*stackA) -> next;
@@ -259,6 +279,8 @@ void	rra(t_list **stackA, t_sd *s_data)
 
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "rra");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		while (i < s_data -> ca)
@@ -275,6 +297,8 @@ void	rrb(t_list **stackB, t_sd *s_data)
 	int i = 1;
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "rrb");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		while (i < s_data -> cb)
@@ -291,6 +315,8 @@ void	rrr(t_list **stackA, t_list **stackB, t_sd *s_data)
 	int i = 1;
 	if((s_data->s)[0] == 0)
 		input_string(s_data, "rrr");
+//	else if(pre_vf == 1)
+//		pre_value(stackA, s_data, pre_vf);
 	else
 	{
 		while (i < s_data -> ca)
@@ -447,7 +473,7 @@ int		lst_state_check(t_list **stack,  int range, int i,  int pivot)//int pb_max,
 		tmp = tmp->next;
 		j++;
 	}
-	if  (range != i + 1 && range != 1 &&  j == range)
+	if  (range != i + 1 && j == range)
 	{
 		//printf("==j-1=%d=====pivot=%d===i-%d====", j - 1, pivot, i);
 		return (j - i);
@@ -460,36 +486,39 @@ int		lst2_state_check(t_list **stack, int i, int range, int p_small)
 	int j;
 	t_list *tmp;
 
-	j = i + 1;
+	j = i;
 	tmp = (*stack);
 	while (j < range)
 	{
-		if(tmp->content <= p_small || tmp->content < tmp->next->content)
+		if(tmp->content > p_small)
 			break;
+ //|| tmp->content < tmp->next->content
 		tmp = tmp->next;
 		j++;
 	}
-	if (tmp->next == *stack)
-		return (range - j);
+
+	if  (range != i && j == range)
+		return (j - i);
 	return 0;
 }
 
-int		stack_max_value(t_list **stackA, t_list **stackB, int *range)
+int		stack_max_value(t_list **stackA, t_list **stackB, int *range, int pivot)
 {
 	int j;
 	int max;
 	t_list *tmp;
 
 	j = 0;
+	max = -2147483648;
 	tmp = (*stackB);
 	while (j < (*range))
 	{
-		tmp = tmp->next;
 		if (max < tmp->content)
 			max = tmp->content;
+		tmp = tmp->next;
 		j++;
 	}
-	if ((*stackB)->content == max && (*stackA)->content > (*stackB)->content)
+	if ((*stackB)->content == max && pivot < (*stackB)->content && (*stackA)->content > (*stackB)->content)
 	{
 		return 1;
 	}
@@ -543,7 +572,6 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	int ra_count = 0;
 	int pb_count = 0;
 	int rb_count = 0;
-	int pb_max = 0;
 	if (range == 1 || range == 0)
 		return ;
 	else if (range == 2 || range == 3)
@@ -561,20 +589,15 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	{
 		if (0 != (flag =  lst_state_check(stackA, range, i, pivot)))//,pb_max
 		{
-			//stack_d_check(*stackA, *stackB, s_data);
 			break;
 		}
 		if ((*stackA)->content > pivot)
 		{
-			if((*stackA) -> content > pb_max)
-				pb_max = (*stackA) -> content;
 			ra(stackA, s_data);
 			ra_count++;
 		}
 		else
 		{
-			if(pb_max < (*stackA) -> content)
-				pb_max = (*stackA) -> content;
 			pb(stackA, stackB, s_data);
 			pb_count++;
 			if ((*stackB)->content >= p_small)
@@ -602,9 +625,8 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 //		i++;
 //	}
 	i = 0;
-
-//	if (1 == location_check(s_data, ra_count, rb_count))
-//	{
+	if (1 == location_check(s_data, ra_count, rb_count))
+	{
 		//stack_d_check(*stackA, *stackB, s_data);
 		while(i < rb_count && i < ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
 		{
@@ -621,27 +643,27 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 			i++;
 			rrb(stackB, s_data);
 		}
-//	}
-//	else
-//	{
-//		printf("eifjowejoifjwoifjowjojowjei");
-//		//stack_d_check(*stackA, *stackB, s_data);
-//		while(i < s_data->cb - rb_count && i < s_data->ca - ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
-//		{
-//			rr(stackA, stackB, s_data);
-//			i++;
-//		}
-//		while(i< s_data->ca - ra_count && (ra_count != s_data->ca))
-//		{
-//			ra(stackA, s_data);
-//			i++;
-//		}
-//		while(i< s_data->cb - rb_count && (rb_count != s_data->cb))
-//		{
-//			i++;
-//			rb(stackB, s_data);
-//		}
-//	}
+	}
+	else
+	{
+		//printf("eifjowejoifjwoifjowjojowjei");
+		//stack_d_check(*stackA, *stackB, s_data);
+		while(i < s_data->cb - rb_count && i < s_data->ca - ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
+		{
+			rr(stackA, stackB, s_data);
+			i++;
+		}
+		while(i< s_data->ca - ra_count && (ra_count != s_data->ca))
+		{
+			ra(stackA, s_data);
+			i++;
+		}
+		while(i< s_data->cb - rb_count && (rb_count != s_data->cb))
+		{
+			i++;
+			rb(stackB, s_data);
+		}
+	}
 
 	//stack_d_check(*stackA, *stackB, s_data);
 	A_to_B(stackA, stackB, s_data, ra_count + flag);
@@ -650,6 +672,30 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	return ;
 }
 
+int		stack_pre_check(t_list **stackA, int only_pa)
+{
+	int i =	1;
+	int max = -2147483648;
+	t_list *tmp;
+
+	tmp = *stackA;
+	if (only_pa == 0 || only_pa == 1)
+		return 1;
+	else
+	{
+		while(i < only_pa)
+		{
+			max = tmp->content;
+			tmp = tmp->next;
+			if(max > tmp->content)
+				break;
+			i++;
+		}
+		if(i == only_pa)
+			return 1;
+	}
+	return 0;
+}
 
 void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 {
@@ -679,28 +725,31 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 		return ;
 	}
 	pivot = select_pivot(stackB, range, &p_small);
+	save = 0;
+	int check;
+	check = -2147483648;
 	while (i < range)
 	{
 		if (0 != (save =  lst2_state_check(stackB, i, range, p_small)))
 			break;
-		if(1 == stack_max_value(stackA, stackB, &range))
-			pa(stackA, stackB, s_data);
+
+
+		if ((*stackB)->content <= p_small)
+		{
+			rb(stackB, s_data);
+			rb_count++;
+		}
 		else
 		{
-			if ((*stackB)->content <= p_small)
-			{
-				rb(stackB, s_data);
-				rb_count++;
-			}
-			else
-			{			
-				pa(stackA, stackB, s_data);
+			if(1 == stack_max_value(stackA, stackB, &range, pivot) && 1 ==  stack_pre_check(stackA, pa_count - ra_count))
+				pa_count = ra_count;
+			else 
 				pa_count++;
-				if((*stackA)->content <= pivot)
-				{
-					ra(stackA, s_data);
-					ra_count++;
-				}
+			pa(stackA, stackB, s_data);
+			if((*stackA)->content <= pivot)
+			{
+				ra(stackA, s_data);
+				ra_count++;
 			}
 		}
 		i++;
@@ -708,6 +757,7 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 
 
 	//stack_d_check(*stackA, *stackB, s_data);
+	//+ flag
 	A_to_B(stackA, stackB, s_data, pa_count - ra_count);
 	i = 0;
 
@@ -732,6 +782,7 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	}
 	else
 	{
+		printf("22222222222222222");
 		//stack_d_check(*stackA, *stackB, s_data);
 		while(i < s_data->cb - rb_count && i < s_data->ca - ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
 		{
@@ -757,10 +808,8 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 
 	//stack_d_check(*stackA, *stackB, s_data);
 	A_to_B(stackA, stackB, s_data, ra_count);
-	B_to_A(stackA, stackB, s_data, rb_count);
-//	if (save != 0)
-//		while (save-- > 0)
-//			pa(stackA, stackB, s_data);
+	B_to_A(stackA, stackB, s_data, rb_count + save);
+
 	return ;
 }
 
