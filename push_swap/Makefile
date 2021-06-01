@@ -24,7 +24,8 @@ OBJS = ${SRCS:.c=.o}
 CC		= gcc
 RM		= rm -f
 
-CFLAGS =-Wall -Wextra -Werror
+CFLAGS =
+#-Wall -Wextra -Werror
 
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}

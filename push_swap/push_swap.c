@@ -114,7 +114,7 @@ void		setup_data(t_sd	*s_data)
 	s_data->ca = 0;
 	s_data->cb = 0;
 	s_data->s = malloc(4);
-	(s_data->s)[0] = 'o';
+	(s_data->s)[0] = 0;
 }
 
 void		circle_lst(t_list **stack, int lst_depth)
@@ -145,193 +145,149 @@ void		input_string(t_sd *s_data, char *tmp)
 		(s_data->s)[i] = tmp[i];
 		i++;
 	}
-	tmp[i] = '\0';
+	(s_data->s)[i] = '\0';
 	return ;
 }
 
-//void		pre_value(t_list **stackA, t_sd *s_data, int pre_vf)
-//{
-//	;
-//}
+
+
+void		pre_value(char *s, t_sd *s_data)
+{
+	char tmp[4];
+	int i = 0;
+
+	if((s_data->s)[0] == 0)
+		input_string(s_data, s);
+	else
+	{
+		while (s_data->s[i])
+		{
+			tmp[i] = s_data->s[i];
+			i++;
+		}
+		tmp[i] = 0;
+		input_string(s_data, s);
+
+		if(ft_strncmp(tmp, "ra", 2) == 0 && ft_strncmp(s_data->s, "rb", 2) == 0)
+		{
+			write(1, "rr\n", 3);
+			s_data->s[0] = 0;
+		}
+		else if(ft_strncmp(s_data->s, "ra", 2) == 0 && ft_strncmp(tmp, "rb", 2) == 0)
+		{
+			write(1, "rr\n", 3);
+			s_data->s[0] = 0;
+		}
+		else
+		{
+			write(1, tmp, ft_strlen(tmp));
+			write(1, "\n", 1);
+		}
+	}
+}
 
 void		sa(t_list **stackA, t_sd *s_data)
 {
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "sa");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
-	{
-		swap(stackA);
-		write(1, "sa\n", 3);
-	}
+	swap(stackA);
+	pre_value("sa\0", s_data);
 }
 
 void		sb(t_list **stackB, t_sd *s_data)
 {
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "sb");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
-	{
-		swap(stackB);
-		write(1, "sb\n", 3);
-	}
+	swap(stackB);
+	pre_value("sb\0", s_data);
 }
 
 void		ss(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "ss");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
-	{
-		swap(stackA);
-		swap(stackB);
-		write(1, "ss\n", 3);
-	}
+	swap(stackA);
+	swap(stackB);
+	pre_value("ss\0", s_data);
 }
 
 void		pa(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
 	if(*stackB == 0)
 		return ;
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "pa");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
-	{
-		s_data -> cb--;
-		s_data -> ca++;
-		push(stackB, stackA);
-		circle_lst(stackA, s_data -> ca);
-		circle_lst(stackB, s_data -> cb);
-		write(1, "pa\n", 3);
-	}
+	s_data -> cb--;
+	s_data -> ca++;
+	push(stackB, stackA);
+	circle_lst(stackA, s_data -> ca);
+	circle_lst(stackB, s_data -> cb);
+	pre_value("pa\0", s_data);
 }
 
 void		pb(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
 	if(*stackA == 0)
 		return ;
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "pb");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
-	{
-		s_data -> cb++;
-		s_data -> ca--;
-		push(stackA, stackB);
-		circle_lst(stackA, s_data -> ca);
-		circle_lst(stackB, s_data -> cb);
-		write(1, "pb\n", 3);
-	}
+	s_data -> cb++;
+	s_data -> ca--;
+	push(stackA, stackB);
+	circle_lst(stackA, s_data -> ca);
+	circle_lst(stackB, s_data -> cb);
+	pre_value("pb\0", s_data);
 }
 
 void	ra(t_list **stackA, t_sd *s_data)
 {
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "ra");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
-	{
-		(*stackA) = (*stackA) -> next;
-		write(1, "ra\n", 3);
-	}
+	(*stackA) = (*stackA) -> next;
+	pre_value("ra\0", s_data);
 }
 
 void	rb(t_list **stackB, t_sd *s_data)
 {	
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "rb");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
-	{
-		(*stackB) = (*stackB) -> next;
-		write(1, "rb\n", 3);
-	}
+	(*stackB) = (*stackB) -> next;
+	pre_value("rb\0", s_data);
 }
 
 void	rr(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "rr");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
-	{
-		(*stackA) = (*stackA) -> next;
-		(*stackB) = (*stackB) -> next;
-		write(1, "rr\n", 3);
-	}
-	// 수정..
+	(*stackA) = (*stackA) -> next;
+	(*stackB) = (*stackB) -> next;
+	pre_value("rr\0", s_data);
 }
 
 void	rra(t_list **stackA, t_sd *s_data)
 {
 	int i = 1;
 
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "rra");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
+	while (i < s_data -> ca)
 	{
-		while (i < s_data -> ca)
-		{
-			*stackA = (*stackA) -> next;
-			i++;
-		}
-		write(1, "rra\n", 4);
+		*stackA = (*stackA) -> next;
+		i++;
 	}
+	pre_value("rra\0", s_data);
 }
 
 void	rrb(t_list **stackB, t_sd *s_data)
 {
 	int i = 1;
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "rrb");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
+
+	while (i < s_data -> cb)
 	{
-		while (i < s_data -> cb)
-		{
-			*stackB = (*stackB) -> next;
-			i++;
-		}
-		write(1, "rrb\n", 4);
+		*stackB = (*stackB) -> next;
+		i++;
 	}
+	pre_value("rrb\0", s_data);
 }
 
 void	rrr(t_list **stackA, t_list **stackB, t_sd *s_data)
 {
 	int i = 1;
-	if((s_data->s)[0] == 0)
-		input_string(s_data, "rrr");
-//	else if(pre_vf == 1)
-//		pre_value(stackA, s_data, pre_vf);
-	else
+
+	while (i < s_data -> ca)
 	{
-		while (i < s_data -> ca)
-		{
-			*stackA = (*stackA) -> next;
-			i++;
-		}
-		i = 1;
-		while (i < s_data -> cb)
-		{
-			*stackB = (*stackB) -> next;
-			i++;
-		}
-		write(1, "rrr\n", 4);
+		*stackA = (*stackA) -> next;
+		i++;
 	}
+	i = 1;
+	while (i < s_data -> cb)
+	{
+		*stackB = (*stackB) -> next;
+		i++;
+	}
+	pre_value("rrr\0", s_data);
 }
 
 int		min_value(t_list **stack, int depth)
@@ -843,7 +799,11 @@ int main(int argc, char **argv)
 	}
 	circle_lst(&stackA, s_data.ca);
 	A_to_B(&stackA, &stackB, &s_data, s_data.ca);
-	
+	if(s_data.s[0] != 0)
+	{
+		write(1, s_data.s, ft_strlen(s_data.s));
+		write(1, "\n", 1);
+	}
 	//stack_d_check(stackA, stackB, &s_data);
 	return 0;
 }
