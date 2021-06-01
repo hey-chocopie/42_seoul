@@ -19,6 +19,12 @@ typedef struct		s_sd
 	int		ca;
 	int		cb;
 	char	*s;
+	int		p_small;
+	int		p_big;
+	int		rb_c;
+	int		ra_c;
+	int		pa_c;
+	int		range;
 }					t_sd;
 
 void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range);
@@ -668,88 +674,131 @@ void short_length(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	return ;
 }
 
-void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
+void	pivot_sort(t_list **stackA, t_list **stackB, t_sd *s_data, int *save)
 {
-	int i = 0;
-	int pivot;
-	int rb_count = 0;
-	int pa_count = 0;
-	int save = 0;
-	int p_small = 0;
-	int ra_count = 0;
-
-	if(range <= 3)
+	int i;
+	
+	i = 0;
+	while (i < s_data->range)
 	{
-		short_length(stackA, stackB, s_data, range);
-		return;
-	}
-	pivot = select_pivot(stackB, range, &p_small);
-	save = 0;
-	while (i < range)
-	{
-		if (0 != (save =  lst2_state_check(stackB, i, range, p_small)))
+		if (0 != (*save =  lst2_state_check(stackB, i, s_data->range, s_data->p_small)))
 			break;
-		if ((*stackB)->content <= p_small)
+		if ((*stackB)->content <= s_data->p_small)
 		{
 			rb(stackB, s_data);
-			rb_count++;
+			s_data->rb_c++;
 		}
 		else
 		{
-			if(1 == stack_max_value(stackA, stackB, &range, pivot) && 1 ==  stack_pre_check(stackA, pa_count - ra_count))
-				pa_count = ra_count;
+			if(1 == stack_max_value(stackA, stackB, &s_data->range, s_data->p_big) && 1 ==  stack_pre_check(stackA, s_data->pa_c - s_data->ra_c))
+				s_data->pa_c = s_data->ra_c;
 			else 
-				pa_count++;
+				s_data->pa_c++;
 			pa(stackA, stackB, s_data);
-			if((*stackA)->content <= pivot)
+			if((*stackA)->content <= s_data->p_big)
 			{
 				ra(stackA, s_data);
-				ra_count++;
+				s_data->ra_c++;
 			}
 		}
 		i++;
 	}
-	A_to_B(stackA, stackB, s_data, pa_count - ra_count);
-	i = 0;
+}
 
-	if (1 == location_check(s_data, ra_count, rb_count))
+void	data_save(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pb_count)
+{
+	rr_ab_c[0] = s_data->ra_c;
+	rr_ab_c[1] = s_data->rb_c;
+	p_sb[0] = s_data->p_small;
+	p_sb[1] = s_data->p_big;
+	(*pb_count) = s_data->pa_c;
+}
+
+
+void	data_load(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pb_count)
+{
+	s_data->ra_c = rr_ab_c[0];
+	s_data->rb_c = rr_ab_c[1];
+	s_data->p_small = p_sb[0];
+	s_data->p_big = p_sb[1];
+	s_data->pa_c = (*pb_count);
+}
+
+void	rrr_location(t_list **stackA, t_list **stackB, t_sd *s_data)
+{
+	int i;
+
+	i = 0;
+	while(i < s_data->rb_c && i < s_data->ra_c && (s_data->ra_c != s_data->ca && s_data->rb_c != s_data->cb))
 	{
-		while(i < rb_count && i < ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
-		{
-			rrr(stackA, stackB, s_data);
-			i++;
-		}
-		while(i< ra_count && (ra_count != s_data->ca))
-		{
-			rra(stackA, s_data);
-			i++;
-		}
-		while(i< rb_count && (rb_count != s_data->cb))
-		{
-			i++;
-			rrb(stackB, s_data);
-		}
+		rrr(stackA, stackB, s_data);
+		i++;
 	}
+	while(i< s_data->ra_c && (s_data->ra_c != s_data->ca))
+	{
+		rra(stackA, s_data);
+		i++;
+	}
+	while(i< s_data->rb_c && (s_data->rb_c != s_data->cb))
+	{
+		i++;
+		rrb(stackB, s_data);
+	}
+}
+
+void	rr_location(t_list **stackA, t_list **stackB, t_sd *s_data)
+{
+	int i;
+
+	i = 0;
+	while(i < s_data->cb - s_data->rb_c && i < s_data->ca - s_data->ra_c && (s_data->ra_c != s_data->ca && s_data->rb_c != s_data->cb))
+	{
+		rr(stackA, stackB, s_data);
+		i++;
+	}
+	while(i< s_data->ca - s_data->ra_c && (s_data->ra_c != s_data->ca))
+	{
+		ra(stackA, s_data);
+		i++;
+	}
+	while(i< s_data->cb - s_data->rb_c && (s_data->rb_c != s_data->cb))
+	{
+		i++;
+		rb(stackB, s_data);
+	}
+
+}
+
+void	B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
+{
+	int rr_ab_c[2];
+	int p_sb[2];
+	int pb_count = 0;
+	int save = 0;
+
+	s_data->ra_c = 0;
+	s_data->rb_c = 0;
+	s_data->p_big = select_pivot(stackB, range, &s_data->p_small);
+	s_data->pa_c = 0;
+	save = 0;
+	s_data->range = range;
+
+	if(s_data->range <= 3)
+	{
+		short_length(stackA, stackB, s_data, s_data->range);
+		return ;
+	}
+	pivot_sort(stackA, stackB, s_data, &save);
+	data_save(s_data, rr_ab_c, p_sb, &pb_count);
+	A_to_B(stackA, stackB, s_data, s_data->pa_c - s_data->ra_c);
+	data_load(s_data, rr_ab_c, p_sb, &pb_count);
+	if (1 == location_check(s_data, s_data->ra_c, s_data->rb_c))
+		rrr_location(stackA, stackB, s_data);
 	else
-	{
-		while(i < s_data->cb - rb_count && i < s_data->ca - ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
-		{
-			rr(stackA, stackB, s_data);
-			i++;
-		}
-		while(i< s_data->ca - ra_count && (ra_count != s_data->ca))
-		{
-			ra(stackA, s_data);
-			i++;
-		}
-		while(i< s_data->cb - rb_count && (rb_count != s_data->cb))
-		{
-			i++;
-			rb(stackB, s_data);
-		}
-	}
-	A_to_B(stackA, stackB, s_data, ra_count);
-	B_to_A(stackA, stackB, s_data, rb_count + save);
+		rr_location(stackA, stackB, s_data);
+	rr_ab_c[1] = s_data->rb_c;
+	A_to_B(stackA, stackB, s_data, s_data->ra_c);
+	B_to_A(stackA, stackB, s_data, rr_ab_c[1] + save);
 
 	return ;
 }
