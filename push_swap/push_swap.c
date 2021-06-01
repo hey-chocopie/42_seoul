@@ -58,20 +58,24 @@ void		push(t_list **give, t_list **receive)
 int		 make_stack_a(int i, char **argv, t_list **start)
 {
 	int value;
-
+	int j;
 	t_list *tmp;
 
+	j = 0;
+	while(argv[i][j])
+	{
+		if((argv[i][j] < '0' || argv[i][j] > '9') && argv[i][j] != '-')
+			return -1;
+		j++;
+	}
 	value = ft_atoi(argv[i]);
-	if(value == -1)
+	if(value == -1 && ft_strncmp(argv[i], "-1",2) != 0 && ft_strlen(argv[i]) != 2)
 		return -1;
 	tmp = ft_lstnew(value);
-	//말록한거라 start는 프리해줘야함.
 	if((*start) != NULL)
 		ft_lstadd_back(start, tmp);
 	else if((*start) == NULL)
-	{
 		*start = ft_lstnew(ft_atoi(argv[i]));
-	}
 	return 0;
 }
 
@@ -431,7 +435,7 @@ void		two_three_optimization(t_list **stackA, t_sd *s_data, int range)
 		}
 	}
 }
-int		lst_state_check(t_list **stack,  int range, int i,  int pivot)//int pb_max,
+int		lst_range_check(t_list **stack,  int range, int i,  int pivot)//int pb_max,
 {
 	int j;
 	t_list *tmp;
@@ -440,17 +444,13 @@ int		lst_state_check(t_list **stack,  int range, int i,  int pivot)//int pb_max,
 	tmp = (*stack);
 	while (j < range)
 	{
-		//if(tmp->content > tmp->next->content || pb_max > tmp->content)
 		if(tmp->content <= pivot)
 			break;
 		tmp = tmp->next;
 		j++;
 	}
 	if  (range != i + 1 && j == range)
-	{
-		//printf("==j-1=%d=====pivot=%d===i-%d====", j - 1, pivot, i);
 		return (j - i);
-	}
 	return 0;
 }
 
@@ -519,23 +519,23 @@ int		location_check(t_sd *s_data, int ra_count, int rb_count)
 	}
 }
 
-int		good_status(t_list **stackA, int range)
-{
-	int i = 1;
-	t_list *tmp;
-
-	tmp = *stackA;
-	while(i < range)
-	{
-		if(tmp->content > tmp->next->content)
-			break;
-		tmp = tmp->next;
-		i++;
-	}
-	if(i == range)
-		return 1;
-	return 0;
-}
+//int		good_status(t_list **stackA, int range)
+//{
+//	int i = 1;
+//	t_list *tmp;
+//
+//	tmp = *stackA;
+//	while(i < range)
+//	{
+//		if(tmp->content > tmp->next->content)
+//			break;
+//		tmp = tmp->next;
+//		i++;
+//	}
+//	if(i == range)
+//		return 1;
+//	return 0;
+//}
 
 void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 {
@@ -545,6 +545,8 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	int ra_count = 0;
 	int pb_count = 0;
 	int rb_count = 0;
+	int remain = 0;
+
 	if (range == 1 || range == 0)
 		return ;
 	else if (range == 2 || range == 3)
@@ -552,20 +554,12 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 		two_three_optimization(stackA, s_data, range);
 		return ;
 	}
-	else if (1 == good_status(stackA, range))
-	{
-		return ;
-	}
-
 	pivot = select_pivot(stackA, range, &p_small);
-	int flag = 0;
 	i = 0;
 	while (i < range)
 	{
-		if (0 != (flag =  lst_state_check(stackA, range, i, pivot)))//,pb_max
-		{
+		if (0 != (remain =  lst_range_check(stackA, range, i, pivot)))
 			break;
-		}
 		if ((*stackA)->content > pivot)
 		{
 			ra(stackA, s_data);
@@ -584,25 +578,8 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 		i++;
 	}
 	i = 0;
-//	while(i < ra_count && i <rb_count && (ra_count != s_data->ca && rb_count != s_data->cb))
-//	{
-//		rrr(stackA, stackB, s_data);
-//		i++;
-//	}
-//	while(i< ra_count && ra_count != s_data->ca)
-//	{
-//		rra(stackA, s_data);
-//		i++;
-//	}
-//	while(i< rb_count && rb_count != s_data->cb)
-//	{
-//		rrb(stackB, s_data);
-//		i++;
-//	}
-	i = 0;
 	if (1 == location_check(s_data, ra_count, rb_count))
 	{
-		//stack_d_check(*stackA, *stackB, s_data);
 		while(i < rb_count && i < ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
 		{
 			rrr(stackA, stackB, s_data);
@@ -615,14 +592,12 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 		}
 		while(i< rb_count && (rb_count != s_data->cb))
 		{
-			i++;
 			rrb(stackB, s_data);
+			i++;
 		}
 	}
 	else
 	{
-		//printf("eifjowejoifjwoifjowjojowjei");
-		//stack_d_check(*stackA, *stackB, s_data);
 		while(i < s_data->cb - rb_count && i < s_data->ca - ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
 		{
 			rr(stackA, stackB, s_data);
@@ -633,15 +608,13 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 			ra(stackA, s_data);
 			i++;
 		}
-		while(i< s_data->cb - rb_count && (rb_count != s_data->cb))
+		while(i < s_data->cb - rb_count && (rb_count != s_data->cb))
 		{
 			i++;
 			rb(stackB, s_data);
 		}
 	}
-
-	//stack_d_check(*stackA, *stackB, s_data);
-	A_to_B(stackA, stackB, s_data, ra_count + flag);
+	A_to_B(stackA, stackB, s_data, ra_count + remain);
 	B_to_A(stackA, stackB, s_data, rb_count);
 	B_to_A(stackA, stackB, s_data, pb_count - rb_count);
 	return ;
@@ -672,24 +645,18 @@ int		stack_pre_check(t_list **stackA, int only_pa)
 	return 0;
 }
 
-void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
+void short_length(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 {
-	int i = 0;
-	int pivot;
-	int rb_count = 0;
-	int pa_count = 0;
+	int i;
 
-	int save = 0;
-	int p_small = 0;
-	int ra_count = 0;
+	i = 0;
 	if (range == 0)
 		return ;
-	if (range == 1)
+	else if (range == 1)
 	{
 		pa(stackA, stackB, s_data);
-		return ;
 	}
-	if (range <4)
+	else if (range < 4)
 	{
 		while(i < range)
 		{
@@ -697,18 +664,31 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 			i++;
 		}
 		A_to_B(stackA, stackB, s_data, range);
-		return ;
+	}
+	return ;
+}
+
+void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
+{
+	int i = 0;
+	int pivot;
+	int rb_count = 0;
+	int pa_count = 0;
+	int save = 0;
+	int p_small = 0;
+	int ra_count = 0;
+
+	if(range <= 3)
+	{
+		short_length(stackA, stackB, s_data, range);
+		return;
 	}
 	pivot = select_pivot(stackB, range, &p_small);
 	save = 0;
-	int check;
-	check = -2147483648;
 	while (i < range)
 	{
 		if (0 != (save =  lst2_state_check(stackB, i, range, p_small)))
 			break;
-
-
 		if ((*stackB)->content <= p_small)
 		{
 			rb(stackB, s_data);
@@ -729,16 +709,11 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 		}
 		i++;
 	}
-
-
-	//stack_d_check(*stackA, *stackB, s_data);
-	//+ flag
 	A_to_B(stackA, stackB, s_data, pa_count - ra_count);
 	i = 0;
 
 	if (1 == location_check(s_data, ra_count, rb_count))
 	{
-		//stack_d_check(*stackA, *stackB, s_data);
 		while(i < rb_count && i < ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
 		{
 			rrr(stackA, stackB, s_data);
@@ -757,8 +732,6 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	}
 	else
 	{
-		printf("22222222222222222");
-		//stack_d_check(*stackA, *stackB, s_data);
 		while(i < s_data->cb - rb_count && i < s_data->ca - ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
 		{
 			rr(stackA, stackB, s_data);
@@ -775,13 +748,6 @@ void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 			rb(stackB, s_data);
 		}
 	}
-//	while(i < rb_count && rb_count != s_data->cb)
-//	{
-//		rrb(stackB, s_data);
-//		i++;
-//	}
-
-	//stack_d_check(*stackA, *stackB, s_data);
 	A_to_B(stackA, stackB, s_data, ra_count);
 	B_to_A(stackA, stackB, s_data, rb_count + save);
 
@@ -812,9 +778,7 @@ void range_five(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 				sb(stackB, s_data);
 		}
 		else if((*stackA)->content == i)
-		{
 			pb(stackA, stackB, s_data);
-		}
 		else ra(stackA, s_data);
 	}
 	two_three_optimization(stackA, s_data, 3);
@@ -838,9 +802,14 @@ int main(int argc, char **argv)
 	{
 		s_data.ca++;
 		if(-1 == make_stack_a(i, argv, &stackA))
-			return -1;
+		{
+			write(1, "Error\0", 6);
+			exit (-1);
+		}
 		i++;
 	}
+	if (argc == 2)
+		free(argv);
 	circle_lst(&stackA, s_data.ca);
 	if(s_data.ca == 5)
 	{

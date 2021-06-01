@@ -47,7 +47,7 @@ int		ft_atoi(const char *str)
 						(str[a] == '8' || str[a] == '9')))
 			return (-1);
 		if (result <= -214748365 || (result <= -214748364 && (str[a] == '9')))
-			return (0);
+			return (-1);
 		if (result == 0)
 			result = str[a] - '0';
 		else if (a > 0 && result > 0)
