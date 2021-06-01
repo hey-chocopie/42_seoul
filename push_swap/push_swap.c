@@ -308,6 +308,23 @@ int		min_value(t_list **stack, int depth)
 	return min_v;
 }
 
+int		min_next_v(t_list **stack, int min, int depth)
+{
+	int i = 0;
+	int min_v = 2147483647;
+	t_list *tmp;
+
+	tmp = (*stack);
+	i = 0;
+	while(i < depth)
+	{
+		if(tmp -> content < min_v && tmp->content > min)
+			min_v = tmp->content;
+		tmp = tmp->next;
+		i++;
+	}
+	return min_v;
+}
 int		avr_value(t_list **stack, int range, int min_value, int stand)
 {
 	int i;
@@ -539,8 +556,10 @@ void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	{
 		return ;
 	}
+
 	pivot = select_pivot(stackA, range, &p_small);
 	int flag = 0;
+	i = 0;
 	while (i < range)
 	{
 		if (0 != (flag =  lst_state_check(stackA, range, i, pivot)))//,pb_max
@@ -778,6 +797,31 @@ void arg_string(char ***argv, int *argc, int *i)
 	while((*argv)[(*argc)])
 		(*argc)++;
 }
+
+void range_five(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
+{
+	int i;
+
+	i = min_next_v(stackA, min_value(stackA, 5), 5);
+	while(s_data->ca != 3)
+	{
+		if((*stackA)->content != i && (*stackA)->content == min_value(stackA, s_data->ca))
+		{
+			pb(stackA, stackB, s_data);
+			if(s_data->ca == 3)
+				sb(stackB, s_data);
+		}
+		else if((*stackA)->content == i)
+		{
+			pb(stackA, stackB, s_data);
+		}
+		else ra(stackA, s_data);
+	}
+	two_three_optimization(stackA, s_data, 3);
+	pa(stackA, stackB, s_data);
+	pa(stackA, stackB, s_data);
+	return ;
+}
 int main(int argc, char **argv)
 {
 	t_sd	s_data;
@@ -798,7 +842,12 @@ int main(int argc, char **argv)
 		i++;
 	}
 	circle_lst(&stackA, s_data.ca);
-	A_to_B(&stackA, &stackB, &s_data, s_data.ca);
+	if(s_data.ca == 5)
+	{
+		range_five(&stackA, &stackB, &s_data, 5);
+	}
+	else
+		A_to_B(&stackA, &stackB, &s_data, s_data.ca);
 	if(s_data.s[0] != 0)
 	{
 		write(1, s_data.s, ft_strlen(s_data.s));
