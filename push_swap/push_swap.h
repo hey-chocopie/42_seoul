@@ -32,8 +32,8 @@ typedef struct		s_sd
 //void		    rrb(t_list **stackB, t_sd *s_data);
 //void			rrr(t_list **stackA, t_sd *s_data);
 
-void    rrr_location(t_list **stackA, t_list **stackB, t_sd *s_data);
-void    rr_location(t_list **stackA, t_list **stackB, t_sd *s_data);
+void    rrr_location(t_list **stack_a, t_list **stackB, t_sd *s_data);
+void    rr_location(t_list **stack_a, t_list **stackB, t_sd *s_data);
 void    data_save(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pa_count);
 
 #endif
