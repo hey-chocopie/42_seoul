@@ -61,7 +61,7 @@ void		push(t_list **give, t_list **receive)
 		ft_lstadd_front(receive, tmp);
 }
 
-int		 make_stack_a(int i, char **argv, t_list **start)
+int		 argv_check_with_make_stack_a(int i, char **argv, t_list **start)
 {
 	int value;
 	int j;
@@ -77,11 +77,13 @@ int		 make_stack_a(int i, char **argv, t_list **start)
 	value = ft_atoi(argv[i]);
 	if(value == -1 && ft_strncmp(argv[i], "-1",2) != 0 && ft_strlen(argv[i]) != 2)
 		return -1;
-	tmp = ft_lstnew(value);
+	if(0 == (tmp = ft_lstnew(value)))
+		return -1;
 	if((*start) != NULL)
 		ft_lstadd_back(start, tmp);
 	else if((*start) == NULL)
-		*start = ft_lstnew(ft_atoi(argv[i]));
+		if(0 == (*start = ft_lstnew(ft_atoi(argv[i]))))
+			return -1;
 	return 0;
 }
 
@@ -674,7 +676,7 @@ void short_length(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	return ;
 }
 
-void	pivot_sort(t_list **stackA, t_list **stackB, t_sd *s_data, int *save)
+void	b_pivot_split(t_list **stackA, t_list **stackB, t_sd *s_data, int *save)
 {
 	int i;
 	
@@ -768,27 +770,30 @@ void	rr_location(t_list **stackA, t_list **stackB, t_sd *s_data)
 	}
 
 }
+void	info_b_to_a(t_list **stackB, int range, int *save, t_sd *s_data)
+{
+	s_data->ra_c = 0;
+	s_data->rb_c = 0;
+	s_data->pa_c = 0;
+	*save = 0;
+	s_data->range = range;
+	s_data->p_big = select_pivot(stackB, range, &s_data->p_small);
+}
 
 void	B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 {
 	int rr_ab_c[2];
-	int p_sb[2];
 	int pb_count = 0;
 	int save = 0;
+	int p_sb[2];
 
-	s_data->ra_c = 0;
-	s_data->rb_c = 0;
-	s_data->p_big = select_pivot(stackB, range, &s_data->p_small);
-	s_data->pa_c = 0;
-	save = 0;
-	s_data->range = range;
-
+	info_b_to_a(stackB, range, &save, s_data);
 	if(s_data->range <= 3)
 	{
 		short_length(stackA, stackB, s_data, s_data->range);
 		return ;
 	}
-	pivot_sort(stackA, stackB, s_data, &save);
+	b_pivot_split(stackA, stackB, s_data, &save);
 	data_save(s_data, rr_ab_c, p_sb, &pb_count);
 	A_to_B(stackA, stackB, s_data, s_data->pa_c - s_data->ra_c);
 	data_load(s_data, rr_ab_c, p_sb, &pb_count);
@@ -799,14 +804,12 @@ void	B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	rr_ab_c[1] = s_data->rb_c;
 	A_to_B(stackA, stackB, s_data, s_data->ra_c);
 	B_to_A(stackA, stackB, s_data, rr_ab_c[1] + save);
-
 	return ;
 }
 
 void arg_string(char ***argv, int *argc, int *i)
 {
 	(*argv) = ft_split((*argv)[1], ' ');
-	//스플릿은 free
 	*i = 0;
 	*argc = 0;
 	while((*argv)[(*argc)])
@@ -835,35 +838,78 @@ void range_five(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	pa(stackA, stackB, s_data);
 	return ;
 }
+
+void	exit_error_free(char **argv, int argc, t_list **stackA)
+{
+	t_list *tmp;
+	if(argc == 2)
+		free (argv);
+	while((*stackA) != 0)
+	{
+		tmp = (*stackA)->next;
+		free(*stackA);
+		*stackA = tmp;
+	}
+	write(1, "Error\n", 6);
+	exit (-1);
+}
+
+int		argv_overlap_check(char **argv, int argc, int i)
+{
+	int j;
+	while(i < argc - 1)
+	{
+		j = i + 1;
+		while(j < argc)
+		{
+			if(0 == ft_strncmp(argv[i], argv[j], ft_strlen(argv[i])) && ft_strlen(argv[i]) == ft_strlen(argv[j]))
+			{
+				//printf("sifjsi");
+				return 1;
+			}
+			j++;
+		}
+		i++;
+	}
+	return 0;
+}
+
+int		argc_check_and_make_lst(t_list **stackA, char ** argv, int argc, t_sd *s_data)
+{
+	int i;
+
+	i = 1;
+	if(argc < 2)
+		return 1;
+	if(argc == 2)
+		arg_string(&argv, &argc, &i);
+	if(argv_overlap_check(argv, argc, i) == 1)
+		exit_error_free(argv,  argc, stackA);
+	while(i != argc)
+	{
+		(s_data->ca)++;
+		if(-1 == argv_check_with_make_stack_a(i, argv, stackA))
+			exit_error_free(argv,  argc, stackA);
+		i++;
+	}
+	if (argc == 2)
+		free(argv);
+	return 0;
+}
+
 int main(int argc, char **argv)
 {
 	t_sd	s_data;
 	t_list *stackA;
 	t_list *stackB;
 	int i;
-	i = 1;
+
 	setup_data(&s_data);
-	if(argc < 2)
+	if(1 == argc_check_and_make_lst(&stackA, argv, argc, &s_data))
 		return 0;
-	if(argc == 2)
-		arg_string(&argv, &argc, &i);
-	while(i != argc)
-	{
-		s_data.ca++;
-		if(-1 == make_stack_a(i, argv, &stackA))
-		{
-			write(1, "Error\0", 6);
-			exit (-1);
-		}
-		i++;
-	}
-	if (argc == 2)
-		free(argv);
 	circle_lst(&stackA, s_data.ca);
 	if(s_data.ca == 5)
-	{
 		range_five(&stackA, &stackB, &s_data, 5);
-	}
 	else
 		A_to_B(&stackA, &stackB, &s_data, s_data.ca);
 	if(s_data.s[0] != 0)
