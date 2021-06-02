@@ -10,22 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
 #include "push_swap.h"
-#include <stdio.h>
 
-typedef struct		s_sd
-{
-	int		ca;
-	int		cb;
-	char	*s;
-	int		p_small;
-	int		p_big;
-	int		rb_c;
-	int		ra_c;
-	int		pa_c;
-	int		range;
-}					t_sd;
+//typedef struct		s_sd
+//{
+//	int		ca;
+//	int		cb;
+//	char	*s;
+//	int		p_small;
+//	int		p_big;
+//	int		rb_c;
+//	int		ra_c;
+//	int		pa_c;
+//	int		pb_c;
+//	int		range;
+//}					t_sd;
 
 void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range);
 void	 B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range);
@@ -545,86 +544,104 @@ int		location_check(t_sd *s_data, int ra_count, int rb_count)
 //	return 0;
 //}
 
-void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
+void	info_a_to_B(t_list **stackA, int range, int *remain, t_sd *s_data)
 {
-	int i = 0;
-	int pivot;
-	int p_small;
-	int ra_count = 0;
-	int pb_count = 0;
-	int rb_count = 0;
-	int remain = 0;
+	s_data->ra_c = 0;
+	s_data->rb_c = 0;
+	s_data->pb_c = 0;
+	*remain = 0;
+	s_data->range = range;
+	s_data->p_big = select_pivot(stackA, range, &s_data->p_small);
+}
 
-	if (range == 1 || range == 0)
-		return ;
-	else if (range == 2 || range == 3)
-	{
-		two_three_optimization(stackA, s_data, range);
-		return ;
-	}
-	pivot = select_pivot(stackA, range, &p_small);
+void	a_pivot_split(t_list **stackA, t_list **stackB, t_sd *s_data, int *remain)
+{
+	int i;
+
 	i = 0;
-	while (i < range)
+	while (i < s_data->range)
 	{
-		if (0 != (remain =  lst_range_check(stackA, range, i, pivot)))
+		if (0 != ((*remain) =  lst_range_check(stackA, s_data->range, i, s_data->p_big)))
 			break;
-		if ((*stackA)->content > pivot)
+		if ((*stackA)->content > s_data->p_big)
 		{
 			ra(stackA, s_data);
-			ra_count++;
+			s_data->ra_c++;
 		}
 		else
 		{
 			pb(stackA, stackB, s_data);
-			pb_count++;
-			if ((*stackB)->content >= p_small)
+			s_data->pb_c++;
+			if ((*stackB)->content >= s_data->p_small)
 			{
 				rb(stackB, s_data);
-				rb_count++;
+				s_data->rb_c++;
 			}
 		}
 		i++;
 	}
-	i = 0;
-	if (1 == location_check(s_data, ra_count, rb_count))
+}
+
+void	 A_to_B(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
+{
+	int i = 0;
+	int p_sb[2];
+	int rr_ab_c[2];
+	int pb_count = 0;
+	int remain = 0;
+
+	info_a_to_B(stackA, range, &remain, s_data);
+	if(s_data->range <= 3)
 	{
-		while(i < rb_count && i < ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
-		{
-			rrr(stackA, stackB, s_data);
-			i++;
-		}
-		while(i< ra_count && (ra_count != s_data->ca))
-		{
-			rra(stackA, s_data);
-			i++;
-		}
-		while(i< rb_count && (rb_count != s_data->cb))
-		{
-			rrb(stackB, s_data);
-			i++;
-		}
+		if(range == 2 || range == 3)
+			two_three_optimization(stackA, s_data, range);
+		return ;
+	}
+	a_pivot_split(stackA, stackB, s_data, &remain);
+	i = 0;
+	if (1 == location_check(s_data, s_data->ra_c, s_data->rb_c))
+	{
+		rrr_location(stackA, stackB, s_data);
+//		while(i < s_data->rb_c && i < s_data->ra_c && (s_data->ra_c != s_data->ca && s_data->rb_c != s_data->cb))
+//		{
+//			rrr(stackA, stackB, s_data);
+//			i++;
+//		}
+//		while(i< s_data->ra_c && (s_data->ra_c != s_data->ca))
+//		{
+//			rra(stackA, s_data);
+//			i++;
+//		}
+//		while(i< s_data->rb_c && (s_data->rb_c != s_data->cb))
+//		{
+//			rrb(stackB, s_data);
+//			i++;
+//		}
 	}
 	else
 	{
-		while(i < s_data->cb - rb_count && i < s_data->ca - ra_count && (ra_count != s_data->ca && rb_count != s_data->cb))
-		{
-			rr(stackA, stackB, s_data);
-			i++;
-		}
-		while(i< s_data->ca - ra_count && (ra_count != s_data->ca))
-		{
-			ra(stackA, s_data);
-			i++;
-		}
-		while(i < s_data->cb - rb_count && (rb_count != s_data->cb))
-		{
-			i++;
-			rb(stackB, s_data);
-		}
+		rr_location(stackA, stackB, s_data);
+//		while(i < s_data->cb - s_data->rb_c && i < s_data->ca - s_data->ra_c && (s_data->ra_c != s_data->ca && s_data->rb_c != s_data->cb))
+//		{
+//			rr(stackA, stackB, s_data);
+//			i++;
+//		}
+//		while(i< s_data->ca - s_data->ra_c && (s_data->ra_c != s_data->ca))
+//		{
+//			ra(stackA, s_data);
+//			i++;
+//		}
+//		while(i < s_data->cb - s_data->rb_c && (s_data->rb_c != s_data->cb))
+//		{
+//			i++;
+//			rb(stackB, s_data);
+//		}
 	}
-	A_to_B(stackA, stackB, s_data, ra_count + remain);
-	B_to_A(stackA, stackB, s_data, rb_count);
-	B_to_A(stackA, stackB, s_data, pb_count - rb_count);
+	pb_count = s_data->pb_c;
+	data_save(s_data, rr_ab_c, p_sb, &pb_count);
+	A_to_B(stackA, stackB, s_data, rr_ab_c[0] + remain);
+	B_to_A(stackA, stackB, s_data, rr_ab_c[1]);
+	B_to_A(stackA, stackB, s_data, pb_count - rr_ab_c[1]);
 	return ;
 }
 
@@ -653,7 +670,7 @@ int		stack_pre_check(t_list **stackA, int only_pa)
 	return 0;
 }
 
-void short_length(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
+void	b_short_length(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 {
 	int i;
 
@@ -707,13 +724,12 @@ void	b_pivot_split(t_list **stackA, t_list **stackB, t_sd *s_data, int *save)
 	}
 }
 
-void	data_save(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pb_count)
+void	data_save(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pa_count)
 {
 	rr_ab_c[0] = s_data->ra_c;
 	rr_ab_c[1] = s_data->rb_c;
 	p_sb[0] = s_data->p_small;
 	p_sb[1] = s_data->p_big;
-	(*pb_count) = s_data->pa_c;
 }
 
 
@@ -783,20 +799,21 @@ void	info_b_to_a(t_list **stackB, int range, int *save, t_sd *s_data)
 void	B_to_A(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 {
 	int rr_ab_c[2];
-	int pb_count = 0;
+	int pa_count = 0;
 	int save = 0;
 	int p_sb[2];
 
 	info_b_to_a(stackB, range, &save, s_data);
 	if(s_data->range <= 3)
 	{
-		short_length(stackA, stackB, s_data, s_data->range);
+		b_short_length(stackA, stackB, s_data, s_data->range);
 		return ;
 	}
 	b_pivot_split(stackA, stackB, s_data, &save);
-	data_save(s_data, rr_ab_c, p_sb, &pb_count);
+	data_save(s_data, rr_ab_c, p_sb, &pa_count);
+	(pa_count) = s_data->pa_c;
 	A_to_B(stackA, stackB, s_data, s_data->pa_c - s_data->ra_c);
-	data_load(s_data, rr_ab_c, p_sb, &pb_count);
+	data_load(s_data, rr_ab_c, p_sb, &pa_count);
 	if (1 == location_check(s_data, s_data->ra_c, s_data->rb_c))
 		rrr_location(stackA, stackB, s_data);
 	else
@@ -839,7 +856,7 @@ void range_five(t_list **stackA, t_list **stackB, t_sd *s_data, int range)
 	return ;
 }
 
-void	exit_error_free(char **argv, int argc, t_list **stackA)
+void	exit_error_free(char **argv, int argc, t_list **stackA, t_sd *s_data)
 {
 	t_list *tmp;
 	if(argc == 2)
@@ -850,6 +867,7 @@ void	exit_error_free(char **argv, int argc, t_list **stackA)
 		free(*stackA);
 		*stackA = tmp;
 	}
+	free(s_data->s);
 	write(1, "Error\n", 6);
 	exit (-1);
 }
@@ -884,12 +902,12 @@ int		argc_check_and_make_lst(t_list **stackA, char ** argv, int argc, t_sd *s_da
 	if(argc == 2)
 		arg_string(&argv, &argc, &i);
 	if(argv_overlap_check(argv, argc, i) == 1)
-		exit_error_free(argv,  argc, stackA);
+		exit_error_free(argv,  argc, stackA, s_data);
 	while(i != argc)
 	{
 		(s_data->ca)++;
 		if(-1 == argv_check_with_make_stack_a(i, argv, stackA))
-			exit_error_free(argv,  argc, stackA);
+			exit_error_free(argv,  argc, stackA, s_data);
 		i++;
 	}
 	if (argc == 2)
@@ -917,6 +935,7 @@ int main(int argc, char **argv)
 		write(1, s_data.s, ft_strlen(s_data.s));
 		write(1, "\n", 1);
 	}
+	free(s_data.s);
 	//stack_d_check(stackA, stackB, &s_data);
 	return 0;
 }
