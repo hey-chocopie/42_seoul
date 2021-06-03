@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 18:09:05 by hoylee            #+#    #+#             */
-/*   Updated: 2021/05/31 23:00:44 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/03 22:13:38 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,13 @@
 //
 
 
+<<<<<<< HEAD
 void		setup_data(t_sd	*s_data)
+=======
+void		setup_data(t_list **stack_a, t_sd	*s_data)
+>>>>>>> f5c52a659c20cce6591b58eca151b22b87e3a969
 {
+	*stack_a = 0;
 	s_data->ca = 0;
 	s_data->cb = 0;
 	s_data->s = malloc(4);
@@ -96,6 +101,7 @@ void	B_to_A(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 	return ;
 }
 
+<<<<<<< HEAD
 //int main(int argc, char **argv)
 //{
 //	t_sd	s_data;
@@ -120,3 +126,29 @@ void	B_to_A(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 //	//stack_d_check(stack_a, stack_b, &s_data);
 //	return 0;
 //}
+=======
+int main(int argc, char **argv)
+{
+	t_sd	s_data;
+	t_list *stack_a;
+	t_list *stack_b;
+//	int i;
+
+	setup_data(&stack_a, &s_data);
+	if(1 == argc_check_and_make_lst(&stack_a, argv, argc, &s_data))
+		return 0;
+	circle_lst(&stack_a, s_data.ca);
+	if(s_data.ca == 5)
+		range_five(&stack_a, &stack_b, &s_data, 5);
+	else
+		A_to_B(&stack_a, &stack_b, &s_data, s_data.ca);
+	if(s_data.s[0] != 0)
+	{
+		write(1, s_data.s, ft_strlen(s_data.s));
+		write(1, "\n", 1);
+	}
+	free(s_data.s);
+	//stack_d_check(stack_a, stack_b, &s_data);
+	return 0;
+}
+>>>>>>> f5c52a659c20cce6591b58eca151b22b87e3a969

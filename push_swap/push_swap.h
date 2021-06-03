@@ -52,7 +52,11 @@ void	data_load(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pb_count);
 void	b_short_length(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range);
 void	a_pivot_split(t_list **stack_a, t_list **stack_b, t_sd *s_data, int *remain);
 int		location_check(t_sd *s_data, int ra_count, int rb_count);
+<<<<<<< HEAD
 void		setup_data(t_sd	*s_data);
+=======
+void		setup_data(t_list **stack_a, t_sd	*s_data);
+>>>>>>> f5c52a659c20cce6591b58eca151b22b87e3a969
 
 void	rrr_location(t_list **stack_a, t_list **stack_b, t_sd *s_data);
 void	rr_location(t_list **stack_a, t_list **stack_b, t_sd *s_data);
@@ -73,6 +77,20 @@ void	rrb(t_list **stack_b, t_sd *s_data);
 void	rrr(t_list **stack_a, t_list **stack_b, t_sd *s_data);
 
 
+<<<<<<< HEAD
+=======
+void		sa2(t_list **stack_a, t_sd *s_data);
+void		sb2(t_list **stack_b, t_sd *s_data);
+void		ss2(t_list **stack_a, t_list **stack_b, t_sd *s_data);
+void		pa2(t_list **stack_a, t_list **stack_b, t_sd *s_data);
+void		pb2(t_list **stack_a, t_list **stack_b, t_sd *s_data);
+void	ra2(t_list **stack_a, t_sd *s_data);
+void	rb2(t_list **stack_b, t_sd *s_data);
+void	rr2(t_list **stack_a, t_list **stack_b, t_sd *s_data);
+void	rra2(t_list **stack_a, t_sd *s_data);
+void	rrb2(t_list **stack_b, t_sd *s_data);
+void	rrr2(t_list **stack_a, t_list **stack_b, t_sd *s_data);
+>>>>>>> f5c52a659c20cce6591b58eca151b22b87e3a969
 
 
 
