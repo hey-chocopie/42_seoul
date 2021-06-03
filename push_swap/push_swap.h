@@ -52,7 +52,7 @@ void	data_load(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pb_count);
 void	b_short_length(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range);
 void	a_pivot_split(t_list **stack_a, t_list **stack_b, t_sd *s_data, int *remain);
 int		location_check(t_sd *s_data, int ra_count, int rb_count);
-void		setup_data(t_sd	*s_data);
+void		setup_data(t_list **stack_a, t_sd	*s_data);
 
 void	rrr_location(t_list **stack_a, t_list **stack_b, t_sd *s_data);
 void	rr_location(t_list **stack_a, t_list **stack_b, t_sd *s_data);

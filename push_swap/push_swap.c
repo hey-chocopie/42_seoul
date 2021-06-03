@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 18:09:05 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/03 16:58:15 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/03 22:13:38 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@
 //
 
 
-void		setup_data(t_sd	*s_data)
+void		setup_data(t_list **stack_a, t_sd	*s_data)
 {
+	*stack_a = 0;
 	s_data->ca = 0;
 	s_data->cb = 0;
 	s_data->s = malloc(4);
@@ -101,9 +102,9 @@ int main(int argc, char **argv)
 	t_sd	s_data;
 	t_list *stack_a;
 	t_list *stack_b;
-	int i;
+//	int i;
 
-	setup_data(&s_data);
+	setup_data(&stack_a, &s_data);
 	if(1 == argc_check_and_make_lst(&stack_a, argv, argc, &s_data))
 		return 0;
 	circle_lst(&stack_a, s_data.ca);

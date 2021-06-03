@@ -21,8 +21,9 @@ int		 argv_check_with_make_stack_a(int i, char **argv, t_list **start)
 	if((*start) != NULL)
 		ft_lstadd_back(start, tmp);
 	else if((*start) == NULL)
-		if(0 == (*start = ft_lstnew(ft_atoi(argv[i]))))
-			return -1;
+		*start = tmp;
+//		if(0 == (*start = ft_lstnew(ft_atoi(argv[i]))))
+//			return -1;
 	return 0;
 }
 
@@ -37,9 +38,10 @@ void	exit_error_free(char **argv, int argc, t_list **stack_a, t_sd *s_data)
 		free(*stack_a);
 		*stack_a = tmp;
 	}
-	free(s_data->s);
-	write(1, "Error\n", 6);
-	exit (-1);
+	if(s_data->s != 0)
+		free(s_data->s);
+	write(1, "Error", 5);
+	exit (0);
 }
 
 int		argv_overlap_check(char **argv, int argc, int i)
