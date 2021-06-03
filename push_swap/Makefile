@@ -14,7 +14,7 @@ LNAME = libft.a
 
 NAME  = push_swap
 
-SRCS  = push_swap.c
+SRCS  = push_swap.c argc_check_and_make_lis.c frequently_used_functions.c function_push.c function_reverse_rotate.c function_rotate.c function_swap.c  range_five.c two_three_optimization.c rr_rrr_location.c data_save_load.c pivot_select.c pivot_split_stack.c
 
 LIBFT = libft/libft.a
 
