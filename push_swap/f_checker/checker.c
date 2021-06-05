@@ -6,7 +6,7 @@
 /*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 16:06:17 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/05 21:48:52 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 21:54:48 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	setup_data2(t_sd *s_data, t_list **stack_a)
 	*stack_a = 0;
 	s_data->ca = 0;
 	s_data->cb = 0;
-	if(!(s_data->input_d = malloc(20)))
+	if (!(s_data->input_d = malloc(20)))
 		exit(1);
 	(s_data->input_d)[19] = 0;
 	s_data->s = 0;

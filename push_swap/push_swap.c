@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 18:09:05 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/05 21:31:06 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 21:54:14 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,23 +90,6 @@ void		b_to_a(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 	return ;
 }
 
-int		ascending_input(t_list **stack_a, t_sd *s_data)
-{
-	t_list	*tmp;
-	int i;
-
-	i = 1;
-	tmp = *stack_a;
-	while(i < s_data->ca)
-	{
-		if(tmp->content >= tmp->next->content)
-			return 0;
-		tmp = tmp->next;
-		i++;
-	}
-	return 1;
-}
-
 int			main(int argc, char **argv)
 {
 	t_sd	s_data;
@@ -129,5 +112,5 @@ int			main(int argc, char **argv)
 		write(1, "\n", 1);
 	}
 	free(s_data.s);
-	exit (0);
+	exit(0);
 }

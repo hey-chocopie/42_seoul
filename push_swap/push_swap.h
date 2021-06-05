@@ -6,7 +6,7 @@
 /*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 20:59:39 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/05 21:49:15 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 21:53:00 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int				pivot_select(t_list **stack, int range, int *p_small);
 void			stack_d_check(t_list *stack_a, t_list *stack_b, t_sd *s_data);
 void			exit_error_free(char **argv, int argc,
 								t_list **stack_a, t_sd *s_data);
+int				ascending_input(t_list **stack_a, t_sd *s_data);
 void			sa(t_list **stack_a, t_sd *s_data);
 void			sb(t_list **stack_b, t_sd *s_data);
 void			ss(t_list **stack_a, t_list **stack_b, t_sd *s_data);
