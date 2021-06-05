@@ -6,7 +6,7 @@
 /*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 20:59:39 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/05 20:59:41 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 21:49:15 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void			b_to_a(t_list **stack_a, t_list **stack_b,
 									t_sd *s_data, int range);
 void			rrr_location(t_list **stack_a, t_list **stack_b, t_sd *s_data);
 void			rr_location(t_list **stack_a, t_list **stack_b, t_sd *s_data);
-void			data_save(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pa_count);
+void			data_save(t_sd *s_data, int *rr_ab_c, int *p_sb);
 int				argc_check_and_make_lst(t_list **stack_a,
 								char **argv, int argc, t_sd *s_data);
 void			range_five(t_list **stack_a, t_list **stack_b, t_sd *s_data);
@@ -50,7 +50,6 @@ int				min_value(t_list **stack, int depth);
 void			pre_value(char *s, t_sd *s_data);
 void			circle_lst(t_list **stack, int lst_depth);
 void			input_string(t_sd *s_data, char *tmp);
-void			data_save(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pa_count);
 void			data_load(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pb_count);
 void			b_short_length(t_list **stack_a, t_list **stack_b,
 											t_sd *s_data, int range);
@@ -77,14 +76,14 @@ void			rr(t_list **stack_a, t_list **stack_b, t_sd *s_data);
 void			rra(t_list **stack_a, t_sd *s_data);
 void			rrb(t_list **stack_b, t_sd *s_data);
 void			rrr(t_list **stack_a, t_list **stack_b, t_sd *s_data);
-void			sa2(t_list **stack_a, t_sd *s_data);
-void			sb2(t_list **stack_b, t_sd *s_data);
-void			ss2(t_list **stack_a, t_list **stack_b, t_sd *s_data);
+void			sa2(t_list **stack_a);
+void			sb2(t_list **stack_b);
+void			ss2(t_list **stack_a, t_list **stack_b);
 void			pa2(t_list **stack_a, t_list **stack_b, t_sd *s_data);
 void			pb2(t_list **stack_a, t_list **stack_b, t_sd *s_data);
-void			ra2(t_list **stack_a, t_sd *s_data);
-void			rb2(t_list **stack_b, t_sd *s_data);
-void			rr2(t_list **stack_a, t_list **stack_b, t_sd *s_data);
+void			ra2(t_list **stack_a);
+void			rb2(t_list **stack_b);
+void			rr2(t_list **stack_a, t_list **stack_b);
 void			rra2(t_list **stack_a, t_sd *s_data);
 void			rrb2(t_list **stack_b, t_sd *s_data);
 void			rrr2(t_list **stack_a, t_list **stack_b, t_sd *s_data);

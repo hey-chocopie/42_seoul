@@ -6,13 +6,13 @@
 /*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 16:03:38 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/05 16:03:39 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 21:12:02 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	data_save(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pa_count)
+void	data_save(t_sd *s_data, int *rr_ab_c, int *p_sb)
 {
 	rr_ab_c[0] = s_data->ra_c;
 	rr_ab_c[1] = s_data->rb_c;

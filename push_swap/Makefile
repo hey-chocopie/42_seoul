@@ -6,7 +6,7 @@
 #    By: hoylee <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/16 17:51:13 by hoylee            #+#    #+#              #
-#    Updated: 2021/06/05 21:09:44 by hoylee           ###   ########.fr        #
+#    Updated: 2021/06/05 21:42:04 by hoylee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,10 +50,13 @@ all:	${NAME} ${NAME_2}
 clean:
 		cd ./libft/; make clean
 		${RM} ${OBJS}
+		${RM} ${OBJS_2}
 
 fclean:	clean
 		cd ./libft/; make fclean
 		${RM} ${NAME}
+		${RM} ${NAME_2}
+
 re:		fclean all
 
 .PHONY : all clean fclean re

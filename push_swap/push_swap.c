@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 18:09:05 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/05 21:09:24 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 21:31:06 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		a_to_b(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 	else
 		rr_location(stack_a, stack_b, s_data);
 	pb_count = s_data->pb_c;
-	data_save(s_data, rr_ab_c, p_sb, &pb_count);
+	data_save(s_data, rr_ab_c, p_sb);
 	a_to_b(stack_a, stack_b, s_data, rr_ab_c[0] + remain);
 	b_to_a(stack_a, stack_b, s_data, rr_ab_c[1]);
 	b_to_a(stack_a, stack_b, s_data, pb_count - rr_ab_c[1]);
@@ -76,7 +76,7 @@ void		b_to_a(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 		return ;
 	}
 	b_pivot_split(stack_a, stack_b, s_data, &remain);
-	data_save(s_data, rr_ab_c, p_sb, &pa_count);
+	data_save(s_data, rr_ab_c, p_sb);
 	(pa_count) = s_data->pa_c;
 	a_to_b(stack_a, stack_b, s_data, s_data->pa_c - s_data->ra_c);
 	data_load(s_data, rr_ab_c, p_sb, &pa_count);
@@ -90,6 +90,23 @@ void		b_to_a(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 	return ;
 }
 
+int		ascending_input(t_list **stack_a, t_sd *s_data)
+{
+	t_list	*tmp;
+	int i;
+
+	i = 1;
+	tmp = *stack_a;
+	while(i < s_data->ca)
+	{
+		if(tmp->content >= tmp->next->content)
+			return 0;
+		tmp = tmp->next;
+		i++;
+	}
+	return 1;
+}
+
 int			main(int argc, char **argv)
 {
 	t_sd	s_data;
@@ -98,6 +115,8 @@ int			main(int argc, char **argv)
 
 	setup_data(&stack_a, &s_data);
 	if (1 == argc_check_and_make_lst(&stack_a, argv, argc, &s_data))
+		exit(0);
+	if (1 == ascending_input(&stack_a, &s_data))
 		exit(0);
 	circle_lst(&stack_a, s_data.ca);
 	if (s_data.ca == 5)
@@ -110,5 +129,5 @@ int			main(int argc, char **argv)
 		write(1, "\n", 1);
 	}
 	free(s_data.s);
-	return (0);
+	exit (0);
 }
