@@ -17,11 +17,7 @@
 //
 
 
-<<<<<<< HEAD
-void		setup_data(t_sd	*s_data)
-=======
 void		setup_data(t_list **stack_a, t_sd	*s_data)
->>>>>>> f5c52a659c20cce6591b58eca151b22b87e3a969
 {
 	*stack_a = 0;
 	s_data->ca = 0;
@@ -101,32 +97,6 @@ void	B_to_A(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 	return ;
 }
 
-<<<<<<< HEAD
-//int main(int argc, char **argv)
-//{
-//	t_sd	s_data;
-//	t_list *stack_a;
-//	t_list *stack_b;
-//	int i;
-//
-//	setup_data(&s_data);
-//	if(1 == argc_check_and_make_lst(&stack_a, argv, argc, &s_data))
-//		return 0;
-//	circle_lst(&stack_a, s_data.ca);
-//	if(s_data.ca == 5)
-//		range_five(&stack_a, &stack_b, &s_data, 5);
-//	else
-//		A_to_B(&stack_a, &stack_b, &s_data, s_data.ca);
-//	if(s_data.s[0] != 0)
-//	{
-//		write(1, s_data.s, ft_strlen(s_data.s));
-//		write(1, "\n", 1);
-//	}
-//	free(s_data.s);
-//	//stack_d_check(stack_a, stack_b, &s_data);
-//	return 0;
-//}
-=======
 int main(int argc, char **argv)
 {
 	t_sd	s_data;
@@ -151,4 +121,3 @@ int main(int argc, char **argv)
 	//stack_d_check(stack_a, stack_b, &s_data);
 	return 0;
 }
->>>>>>> f5c52a659c20cce6591b58eca151b22b87e3a969
