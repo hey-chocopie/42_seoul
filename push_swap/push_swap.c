@@ -6,18 +6,35 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 18:09:05 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/05 16:14:48 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 17:41:39 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-//void	 A_to_B(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range);
-//void	 B_to_A(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range);
-//
+void		stack_d_check(t_list *stack_a, t_list *stack_b, t_sd *s_data)
+{
+	int		i;
 
+	i = 0;
+	printf("\nstack_a : ");
+	while (i <= s_data->ca && s_data->ca != 0)
+	{
+		printf("%d ", stack_a->content);
+		stack_a = stack_a->next;
+		i++;
+	}
+	printf("\nstack_b : ");
+	i = 0;
+	while (i <= s_data->cb && s_data->cb != 0)
+	{
+		printf("%d ", stack_b->content);
+		stack_b = stack_b->next;
+		i++;
+	}
+}
 
-void		setup_data(t_list **stack_a, t_sd	*s_data)
+void		setup_data(t_list **stack_a, t_sd *s_data)
 {
 	*stack_a = 0;
 	s_data->ca = 0;
@@ -26,9 +43,7 @@ void		setup_data(t_list **stack_a, t_sd	*s_data)
 	(s_data->s)[0] = 0;
 }
 
-
-
-void	info_set(t_list **stack, int range, int *remain, t_sd *s_data)
+void		info_set(t_list **stack, int range, int *remain, t_sd *s_data)
 {
 	s_data->ra_c = 0;
 	s_data->rb_c = 0;
@@ -39,8 +54,7 @@ void	info_set(t_list **stack, int range, int *remain, t_sd *s_data)
 	s_data->p_big = pivot_select(stack, range, &s_data->p_small);
 }
 
-
-void	 A_to_B(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
+void		A_to_B(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 {
 	int i = 0;
 	int p_sb[2];
@@ -109,7 +123,7 @@ int main(int argc, char **argv)
 		return 0;
 	circle_lst(&stack_a, s_data.ca);
 	if (s_data.ca == 5)
-		range_five(&stack_a, &stack_b, &s_data, 5);
+		range_five(&stack_a, &stack_b, &s_data);
 	else
 		A_to_B(&stack_a, &stack_b, &s_data, s_data.ca);
 	if (s_data.s[0] != 0)
@@ -118,6 +132,5 @@ int main(int argc, char **argv)
 		write(1, "\n", 1);
 	}
 	free(s_data.s);
-	//stack_d_check(stack_a, stack_b, &s_data);
 	return 0;
 }

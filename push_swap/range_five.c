@@ -6,7 +6,7 @@
 /*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 16:05:47 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/05 16:30:34 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 17:40:58 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		min_next_v(t_list **stack, int min, int depth)
 	return min_v;
 }
 
-void    range_five(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
+void    range_five(t_list **stack_a, t_list **stack_b, t_sd *s_data)
 {
 	int i;
 

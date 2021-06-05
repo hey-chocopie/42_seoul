@@ -14,10 +14,11 @@
 
 int		avr_value(t_list **stack, int range, int min_value, int stand)
 {
-	int i;
-	int count;
-	int arv;
-	t_list *tmp;
+	int		i;
+	int		count;
+	int		arv;
+	t_list	*tmp;
+
 	i = 0;
 	count = 0;
 	while (count < ((range * stand) / 3) - 1)
@@ -35,13 +36,14 @@ int		avr_value(t_list **stack, int range, int min_value, int stand)
 		min_value = arv;
 		count++;
 	}
-	return min_value;
+	return (min_value);
 }
 
 int		pivot_select(t_list **stack, int range, int *p_small)
 {
 	int avr;
+
 	avr = avr_value(stack, range, min_value(stack, range), 2);
 	*p_small = avr_value(stack, range, min_value(stack, range), 1);
-	return avr;
+	return (avr);
 }

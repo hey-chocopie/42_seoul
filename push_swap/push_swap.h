@@ -41,7 +41,7 @@ void    rrr_location(t_list **stack_a, t_list **stackB, t_sd *s_data);
 void    rr_location(t_list **stack_a, t_list **stackB, t_sd *s_data);
 void    data_save(t_sd *s_data, int *rr_ab_c, int *p_sb, int *pa_count);
 int		argc_check_and_make_lst(t_list **stack_a, char ** argv, int argc, t_sd *s_data);
-void	range_five(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range);
+void	range_five(t_list **stack_a, t_list **stack_b, t_sd *s_data);
 void	two_three_optimization(t_list **stack_a, t_sd *s_data, int range);
 int		min_value(t_list **stack, int depth);
 void	pre_value(char *s, t_sd *s_data);
