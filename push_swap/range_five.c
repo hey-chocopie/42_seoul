@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   range_five.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/05 16:05:47 by hoylee            #+#    #+#             */
+/*   Updated: 2021/06/05 16:30:34 by hoylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 int		min_next_v(t_list **stack, int min, int depth)
@@ -8,9 +20,9 @@ int		min_next_v(t_list **stack, int min, int depth)
 
 	tmp = (*stack);
 	i = 0;
-	while(i < depth)
+	while (i < depth)
 	{
-		if(tmp -> content < min_v && tmp->content > min)
+		if (tmp->content < min_v && tmp->content > min)
 			min_v = tmp->content;
 		tmp = tmp->next;
 		i++;
@@ -23,15 +35,15 @@ void    range_five(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 	int i;
 
 	i = min_next_v(stack_a, min_value(stack_a, 5), 5);
-	while(s_data->ca != 3)
+	while (s_data->ca != 3)
 	{
-		if((*stack_a)->content != i && (*stack_a)->content == min_value(stack_a, s_data->ca))
+		if ((*stack_a)->content != i && (*stack_a)->content == min_value(stack_a, s_data->ca))
 		{
 			pb(stack_a, stack_b, s_data);
-			if(s_data->ca == 3)
+			if (s_data->ca == 3)
 				sb(stack_b, s_data);
 		}
-		else if((*stack_a)->content == i)
+		else if ((*stack_a)->content == i)
 			pb(stack_a, stack_b, s_data);
 		else ra(stack_a, s_data);
 	}

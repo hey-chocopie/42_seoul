@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pivot_select.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/05 16:05:09 by hoylee            #+#    #+#             */
+/*   Updated: 2021/06/05 16:14:02 by hoylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 int		avr_value(t_list **stack, int range, int min_value, int stand)
@@ -8,12 +20,12 @@ int		avr_value(t_list **stack, int range, int min_value, int stand)
 	t_list *tmp;
 	i = 0;
 	count = 0;
-	while(count < ((range * stand) / 3) - 1)
+	while (count < ((range * stand) / 3) - 1)
 	{
 		arv = 2147483647;
 		tmp = *stack;
 		i = 0;
-		while(i < range)
+		while (i < range)
 		{
 			if (min_value < (tmp)->content && arv > (tmp)->content)
 				arv = tmp->content;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pivot_split_stack.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/05 16:05:25 by hoylee            #+#    #+#             */
+/*   Updated: 2021/06/05 16:14:47 by hoylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 int		stack_pre_check(t_list **stack_a, int only_pa)
@@ -11,15 +23,15 @@ int		stack_pre_check(t_list **stack_a, int only_pa)
 		return 1;
 	else
 	{
-		while(i < only_pa)
+		while (i < only_pa)
 		{
 			max = tmp->content;
 			tmp = tmp->next;
-			if(max > tmp->content)
+			if (max > tmp->content)
 				break;
 			i++;
 		}
-		if(i == only_pa)
+		if (i == only_pa)
 			return 1;
 	}
 	return 0;
@@ -58,7 +70,7 @@ int		lst_range_check(t_list **stack,  int range, int i,  int pivot)//int pb_max,
 	tmp = (*stack);
 	while (j < range)
 	{
-		if(tmp->content <= pivot)
+		if (tmp->content <= pivot)
 			break;
 		tmp = tmp->next;
 		j++;
@@ -79,7 +91,7 @@ int		lst2_state_check(t_list **stack, int i, int range, int p_small)
 	tmp = (*stack);
 	while (j < range)
 	{
-		if(tmp->content > p_small)
+		if (tmp->content > p_small)
 			break;
 		tmp = tmp->next;
 		j++;
@@ -134,12 +146,12 @@ void	b_pivot_split(t_list **stack_a, t_list **stack_b, t_sd *s_data, int *remain
 		}
 		else
 		{
-			if(1 == stack_max_value(stack_a, stack_b, &s_data->range, s_data->p_big) && 1 ==  stack_pre_check(stack_a, s_data->pa_c - s_data->ra_c))
+			if (1 == stack_max_value(stack_a, stack_b, &s_data->range, s_data->p_big) && 1 ==  stack_pre_check(stack_a, s_data->pa_c - s_data->ra_c))
 				s_data->pa_c = s_data->ra_c;
 			else 
 				s_data->pa_c++;
 			pa(stack_a, stack_b, s_data);
-			if((*stack_a)->content <= s_data->p_big)
+			if ((*stack_a)->content <= s_data->p_big)
 			{
 				ra(stack_a, s_data);
 				s_data->ra_c++;

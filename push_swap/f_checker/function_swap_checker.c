@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   function_swap_checker.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/05 16:06:43 by hoylee            #+#    #+#             */
+/*   Updated: 2021/06/05 16:14:51 by hoylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../push_swap.h"
 
 void		swap2(t_list **start)
 {
 	int tmp;
-	if((*start) != 0)
+	if ((*start) != 0)
 	{
 		tmp = (*start)->content;
 		(*start)->content = ((*start)->next)->content;

@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 18:09:05 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/03 22:13:38 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 16:14:48 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ void	 A_to_B(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 	int remain = 0;
 
 	info_set(stack_a, range, &remain, s_data);
-	if(s_data->range <= 3)
+	if (s_data->range <= 3)
 	{
-		if(range == 2 || range == 3)
+		if (range == 2 || range == 3)
 			two_three_optimization(stack_a, s_data, range);
 		return ;
 	}
@@ -77,7 +77,7 @@ void	B_to_A(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 	int p_sb[2];
 
 	info_set(stack_b, range, &remain, s_data);
-	if(s_data->range <= 3)
+	if (s_data->range <= 3)
 	{
 		b_short_length(stack_a, stack_b, s_data, s_data->range);
 		return ;
@@ -105,14 +105,14 @@ int main(int argc, char **argv)
 //	int i;
 
 	setup_data(&stack_a, &s_data);
-	if(1 == argc_check_and_make_lst(&stack_a, argv, argc, &s_data))
+	if (1 == argc_check_and_make_lst(&stack_a, argv, argc, &s_data))
 		return 0;
 	circle_lst(&stack_a, s_data.ca);
-	if(s_data.ca == 5)
+	if (s_data.ca == 5)
 		range_five(&stack_a, &stack_b, &s_data, 5);
 	else
 		A_to_B(&stack_a, &stack_b, &s_data, s_data.ca);
-	if(s_data.s[0] != 0)
+	if (s_data.s[0] != 0)
 	{
 		write(1, s_data.s, ft_strlen(s_data.s));
 		write(1, "\n", 1);

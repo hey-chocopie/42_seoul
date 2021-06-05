@@ -1,9 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   function_swap.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/05 16:04:31 by hoylee            #+#    #+#             */
+/*   Updated: 2021/06/05 16:14:46 by hoylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 void		swap(t_list **start)
 {
 	int tmp;
-	if((*start) != 0)
+
+	if ((*start) != 0)
 	{
 		tmp = (*start)->content;
 		(*start)->content = ((*start)->next)->content;
