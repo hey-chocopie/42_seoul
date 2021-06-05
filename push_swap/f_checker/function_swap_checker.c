@@ -14,7 +14,8 @@
 
 void		swap2(t_list **start)
 {
-	int tmp;
+	int		tmp;
+
 	if ((*start) != 0)
 	{
 		tmp = (*start)->content;

@@ -6,7 +6,7 @@
 /*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 16:03:26 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/05 16:14:45 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 21:09:05 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	exit_error_free(char **argv, int argc, t_list **stack_a, t_sd *s_data)
 	{
 		tmp = (*stack_a)->next;
 		free(*stack_a);
-		*stack_a = tmp;
+		(*stack_a) = tmp;
 	}
 	if (s_data->s != 0)
 		free(s_data->s);

@@ -6,7 +6,7 @@
 #    By: hoylee <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/16 17:51:13 by hoylee            #+#    #+#              #
-#    Updated: 2021/06/05 17:42:14 by hoylee           ###   ########.fr        #
+#    Updated: 2021/06/05 21:09:44 by hoylee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,8 +30,7 @@ CC		= gcc
 RM		= rm -f
 
 
-CFLAGS =
-#-Wall -Wextra -Werror
+CFLAGS =-Wall -Wextra -Werror
 
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}

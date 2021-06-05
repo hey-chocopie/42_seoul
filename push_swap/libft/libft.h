@@ -6,7 +6,7 @@
 /*   By: hoylee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/01 16:13:29 by hoylee            #+#    #+#             */
-/*   Updated: 2021/05/22 20:55:55 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 20:49:20 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@
 # include <unistd.h>
 # include <limits.h>
 
-
-
 typedef struct	s_list
 {
-	int			content;
+	int				content;
 	struct s_list	*next;
 }				t_list;
 
@@ -54,7 +52,6 @@ int				ft_tolower(int c);
 void			*ft_calloc(size_t count, size_t size);
 char			*ft_strdup(const char *s1);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
-//char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_strtrim(char const *s1, char const *set);
 char			**ft_split(char const *s, char c);
 char			*ft_itoa(int n);

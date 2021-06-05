@@ -18,7 +18,7 @@ void	ra2(t_list **stack_a, t_sd *s_data)
 }
 
 void	rb2(t_list **stack_b, t_sd *s_data)
-{	
+{
 	(*stack_b) = (*stack_b)->next;
 }
 
