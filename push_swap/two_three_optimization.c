@@ -6,13 +6,14 @@
 /*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 16:06:05 by hoylee            #+#    #+#             */
-/*   Updated: 2021/06/05 16:30:35 by hoylee           ###   ########.fr       */
+/*   Updated: 2021/06/05 17:55:44 by hoylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	b_short_length(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
+void		b_short_length(t_list **stack_a, t_list **stack_b,
+									t_sd *s_data, int range)
 {
 	int i;
 
@@ -30,9 +31,29 @@ void	b_short_length(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range)
 			pa(stack_a, stack_b, s_data);
 			i++;
 		}
-		A_to_B(stack_a, stack_b, s_data, range);
+		a_to_b(stack_a, stack_b, s_data, range);
 	}
 	return ;
+}
+
+void		best_choice_swap3(t_list **stack_a, t_sd *s_data, int *flag)
+{
+	if (flag[0] == 0 && flag[1] == 0 && flag[2] == 0)
+	{
+		if (s_data->ca == 3)
+		{
+			sa(stack_a, s_data);
+			rra(stack_a, s_data);
+		}
+		else
+		{
+			sa(stack_a, s_data);
+			ra(stack_a, s_data);
+			sa(stack_a, s_data);
+			rra(stack_a, s_data);
+			sa(stack_a, s_data);
+		}
+	}
 }
 
 void		best_choice_swap2(t_list **stack_a, t_sd *s_data, int *flag)
@@ -49,29 +70,14 @@ void		best_choice_swap2(t_list **stack_a, t_sd *s_data, int *flag)
 			rra(stack_a, s_data);
 		}
 	}
-	else if (flag[0] == 0 && flag[1] == 0 && flag[2] == 0)
-	{
-		if (s_data->ca ==3)
-		{
-			sa(stack_a, s_data);
-			rra(stack_a, s_data);
-		}
-		else
-		{
-			sa(stack_a, s_data);
-			ra(stack_a, s_data);
-			sa(stack_a, s_data);
-			rra(stack_a, s_data);
-			sa(stack_a, s_data);
-		}
-	}
+	best_choice_swap3(stack_a, s_data, flag);
 }
 
 void		best_choice_swap(t_list **stack_a, t_sd *s_data, int *flag)
 {
-	if (flag[0] == 1 && flag[1] == 1 && flag[2] == 1)//#1
+	if (flag[0] == 1 && flag[1] == 1 && flag[2] == 1)
 		return ;
-	else if (flag[0] == 1 && flag[1] == 0 && flag[2] == 1)//#2
+	else if (flag[0] == 1 && flag[1] == 0 && flag[2] == 1)
 	{
 		ra(stack_a, s_data);
 		sa(stack_a, s_data);
@@ -93,10 +99,15 @@ void		best_choice_swap(t_list **stack_a, t_sd *s_data, int *flag)
 	}
 	best_choice_swap2(stack_a, s_data, flag);
 }
-void	two_three_optimization(t_list **stack_a, t_sd *s_data, int range)
+
+void		two_three_optimization(t_list **stack_a, t_sd *s_data, int range)
 {
-	t_list *tmp;
-	int flag[3] = { 0, }; 
+	t_list	*tmp;
+	int		flag[3];
+
+	flag[0] = 0;
+	flag[1] = 0;
+	flag[2] = 0;
 	if (range == 2)
 	{
 		if ((*stack_a)->next->content < ((*stack_a)->content))

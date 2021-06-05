@@ -21,8 +21,8 @@ typedef struct		s_sd
 	int		range;
 
 }					t_sd;
-void	 A_to_B(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range);
-void	 B_to_A(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range);
+void	 a_to_b(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range);
+void	 b_to_a(t_list **stack_a, t_list **stack_b, t_sd *s_data, int range);
 
 
 //void			sa(t_list **stackA);
