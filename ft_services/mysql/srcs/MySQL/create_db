@@ -1,3 +1,0 @@
-CREATE DATABASE my_db;
-CREATE USER 'admin'@'%' IDENTIFIED BY 'password';
-GRANT ALL ON my_db.* TO 'admin'@'%' WITH GRANT OPTION;
