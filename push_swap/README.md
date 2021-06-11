@@ -35,8 +35,6 @@
 
 > 3 1 2 를 오름차순으로 정리하기 하기위해 효율 적인 방법은 ra입니다. 3은 배열 맨 뒤로 가고, 1과 2는 앞으로 옵니다. ./push_swap 3 1 2 을 실행하면 ra가 나오는걸 확인할 수 있습니다.
 
-
-
 * 예제2 : <pre><code>./push_swap 4 2 5 1 3</pre></code>
 > ra->pb->ra->pb->sb->pa->pa 를 통해 4 2 5 1 3을 오름차순으로 정렬했습니다.
 확인해보고 싶다면 제약된 사항들과 비교해보면 따라해보세요!
@@ -56,11 +54,6 @@
 ![image](https://user-images.githubusercontent.com/52343427/121638871-a4abf400-cac6-11eb-8a40-cc40a262d89b.png)
 
 # 테스터기 이용한 확인
-### 42-push_swap 폴더
-./test.sh를 이용해 push_swap(실행파일)이 정상 작동하는지 확인할 수 있습니다. 
->![image](https://user-images.githubusercontent.com/52343427/121638905-b2fa1000-cac6-11eb-9075-e0c2c7bb88d6.png)
-
-
 ### push_swap_tester 폴더
 ```
 export ARG=$(./random_numbers 5 -500 100)
@@ -71,4 +64,9 @@ echo $ARG
 >![image](https://user-images.githubusercontent.com/52343427/121638877-a70e4e00-cac6-11eb-8e28-b4f2c9005e21.png)
 
 * ./random_numbers 에서 첫번쨰 인자는 몇개의 정수를 넣을건지 이고, -500~100개 사이에 수중에 랜덤으로 뽑으라 입니다.
+
+### 42-push_swap 폴더
+./test.sh를 이용해 push_swap(실행파일)이 정상 작동하는지 확인할 수 있습니다. 
+>![image](https://user-images.githubusercontent.com/52343427/121638905-b2fa1000-cac6-11eb-9075-e0c2c7bb88d6.png)
+
 
