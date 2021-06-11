@@ -2,15 +2,13 @@
 ### 개요
 * 문제를 해결함에 있어 정렬은 많은 곳에서 사용됩니다.
 * 이 과제를 통해 정렬에 대한 이해를 넓힐 수 있습니다.
-* 제한된 지침으로 스택데이터를 정렬하며, 적은수의 작업으로 성공해야 합니다.
+* **제한된 지침**으로 스택데이터를 정렬하며, 적은수의 작업으로 성공해야 합니다.(제한된 지침은 밑에 정리해두었습니다.)
 * 알고리즘 유형을 선택하고 적합한 솔루션으로 해결해야 합니다.
 
 ### 목표
 * 두 개의 스택으로 퀵 소트 정렬을 구현합니다.
 * 퀵 소트를 구현할떄 최소한의 방법으로 구현해보세요!
 
-### 제한된 지침
-![image](https://user-images.githubusercontent.com/52343427/121637209-01f27600-cac4-11eb-8235-1f1acc3b0f75.png)
 
 ### 결과물
 * push_swap (실행파일)
@@ -25,13 +23,19 @@
 * 나머지 .c 파일들은 push_swap (실행파일)을 만들기 위한 파일들입니다.
 * 메인문은 push_swap.c파일에 있습니다.
 
+### 제한된 지침
+>![image](https://user-images.githubusercontent.com/52343427/121637209-01f27600-cac4-11eb-8235-1f1acc3b0f75.png)
+
 ### 사용방법
 # push_swap (실행파일)
 * push_swap폴더에서 make를 하면 push_swap(실행파일)과 checker 를 만들 수 있습니다.
 * <pre><code>./push_swap 정렬되지 않은 정수들</pre></code> 를 넣으면 정수들을 정렬할 수 있는 제약된 지침들이 나옵니다.
 * 예제 : <pre><code>./push_swap 3 1 2</pre></code>
-> 3 1 2 를 오름차순으로 정리하기 하기위해 효율 적인 방법은 ra입니다. 3은 배열 맨 뒤로 가고, 1과 2는 앞으로 옵니다. ./push_swap 3 1 2 을 실행하면 ra가 나오는걸 확인할 수 있습니다.
 ![image](https://user-images.githubusercontent.com/52343427/121637241-0cad0b00-cac4-11eb-930e-813d75e464ee.png)
+
+> 3 1 2 를 오름차순으로 정리하기 하기위해 효율 적인 방법은 ra입니다. 3은 배열 맨 뒤로 가고, 1과 2는 앞으로 옵니다. ./push_swap 3 1 2 을 실행하면 ra가 나오는걸 확인할 수 있습니다.
+
+
 
 * 예제2 : <pre><code>./push_swap 4 2 5 1 3</pre></code>
 > ra->pb->ra->pb->sb->pa->pa 를 통해 4 2 5 1 3을 오름차순으로 정렬했습니다.
@@ -45,3 +49,26 @@
 > 체커를 실행하면 표준입력을 대기합니다. ra를 입력하고 ctrl + d(EOF)를 입력하세요. 정상적으로 정렬이 되어 ok가 나옵니다. 정렬이 되어있지 않은 상태에서 ctrl + d (EOF)를 발생 시키면 ko를 출력합니다.
 > sa, sa, ss, pa, pb, ra, rb, rr, rra, rrb, rrr을 입력할 수 있습니다. 제한된 지침외에 다른 지침을 입력하면 "Error"을 출력합니다.
 ![image](https://user-images.githubusercontent.com/52343427/121637263-15054600-cac4-11eb-9905-58bf2ae66e12.png)
+
+* 예제2 : <pre><code>ARG="1 3 2" ; ./push_swap $ARG | ./checker $ARG</pre></code>
+
+>push_swap 실행파일에서 나오는 값들을 바로 체커로 넣었습니다. push_swap에서 나오는 값으로 바로 정렬이 이루어지면 ok를 출력합니다. 
+![image](https://user-images.githubusercontent.com/52343427/121638871-a4abf400-cac6-11eb-8a40-cc40a262d89b.png)
+
+# 테스터기 이용한 확인
+### 42-push_swap 폴더
+./test.sh를 이용해 push_swap(실행파일)이 정상 작동하는지 확인할 수 있습니다. 
+>![image](https://user-images.githubusercontent.com/52343427/121638905-b2fa1000-cac6-11eb-9075-e0c2c7bb88d6.png)
+
+
+### push_swap_tester 폴더
+```
+export ARG=$(./random_numbers 5 -500 100)
+../push_swap $ARG | ../checker $ARG
+../push_swap $ARG | wc -l
+echo $ARG
+```
+>![image](https://user-images.githubusercontent.com/52343427/121638877-a70e4e00-cac6-11eb-8e28-b4f2c9005e21.png)
+
+* ./random_numbers 에서 첫번쨰 인자는 몇개의 정수를 넣을건지 이고, -500~100개 사이에 수중에 랜덤으로 뽑으라 입니다.
+
