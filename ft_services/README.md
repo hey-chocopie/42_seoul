@@ -14,7 +14,9 @@
 >동그라미는 유저가 접근할 수 있는 것들이고, 네모는 유저는 불가, 관리자만 접근 가능합니다.
 
 ### 3. 결과물
+![image](https://user-images.githubusercontent.com/52343427/121645708-7848a580-cacf-11eb-82dc-fdd868030122.png)
 
+![image](https://user-images.githubusercontent.com/52343427/121645721-7d0d5980-cacf-11eb-9de8-10f4b82bd91a.png)
 ### 4. 사용법
 > 개발 환경 구축
 ```
