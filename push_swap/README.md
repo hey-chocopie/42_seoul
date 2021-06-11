@@ -9,7 +9,6 @@
 * 두 개의 스택으로 퀵 소트 정렬을 구현합니다.
 * 퀵 소트를 구현할떄 최소한의 방법으로 구현해보세요!
 
-
 ### 결과물
 * push_swap (실행파일)
 * checker (실행파일)
@@ -30,7 +29,7 @@
 # push_swap (실행파일)
 * push_swap폴더에서 make를 하면 push_swap(실행파일)과 checker 를 만들 수 있습니다.
 * <pre><code>./push_swap 정렬되지 않은 정수들</pre></code> 를 넣으면 정수들을 정렬할 수 있는 제약된 지침들이 나옵니다.
-* 예제 : <pre><code>./push_swap 3 1 2</pre></code>
+* 예제1 : <pre><code>./push_swap 3 1 2</pre></code>
 ![image](https://user-images.githubusercontent.com/52343427/121637241-0cad0b00-cac4-11eb-930e-813d75e464ee.png)
 
 > 3 1 2 를 오름차순으로 정리하기 하기위해 효율 적인 방법은 ra입니다. 3은 배열 맨 뒤로 가고, 1과 2는 앞으로 옵니다. ./push_swap 3 1 2 을 실행하면 ra가 나오는걸 확인할 수 있습니다.
