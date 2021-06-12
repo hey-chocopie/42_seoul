@@ -5,13 +5,16 @@ cub3d과제 목표 Raycasting(레이케스팅)을 이용하여 간단한 가상�
 
 >레이캐스팅 기술을 사용한 게임 중 가장 유명한 게임은 'Wolfenstein 3D'입니다.
 
+![image](https://user-images.githubusercontent.com/52343427/121767426-194c6480-cb93-11eb-89f9-6d47210a9c00.png)
+
 ### 2. 목표
 * 입력되는 2차원 데이터를 3차원으로 원근감 있게 렌더링 합니다.
 * 레이케스팅 원문을 이해하고, 자신만의 코드를 작성하세요.
 
 ### 3. 결과물
 cub3D
-
+![image](https://user-images.githubusercontent.com/52343427/121767427-1cdfeb80-cb93-11eb-845d-c65c80e7e635.png)
+![image](https://user-images.githubusercontent.com/52343427/121767428-1fdadc00-cb93-11eb-86ce-ae36d345c283.png)
 ### 4. 사용법
 1. make
 <pre><code>make</pre></code>
