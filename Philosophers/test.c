@@ -34,10 +34,6 @@ void* Philosopher(void * arg) {
     pickup_forks(philosopher_number);
     printf("philosopher(%d) picks up the fork(%d).\n", philosopher_number, philosopher_number);
      
-    // pickup left fork
-    pickup_forks(philosopher_number);
-    printf("philosopher(%d) picks up the fork(%d).\n", philosopher_number, philosopher_number);
-     
     // pickup right fork
     pickup_forks(philosopher_number+1);
     printf("philosopher(%d) picks up the fork(%d).\n", philosopher_number, (philosopher_number + 1) % NUM_THREADS);
