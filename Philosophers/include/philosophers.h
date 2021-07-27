@@ -32,18 +32,16 @@ typedef struct  s_philosophers_data
 
 typedef struct  s_all_data
 {
-  int             number;
   pthread_mutex_t *mutex;
   pthread_mutex_t *monitor_mutex;
-
   pthread_mutex_t *print_mutex;
   pthread_t       *philosopher;
   pthread_t       *monitor;
   struct s_philosophers_data pd;
   struct s_time   t;
   int             *die_flag;
-  char			  **p_status;
   int			  *die_index;
+  int             number;
 }               t_all_data;
 
 int argc_argv_check(int argc, char **argv);
