@@ -10,17 +10,18 @@
 #                                                                              #
 # **************************************************************************** #
 
-#CC 				= gcc
-CC 				= gcc -g -fsanitize=address
+CC 				= gcc
+#CC 				= gcc -g -fsanitize=address
 RM				= rm -rf
-CFLAGS 			= -Wall -Wextra -Werror
+CFLAGS			=
+#CFLAGS 			= -Wall -Wextra -Werror
 NAME 			= philosophers
 
 LIBFT		= libft.a
 LIBFT_DIR	= libft
 
 SRC_DIR 	= srcs
-SRC 		= srcs/philosophers.c
+SRC 		= srcs/philosophers.c srcs/utils.c srcs/t_philo_thread.c srcs/time_utils.c
 
 OBJ_DIR 	= objs
 OBJ 		= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
