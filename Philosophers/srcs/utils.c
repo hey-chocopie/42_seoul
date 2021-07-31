@@ -57,7 +57,6 @@ int     create_mutex(t_all_data *ad)
     }
     if(pthread_mutex_init(ad->monitor_mutex, NULL) == -1)
         return (-4);
-
     if(pthread_mutex_init(ad->print_mutex, NULL) == -1)
         return (-4);
     return 0;
@@ -74,7 +73,7 @@ int     set_philosopers(int argc, char **argv, t_all_data *ad)
     while(i < argc)
     {
         tmp = ft_atoi(argv[i]);
-        if (tmp <= 0 || (tmp == 1 && i == 1))
+        if (tmp <= 0 || (tmp == 1 && i == 1) || (tmp < 60 && (i == 3 || i == 4)))
             return (-1);
         if (i == 1)
             ad->pd.number_of_philosophers = tmp;

@@ -13,35 +13,108 @@ void	set_around_number(t_all_data *ad, int *philosopher_number, int *philosopher
 void philosophers_order(t_all_data *ad)
 {
     if(ad->number % 2 == 1)
-		usleep(1000 * ad->pd.time_to_eat);
-		//accurate_usleep(1000 * ad->pd.time_to_eat, 0);
+		accurate_usleep(1000 * ad->pd.time_to_eat, 0);
     if(ad->pd.number_of_philosophers % 2 == 1)
         if (ad->pd.number_of_philosophers == ad->number + 1)
-		usleep(1000 * ad->pd.time_to_eat * 2);
-		//accurate_usleep(1000 * ad->pd.time_to_eat * 2, 0);
+		accurate_usleep(1000 * ad->pd.time_to_eat * 2, 0);
 }
 
-void	numbers_odd_or_even(t_all_data *ad, int *philosopher_number, int *philosopher_next_number, int *philosopher_pre_number)
+int unlock_get_fork_error(t_all_data *ad, int return_value,int *philosopher_number, int *philosopher_pre_number)
 {
+	if (return_value / 10000 != 0)
+	{
+	    pthread_mutex_unlock(&(ad->mutex[*philosopher_pre_number]));
+	    pthread_mutex_unlock(&(ad->mutex[*philosopher_number]));
+		return(return_value / 10000);
+	}
+	else if (return_value / 1000 != 0)
+	{
+	    pthread_mutex_unlock(&(ad->mutex[*philosopher_pre_number]));
+		return(return_value / 1000);
+	}
+	else if(return_value / 100 != 0)
+	{
+	    pthread_mutex_unlock(&(ad->mutex[*philosopher_number]));
+	    pthread_mutex_unlock(&(ad->mutex[*philosopher_pre_number]));
+		return(return_value / 100);
+	}
+	if(return_value / 10 != 0)
+	{
+	    pthread_mutex_unlock(&(ad->mutex[*philosopher_number]));
+		return (return_value / 10);
+	}
+	return (0);
+}
+
+int	get_fork(t_all_data *ad, int *philosopher_number, int *philosopher_next_number, int *philosopher_pre_number)
+{
+	int return_value;
+
 	if(ad->number % 2 == 1)
 	{
 	    pthread_mutex_lock(&(ad->mutex[*philosopher_number]));
-	    time_distinction_start_between_end(ad, "has taken a fork", *philosopher_number);
+	    if((return_value = time_distinction_start_between_end(ad, "has taken a fork", *philosopher_number)) != 0)
+			return (unlock_get_fork_error(ad, return_value * 10, philosopher_number, philosopher_pre_number));
 	    pthread_mutex_lock(&(ad->mutex[*philosopher_pre_number]));
-	    time_distinction_start_between_end(ad, "has taken a fork", *philosopher_number);
+	    if((return_value = time_distinction_start_between_end(ad, "has taken a fork", *philosopher_number)) != 0)
+			return (unlock_get_fork_error(ad, return_value * 100, philosopher_number, philosopher_pre_number));
 	}
 	else if(ad->number % 2 == 0)
 	{
-	    if(ad->pd.number_of_philosophers % 2 == 1)
-	    {
-	        if(ad->t.last_eat_time[*philosopher_number] >= 1000)
-	            usleep(100);
-	    }
-	    pthread_mutex_lock(&(ad->mutex[*philosopher_pre_number])); //먼저 다 락떄려
-	    time_distinction_start_between_end(ad, "has taken a fork", *philosopher_number);
-	    pthread_mutex_lock(&(ad->mutex[*philosopher_number])); //먼저 다 락떄려
-	    time_distinction_start_between_end(ad, "has taken a fork", *philosopher_number);
+	    pthread_mutex_lock(&(ad->mutex[*philosopher_pre_number]));
+	    if((return_value = time_distinction_start_between_end(ad, "has taken a fork", *philosopher_number)) != 0)
+			return (unlock_get_fork_error(ad, return_value * 1000, philosopher_number, philosopher_pre_number));
+	    pthread_mutex_lock(&(ad->mutex[*philosopher_number]));
+		if((return_value = time_distinction_start_between_end(ad, "has taken a fork", *philosopher_number)) != 0)
+			return (unlock_get_fork_error(ad, return_value * 10000, philosopher_number, philosopher_pre_number));
 	}
+	return (0);
+}
+
+int *fork_unlock(t_all_data *ad, int philosopher_number, int philosopher_pre_number)
+{
+	pthread_mutex_unlock(&(ad->mutex[philosopher_number]));
+	pthread_mutex_unlock(&(ad->mutex[philosopher_pre_number]));
+	return(ad->return_value);
+}
+
+int eating(t_all_data *ad, int philosopher_number, int philosopher_pre_number)
+{
+	int return_value;
+
+	return_value = 0;
+	pthread_mutex_lock(ad->monitor_mutex);
+    if((return_value = get_time(&(ad->t.last_eat_time[philosopher_number]))) != 0)
+	{
+		pthread_mutex_unlock(ad->monitor_mutex);
+		return (return_value);
+	}
+	pthread_mutex_unlock(ad->monitor_mutex);
+	if((return_value = get_time(&(ad->save_time))) != 0)
+		return (return_value);
+	return_value = time_distinction_start_between_end(ad, "is eating", philosopher_number);
+    if (return_value != 0 || (return_value = (accurate_usleep(1000 * ad->pd.time_to_eat, ad->save_time))) != 0)
+		return (return_value);
+	return (0);
+}
+
+int sleeping(t_all_data *ad, int philosopher_number, int philosopher_pre_number)
+{
+	int return_value;
+
+	return_value = 0;
+	if((return_value = get_time(&(ad->save_time))) != 0)
+	{
+	    pthread_mutex_unlock(&(ad->mutex[philosopher_number]));
+	    pthread_mutex_unlock(&(ad->mutex[philosopher_pre_number]));
+		return (return_value);
+	}
+	return_value = time_distinction_start_between_end(ad, "is sleeping", philosopher_number);
+    pthread_mutex_unlock(&(ad->mutex[philosopher_number]));
+    pthread_mutex_unlock(&(ad->mutex[philosopher_pre_number]));
+    if (return_value != 0 || (return_value = (accurate_usleep((1000 * ad->pd.time_to_sleep), ad->save_time))) != 0 )
+		return (return_value);
+	return (0);
 }
 
 void *t_philo_thread(void * arg)
@@ -50,87 +123,29 @@ void *t_philo_thread(void * arg)
     int philosopher_next_number;
     int philosopher_pre_number;
     t_all_data *ad = (t_all_data *)arg;
-    //exit(-3);
-	int i = 0;
-	int max_index = 0;
-	unsigned long long save_time;
-
 
 	set_around_number(ad, &philosopher_number, &philosopher_next_number, &philosopher_pre_number);
 	philosophers_order(ad);
+	*(ad->return_value) = 0;
     while(1)
     {
-		numbers_odd_or_even(ad, &philosopher_number, &philosopher_next_number, &philosopher_pre_number);
-        pthread_mutex_lock(ad->monitor_mutex);
-        get_time(&(ad->t.last_eat_time[philosopher_number]));
-
-		get_time(&save_time);
-
-		///get_time(&(ad->t). new_msecs_time);
-		pthread_mutex_unlock(ad->monitor_mutex); //먼저 다 락떄려
-        if (time_distinction_start_between_end(ad, "is eating", philosopher_number) == -1|| (accurate_usleep(1000 * ad->pd.time_to_eat, save_time, ad)) == -2)
-        {
-			return (void *)(-2);
-        }
-		//usleep(1000 * ad->pd.time_to_eat);
-        pthread_mutex_unlock(&(ad->mutex[philosopher_number])); //먼저 다 락떄려
-        pthread_mutex_unlock(&(ad->mutex[philosopher_pre_number])); //먼저 다 락떄려
-		//pthread_mutex_lock(ad->monitor_mutex);
-        if(*(ad->die_flag) == 1)
-		{
-			//pthread_mutex_unlock(ad->monitor_mutex);
-            break; // 맞겠지?
-		}
-//		save_time = 0;
-		get_time(&save_time);
-
-		//printf("%d,%d %s\n", ad->number,philosopher_number, "pre sleep");
-		//pthread_mutex_unlock(ad->monitor_mutex);
-        if (time_distinction_start_between_end(ad, "is sleeping", philosopher_number) == -1 || (accurate_usleep((1000 * ad->pd.time_to_sleep), save_time, ad)) == -2 )
-        {
-			return (void *)(-2);
-        }
-		//usleep(1000 * ad->pd.time_to_sleep);
-		//printf("%d,%d %s\n", ad->number,philosopher_number, "pre think");
-        if(time_distinction_start_between_end(ad, "is thinking", philosopher_number) == -1)
-        {
-			return (void *)(-2);
-        }
+		if ((*(ad->return_value) = get_fork(ad, &philosopher_number, &philosopher_next_number, &philosopher_pre_number)) != 0)
+			return (void *)(ad->return_value);
+		if ((*(ad->return_value) = eating(ad, philosopher_number, philosopher_pre_number)) != 0)
+			return (void *)(fork_unlock(ad, philosopher_number, philosopher_pre_number));
+		if ((*(ad->return_value) = sleeping(ad, philosopher_number, philosopher_pre_number)) != 0)
+			return (void *)(ad->return_value);
+		if (((*ad->return_value) = time_distinction_start_between_end(ad, "is thinking", philosopher_number)) != 0)
+			return (void *)(ad->return_value);
 		if( ad->pd.time_to_eat > ad->pd.time_to_sleep)
-		{
-			if ((accurate_usleep((1000 * (ad->pd.time_to_eat - ad->pd.time_to_sleep)), 0, ad)) == -2)
-				return (void *)(-2);
-			//usleep(1000 * (ad->pd.time_to_eat - ad->pd.time_to_sleep));
-		}
-		else if(ad->pd.number_of_philosophers % 2 == 1)
-		{
-			if ((accurate_usleep(1000 * ad->pd.time_to_eat, 0, ad)) == -2)
-				return (void *)(-2);
-		}
-	//	else if(ad->pd.number_of_philosophers % 2 == 0)
-//		if(ad->pd.number_of_philosophers % 2)
-//		if(ad->pd.number_of_philosophers % 2 == 1)
-//			if ((accurate_usleep(1000)) == -1)
-//				return (void *)(-2);
-		
-		if (ad->pd.number_of_philosophers >= 100)
-			usleep(100000);
-		if (ad->pd.number_of_philosophers >= 50)
-			usleep(50000);
-		else if (ad->pd.number_of_philosophers > 40)
-			usleep(20000);
-
-		else if (ad->pd.number_of_philosophers > 30)
-			usleep(15000);
-
-		else if (ad->pd.number_of_philosophers > 20)
-			usleep(10000);
-		else if (ad->pd.number_of_philosophers > 10)
-			usleep(2000);
-		else if (ad->pd.number_of_philosophers > 0)
-			usleep(1000);
-
+			if ((*ad->return_value = (accurate_usleep((1000 * (ad->pd.time_to_eat - ad->pd.time_to_sleep)), 0))) == -2)
+				return (void *)(ad->return_value);
+		usleep(1000);
     }
-    return (0);
+    return (ad->return_value);
 }
-
+//		if(ad->pd.number_of_philosophers % 2 == 1)
+//		{
+//			if ((*ad->return_value = (accurate_usleep(1000 * ad->pd.time_to_eat, 0))) == -2)
+//				return (void *)(ad->return_value);
+//		}

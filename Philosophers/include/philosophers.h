@@ -42,6 +42,9 @@ typedef struct  s_all_data
   int             *die_flag;
   int			  *die_index;
   int             number;
+  int			  *return_value;
+  int			  *monitor_return_value;
+  unsigned long long  save_time;
 }               t_all_data;
 
 int argc_argv_check(int argc, char **argv);
@@ -49,6 +52,6 @@ int     set_philosopers(int argc, char **argv, t_all_data *ad);
 int get_time(unsigned long long *save);
 int     create_mutex(t_all_data *ad);
 void *t_philo_thread(void * arg);
-int       accurate_usleep(unsigned long long how_sleep, unsigned long long start_time, t_all_data *ad);
+int       accurate_usleep(unsigned long long how_sleep, unsigned long long start_time);
 int       time_distinction_start_between_end(t_all_data *ad, char *action_string, int number);
 #endif
