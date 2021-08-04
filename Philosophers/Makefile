@@ -11,42 +11,36 @@
 # **************************************************************************** #
 
 CC 				= gcc
-#CC 				= gcc -g -fsanitize=address
 RM				= rm -rf
-CFLAGS			=
-#CFLAGS 			= -Wall -Wextra -Werror
-NAME 			= philosophers
-
-LIBFT		= libft.a
-LIBFT_DIR	= libft
-
+CFLAGS 			= -Wall -Wextra -Werror
+NAME 			= philo
+MKOBJS		= test
 SRC_DIR 	= srcs
-SRC 		= srcs/philosophers.c srcs/utils.c srcs/t_philo_thread.c srcs/time_utils.c
+
+SRC 		= srcs/philosophers.c srcs/utils.c srcs/t_philo_thread.c srcs/time_utils.c \
+				srcs/argv_check.c srcs/malloc_mutex_and_pthread.c srcs/monitor_thread.c \
+				srcs/pthread.utils.c srcs/ft_libft.c
 
 OBJ_DIR 	= objs
 OBJ 		= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all : 		$(NAME)
 
-$(NAME) : 	$(LIBFT) $(OBJ)
-			$(CC) $(CFLAGS) -o $@ $(OBJ) \
-			$(LIBFT)
+$(NAME) : 	$(MKOBJS) $(OBJ)
+			$(CC) $(CFLAGS) -o $@ $(OBJ)
 
-$(LIBFT) :
-			cd $(LIBFT_DIR); make
-			cp $(LIBFT_DIR)/$(LIBFT) ./
+$(MKOBJS) :
 			mkdir -p $(OBJ_DIR)
-
+					  
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 			$(CC) $(CFLAGS) -c $< -o $(<:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 clean :
-			cd $(LIBFT_DIR); make clean
 			$(RM) $(OBJ) $(OBJ_DIR)
 
 fclean : 	clean
-			cd $(LIBFT_DIR); make fclean
-			$(RM) $(NAME) $(LIBFT)
+			$(RM) $(NAME)
+#$(LIBFT)
 
 re : 		fclean all
 
