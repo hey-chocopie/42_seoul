@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   monitor_thread.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/04 23:04:55 by hoylee            #+#    #+#             */
+/*   Updated: 2021/08/04 23:04:56 by hoylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 void	*die_to_philosopher(t_all_data *ad)
@@ -61,7 +73,7 @@ void	*monitor_thread(void *arg)
 			return (complet_eat(ad));
 		else
 			pthread_mutex_unlock(ad->monitor_mutex);
-		usleep(1000);
+		usleep(100);
 	}
 	return ((void *)(ad->monitor_return_value));
 }

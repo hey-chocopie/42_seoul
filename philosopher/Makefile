@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: seuyu <seuyu@student.42seoul.kr>           +#+  +:+       +#+         #
+#    By: hoylee <hoylee@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/05/25 19:30:48 by djeon             #+#    #+#              #
-#    Updated: 2021/07/08 17:57:28 by djeon            ###   ########.fr        #
+#    Created: 2021/08/04 23:08:17 by hoylee            #+#    #+#              #
+#    Updated: 2021/08/04 23:16:32 by hoylee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC 				= gcc
-RM				= rm -rf
-CFLAGS 			= -Wall -Wextra -Werror
-NAME 			= philo
+CC 			= gcc
+RM			= rm -rf
+CFLAGS 		= -Wall -Wextra -Werror
+NAME 		= philo
 MKOBJS		= test
 SRC_DIR 	= srcs
 
@@ -40,7 +40,6 @@ clean :
 
 fclean : 	clean
 			$(RM) $(NAME)
-#$(LIBFT)
 
 re : 		fclean all
 
