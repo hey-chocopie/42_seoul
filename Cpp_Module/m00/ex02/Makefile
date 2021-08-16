@@ -1,14 +1,14 @@
 CXX				= clang++
 RM				= rm -f
 CXXFLAGS		= -Wall -Wextra -Werror
-NAME			= My_Awesome_PhoneBook
+NAME			= The_Job_Of_Your_Dreams
 
-SRCS			= awesome_phone_book.cpp phone_book.cpp
+SRCS			= Account.cpp tests.cpp
 OBJS_DIR		= objs
 
 OBJS			= $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
 
-$(OBJS_DIR)/%.o:%.cpp 
+$(OBJS_DIR)/%.o:%.cpp
 				@mkdir -p $(OBJS_DIR)
 				$(CXX) $(CXXFLAGS) -c $< -o $(<:%.cpp=$(OBJS_DIR)/%.o)
 
