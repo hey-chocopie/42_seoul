@@ -1,8 +1,17 @@
-#include "Zombie.hpp"
+#include <iostream>
 
-int main( void )
+int		main( void )
 {
-	Zombie t;
+	std::string str;
+	str = "HI THIS IS BRAIN";
+	std::string *stringPTR = &str;
+	std::string& stringREF = str;
 
-	t.announce("stupid", "int");
+	std::cout << "&str adreess : " << &str << std::endl;
+	std::cout << "stringPTR adress : " << stringPTR << std::endl;
+	std::cout << "&stringREF adress : " << &stringREF << std::endl;
+
+	std::cout << "str string : " << str << std::endl;
+	std::cout << "stringPTR string : " << *stringPTR << std::endl;
+	std::cout << "stringREF string : " << stringREF << std::endl;
 }
