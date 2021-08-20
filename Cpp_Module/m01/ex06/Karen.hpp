@@ -9,12 +9,7 @@ class karen{
 		void info( void );
 		void warning( void );
 		void error( void );
-
-		struct widget
-		{
-			std::string str;
-			void (karen::*ptr) (void);
-		};
+		void nothing( void );
 	public:
 		void complain( std::string level );
 };

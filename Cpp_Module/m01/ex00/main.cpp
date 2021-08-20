@@ -10,5 +10,5 @@ int main( void )
 	delete save;
 
 	t.randomChump( "random" ) ;
-	//t.announce("stupid", "int");
+	t.announce();
 }

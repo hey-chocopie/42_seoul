@@ -1,7 +1,5 @@
 #include "Weapon.hpp"
 
-std::string Weapon::type = "";
-
 const std::string &Weapon::getType( void )
 {
 	return (Weapon::type);

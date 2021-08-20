@@ -1,4 +1,4 @@
-#include <iostream> // cpp 표준 입출력 헤더
+#include <iostream>
 #include <cctype>
 
 int	main(int argc, char **argv)
@@ -11,10 +11,7 @@ int	main(int argc, char **argv)
 		{
 			std::string str = argv[i];
 			for (size_t j = 0; j < str.length(); j++)
-			{
-				//str[j] = std::toupper(str[j]);
 				std::cout << (char)std::toupper(str[j]);
-			}
 		}
 	}
 	std::cout << std::endl;

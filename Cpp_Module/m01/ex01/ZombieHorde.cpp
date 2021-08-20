@@ -11,10 +11,7 @@ Zombie* Zombie::zombieHorde( int N, std::string name )
 	{
 		Zombie *first = new Zombie[N];
 		for(int i = 0; i < N; i++)
-		{
 			first[i].input_name(name);
-			first[i].announce();
-		}
 		return (first);
 	}
 	return (0);

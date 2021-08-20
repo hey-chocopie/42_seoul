@@ -20,24 +20,19 @@ void	karen::error( void )
 	std::cout << "This is unacceptable, I want to speak to the manager now." << std::endl;
 }
 
+void	karen::nothing( void )
+{
+	std::cout << "Level is not included anywhere." << std::endl;
+}
+
 void	karen::complain( std::string level )
 {
-	int i = 0;
-	widget	wid[4] = {
-			 {"DEBUG", &karen::debug},
-			{"INFO", &karen::info},
-			{"WARNING", &karen::warning},
-			{"ERROR", &karen::error}
-	};
+	void	(karen::*exec_func)(void);
 
-	for (i = 0; i < 4; i++)
-	{
-		if(wid[i].str == level)
-		{
-			(this->*wid[i].ptr)();
-			break;
-		}
-	}
-	if (i == 4)
-		std::cout << "Level is not included anywhere." << std::endl;
+	exec_func = &karen::nothing;
+	(!level.compare("DEBUG") && (exec_func = &karen::debug));
+	(!level.compare("INFO") && (exec_func = &karen::info));
+	(!level.compare("WARNING") && (exec_func = &karen::warning));
+	(!level.compare("ERROR") && (exec_func = &karen::error));
+	(this->*exec_func)();
 }

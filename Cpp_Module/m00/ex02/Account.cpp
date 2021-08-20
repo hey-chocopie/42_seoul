@@ -7,7 +7,6 @@ int Account::_nbAccounts = 0;
 int Account::_totalAmount = 0;
 int Account::_totalNbDeposits = 0;
 int Account::_totalNbWithdrawals = 0;
-//static은 한번 만들어지면 프로그램이 종료될때까지 존재하기 때문에, 전역에서 한번만 선언한다. 
 
 void Account::_displayTimestamp( void )
 {

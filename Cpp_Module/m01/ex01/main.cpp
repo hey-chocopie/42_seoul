@@ -4,9 +4,9 @@ int main( void )
 {
 	Zombie a;
 
-	Zombie *b = a.zombieHorde (3, "max");
-//	if (b == 0)
-//		std::cout << "zombieHorde first arg is not natural number" << std::endl;
+	Zombie *b = a.zombieHorde (4, "max");
+	for (int i = 0; i < 4; i++)
+		b[i].announce();
 	delete [] b;
 	return (0);
 }

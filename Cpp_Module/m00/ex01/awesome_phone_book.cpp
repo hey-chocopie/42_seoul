@@ -46,7 +46,6 @@ int main(void)
 	int index;
 	std::string str;
 	phone_book pb[8];
-	//std::string kind_list[5] = {"first_name", "last_name", "nickname", "phone_index", "darkest_secret"};
 
 	index = 0;
 	while(1)

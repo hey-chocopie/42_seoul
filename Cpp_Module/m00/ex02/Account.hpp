@@ -7,6 +7,7 @@
 //                                                                            //
 // ************************************************************************** //
 
+
 #pragma once
 #ifndef __ACCOUNT_H__
 #define __ACCOUNT_H__
@@ -21,7 +22,7 @@ class Account {
 public:
 
 	typedef Account		t;
-	//Account를 t로 사용할수 있음. 
+
 	static int	getNbAccounts( void );
 	static int	getTotalAmount( void );
 	static int	getNbDeposits( void );

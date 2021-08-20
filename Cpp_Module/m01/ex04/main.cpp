@@ -5,11 +5,11 @@ void get_input (std::string *s1, std::string *s2, std::string *filename,
 		std::ifstream *read_file, std::ofstream *write_file)
 {
 	std::cout << "input s1 == ";
-	std::cin >> *s1;
+	std::getline(std::cin, *s1);
 	std::cout << "input s2 == ";
-	std::cin >> *s2;
+	std::getline(std::cin, *s2);
 	std::cout << "input filename == ";
-	std::cin >> *filename;
+	std::getline(std::cin, *filename);
 
 	read_file->open(*filename);
 	*filename = *filename + ".replace";
@@ -54,13 +54,20 @@ int main( void )
 	std::ofstream	write_file;
 
 	get_input(&s1, &s2, &filename, &read_file, &write_file);
-    if (!read_file.is_open())
+	if(s1 == "" || s2 == ""  || filename == "")
+	{
+		std::cout << "not access null input" << std::endl;
+	}
+	else if (!read_file.is_open())
 	{
 		std::cout << "open read_file error" << std::endl;
 		std::cout << "please Check if the file exists" << std::endl;
 	}
 	else if (!write_file.is_open())
+	{
+        read_file.close();
 		std::cout << "open write_file error" << std::endl;
+	}
 	else
 	{
 		write_filename_replace(&s1, &s2, &read_file, &write_file);

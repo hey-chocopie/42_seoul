@@ -11,7 +11,7 @@ class Weapon{
 		Weapon( void );
 		~Weapon();
 	private:
-		static std::string	type;
+		std::string	type;
 };
 
 #endif
