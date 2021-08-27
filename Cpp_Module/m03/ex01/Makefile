@@ -1,6 +1,6 @@
 CXX				= clang++
 RM				= rm -f
-CXXFLAGS		= -Wall -Wextra -Werror
+CXXFLAGS		= -Wall -Wextra -Werror -std=c++98
 NAME			= Serena,_my_love!
 
 SRCS			= main.cpp ClapTrap.cpp ScavTrap.cpp

@@ -32,13 +32,13 @@ void ScavTrap::attack(std::string const & target)
 }
 void ScavTrap::guardGate()
 {
-	std::cout << "[ScavTrap]ScavTrap have enterred in Gate keeper mode!" << std::endl;
+	std::cout << "ScavTrap have enterred in Gate keeper mode!" << std::endl;
 }
 
 
 ScavTrap& ScavTrap::operator=(const ScavTrap& origin)
 {
-	std::cout << "[ScavTrap][operator=] Operator Overloading Called" << std::endl;
+	std::cout << "[ScavTrap][operator=] overwrite" << std::endl;
 	ClapTrap::operator= (origin);
 	return *this;
 }
