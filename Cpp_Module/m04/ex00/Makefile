@@ -3,7 +3,7 @@ RM				= rm -f
 CXXFLAGS		= -Wall -Wextra -Werror -std=c++98
 NAME			= Polymorphism
 
-SRCS			= main.cpp Animal.cpp Cat.cpp Dog.cpp
+SRCS			= main.cpp Animal.cpp Cat.cpp Dog.cpp WrongCat.cpp WrongAnimal.cpp
 OBJS_DIR		= objs
 
 OBJS			= $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
