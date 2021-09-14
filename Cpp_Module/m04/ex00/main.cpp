@@ -21,10 +21,14 @@ int main()
 	std::cout << std::endl;
 
 	WrongAnimal *A =  new WrongCat();
+	WrongCat *C = new WrongCat();
 	A->makeSound();
+	C->makeSound();
 	std::cout << std::endl;
+
 	delete meta;
 	delete j;
 	delete i;
 	delete A;
+	delete C;
 }

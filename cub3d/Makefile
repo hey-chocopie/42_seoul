@@ -28,7 +28,8 @@ FLAMEWORK = -framework OpenGL -framework Appkit
 CC		= gcc
 RM		= rm -f
 
-CFLAGS =-Wall -Wextra -Werror
+CFLAGS =
+#-Wall -Wextra -Werror
 
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
