@@ -7,46 +7,48 @@ int check_argv(int argc, char **argv)
 		std::cout << "please only one input parameter" << std::endl;
 		return (1);
 	}
-	else
-	{
-		for (int i = 1; i < argc; i++)
-		{
-			for (int j = 0; argv[i][j]; j++)
-			{
-				if(argv[i][j] < 32)
-				{
-					std::cout << "Input parameter is non-printable, can not input non-printable. " <<  std::endl;
-					return (1);
-				}
-				else if (argv[i][j] > 127)
-				{
-					std::cout << "Input parameter is not ASCII." << std::endl;
-					return (1);
-				}
-			}
-		}
-	}
+//	else
+//	{
+//		for (int i = 1; i < argc; i++)
+//		{
+//			for (int j = 0; argv[i][j]; j++)
+//			{
+//				if(argv[i][j] < 32)
+//				{
+//					std::cout << "Input parameter is non-printable, can not input non-printable. " <<  std::endl;
+//					return (1);
+//				}
+//				else if (argv[i][j] > 127)
+//				{
+//					std::cout << "Input parameter is not ASCII." << std::endl;
+//					return (1);
+//				}
+//			}
+//		}
+//	}
 	return 0;
 }
 
 #include <stdio.h>
 int main(int argc, char* argv[])
 {
-//	if (1 == check_argv(argc, argv))
-//		return (0);
-//	std::cout << "sucess" << std::endl;
+	if (1 == check_argv(argc, argv))
+		return (0);
+//	float AA = 2.2f;
+//	std::string str = "2.2f";
 
-	float F_num= atof("10.12");
-	int I_num= atoi("10.12");
-	double D_num = std::stod("10.12");
-	printf ("%f\n" , F_num);
-	//printf ("%d\n" , D_num);
+	// for(int i = 1; i < argc; i++)
+	// {
+	// 	printf("%f\n", atof(argv[i]));
+	// 	std::cout << std::fixed;
+	// 	std::cout.precision(6);
+	// 	std::cout << atof(argv[i]) << std::endl;
+	// 	std::cout.unsetf(std::ios::fixed);
+	// }
 
-	std::cout << "=="<< F_num << "==" << std::endl;
-	std::cout << std::fixed;
-	std::cout.precision(6);
-	std::cout << I_num << std::endl;
-	std::cout << D_num << std::endl;
-	std::cout << F_num << std::endl;
+	float F_num;
+	std::string num_str;
+	num_str = "nasnf";
+	std::cout  << stof(num_str) << std::endl;;
 	return 0;
 }
