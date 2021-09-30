@@ -15,17 +15,10 @@ class conversion{
 			private :
 				std::string err_str;
 		};
-		// class GradeTooLowException : public std::exception{
-		// 	const char *what() const throw();
-		// };
 
-		// std::string getName( void ) const;
-		// int			getGrade( void ) const;
 		void value_print( void );
 
 		conversion &operator=(conversion const &rhd);
-
-
 
 		~conversion ( void );
 		

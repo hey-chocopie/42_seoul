@@ -15,7 +15,7 @@
 		|| num_str == "-inff" || num_str == "+inff" || num_str == "nanf")
 			;
 		else
-			for (int i = 0; i < num_str.length(); i++)
+			for (size_t i = 0; i < num_str.length(); i++)
 			{
 				if(i == (num_str.length() - 1) && num_str[num_str.length() - 1] == 'f')
 					break;
@@ -59,6 +59,7 @@
 			
 		std::cout << "float : " << static_cast<float>(D_num) << "f" << std::endl;
 		std::cout << "double : " << static_cast<double>(D_num) << std::endl;
+		std::cout << std::endl;
 	}
 
 	conversion &conversion::operator=(conversion const &rhd)
