@@ -3,6 +3,49 @@
 ![images](https://github.com/Minishell-V6/minishell/blob/main/images/1.2t_minishell_AD.jpg)
 >minishell 초콜릿 팔아요~
 
+# 프로젝트 소개
+ 쉘은 사용자로부터 명령을 받아, 그것을 해석하고 프로그램을 실해하는 역활을 합니다. 리눅스에서 표준으로 사용되는 쉘은 bash입니다.
+이 프로젝트에서 저만의 작은(mini) bash를 제작해보았습니다. 그래서 프로젝트 이름은  minishell 입니다.
+
+
+Summary: The objective of this project is for you to create a simple shell. Yes, your
+little bash or zsh. You will learn a lot about processes and file descriptors.
+
+* 이번 과제에서는 베쉬처럼 동작하는 shell을 만들어보자. 
+
+# 구현목표
+### 구현할 빌트인 함수들
+◦ echo with option -n
+◦ cd with only a relative or absolute path
+◦ pwd with no options
+◦ export with no options
+◦ unset with no options
+◦ env with no options or arguments
+◦ exit with no options
+
+> 나머지 명령들은 /bin/에 있는 명령들로 동작되게 만들었다.
+
+### 따옴표 처리
+’ inhibit all interpretation of a sequence of characters.
+• " inhibit all interpretation of a sequence of characters except for $.
+* \'또는 \"에로 둘러쌓인 값들은 문자로 인식되게 했다. (|, >, < , $ 와 화이트 스페이스)
+
+### 리다이렉트 파이프 처리
+* 리다이렉트로 표준출력을 다른파일로 표준입력으로 넣어주는 기능 (>, >>, <)
+* 리다이렉트로 표준입력을 받고 구분자가 들어오면 끝나는 기능 (<<)
+* 파이프가 있으면 파이프 기준 왼쪽 출력값을 오른쪽으로 표준입력으로 넘겨주는 기능(|)
+* 에러처리구현
+
+### exit status
+* 쉘 명령 실행후 $? 으로 출력했을 때, 명령 실행에 대한 상태를 나타내는기능
+* exit로 프로세스 종료시 종료상태를 나타내는 기능
+
+### signal
+* 인터럽트 발생시 기능 구현
+* ctrl-c, ctrl-d, ctrl-\기능
+
+
+
 ### 사용전 라이브러리. 
 
 mac기준 대부분 xcode commandline tools을 설치하면 내장되어있는 라이브러리를 사용했다. 
@@ -33,48 +76,8 @@ CC 				= gcc -g -fsanitize=address
 ```
 아래 cc 옵션을 릭 검사를 진행하며 제작하였습니다.
 
-# 과제 설명 
-Summary: The objective of this project is for you to create a simple shell. Yes, your
-little bash or zsh. You will learn a lot about processes and file descriptors.
 
-* 42에서 처음 배웠던 쉘..이제는 우리가 만들어 보다니!! 
-* 너무 큰감동.
-* 이번 과제에서는 베쉬처럼 동작하는 shell을 만들어보자. 
-
-
-# 구현해야할 빌트인 함수들
-◦ echo with option -n
-◦ cd with only a relative or absolute path
-◦ pwd with no options
-4
-Minishell As beautiful as a shell
-◦ export with no options
-◦ unset with no options
-◦ env with no options or arguments
-◦ exit with no options
-
-> 나머지 명령들은 /bin/에 있는 명령들로 동작되게 만들었다.
-
-# 따옴표 처리
-’ inhibit all interpretation of a sequence of characters.
-• " inhibit all interpretation of a sequence of characters except for $.
-* \'또는 \"에로 둘러쌓인 값들은 문자로 인식되게 했다. (|, >, < , $ 와 화이트 스페이스)
-
-# 리다이렉트 파이프 처리
-* 리다이렉트로 표준출력을 다른파일로 표준입력으로 넣어주는 기능 (>, >>, <)
-* 리다이렉트로 표준입력을 받고 구분자가 들어오면 끝나는 기능 (<<)
-* 파이프가 있으면 파이프 기준 왼쪽 출력값을 오른쪽으로 표준입력으로 넘겨주는 기능(|)
-* 에러처리구현
-
-# exit status
-* 쉘 명령 실행후 $? 으로 출력했을 때, 명령 실행에 대한 상태를 나타내는기능
-* exit로 프로세스 종료시 종료상태를 나타내는 기능
-
-# signal
-* 인터럽트 발생시 기능 구현
-* ctrl-c, ctrl-d, ctrl-\기능
-
-# 간단한 테스트 케이스 
+# 테스트 케이스 
 ### simple Command & global
 ```
 /bin/ls
