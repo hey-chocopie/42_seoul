@@ -46,7 +46,7 @@ little bash or zsh. You will learn a lot about processes and file descriptors.
 
 
 
-### 사용전 라이브러리. 
+# 사용전 라이브러리. 
 
 mac기준 대부분 xcode commandline tools을 설치하면 내장되어있는 라이브러리를 사용했다. 
 commandline tools 없던 라이브러리.
@@ -63,7 +63,7 @@ info 커맨드를 입력하면 -L과 -I옵션에 대한 경로가 나온다.
 ```
  를 본인 info 경로로 바꾸어주면 정상적으로 실행된다.
 
-### 기타
+# 기타
 ```
 CC 				= gcc
 #CC 				= gcc -g -fsanitize=address
