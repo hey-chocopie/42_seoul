@@ -7,11 +7,11 @@
 
 ### 완료본 링크
 > hoylee : https://github.com/hey-chocopie/42_seoul/tree/main/minishell
- sejpark :
- seuyu :
- seojeong :
- jiylee :
- djeon :
+sejpark : https://github.com/sejinpark12
+seuyu : https://github.com/seuyu42
+seojeong : https://github.com/seoysauce
+jiylee : https://github.com/Jiyong95
+djeon : https://github.com/Daewoong-Jeon/minishell
 
 # 프로젝트 소개
  쉘은 사용자로부터 명령을 받아, 그것을 해석하고 프로그램을 실해하는 역활을 합니다. 리눅스에서 표준으로 사용되는 쉘은 bash입니다.
