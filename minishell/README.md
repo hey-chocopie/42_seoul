@@ -3,6 +3,7 @@
 ![images](https://github.com/Minishell-V6/minishell/blob/main/images/1.2t_minishell_AD.jpg)
 >minishell 초콜릿 팔아요~
 
+
 # 프로젝트 소개
  쉘은 사용자로부터 명령을 받아, 그것을 해석하고 프로그램을 실해하는 역활을 합니다. 리눅스에서 표준으로 사용되는 쉘은 bash입니다.
 이 프로젝트에서 저만의 작은(mini) bash를 제작해보았습니다. 그래서 프로젝트 이름은  minishell 입니다.
@@ -12,6 +13,13 @@ Summary: The objective of this project is for you to create a simple shell. Yes,
 little bash or zsh. You will learn a lot about processes and file descriptors.
 
 * 이번 과제에서는 베쉬처럼 동작하는 shell을 만들어보자. 
+
+### example minishell
+![미니쉘사진1](https://user-images.githubusercontent.com/52343427/143850527-3c7f508c-2967-46b9-9607026ae037.gif)
+
+### example bash
+![미니쉘사진3](htter-images.githubusercontent.com/52343427/143851541-2407809a-1029-47a7-a03d-84bb10484b6e.gif)
+
 
 # 구현목표
 ### 구현할 빌트인 함수들
