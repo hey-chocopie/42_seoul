@@ -9,6 +9,8 @@
 6. libasm
 7. ft_services
 8. push_swap
+9. philosopher
+10. minishell
 
 # 1. libft
 ### 개요
@@ -223,3 +225,39 @@
 * 단 mutex lock은, 필요한 상황에만 사용한다.
 * 만약 mutex lock이 많아 지면, 그만큼 cpu가 아무것도 안하고 낭비하는 시간도 많아지므로 사용시 주의한다. 
 
+
+# minishsell
+### 개요
+* 쉘은 사용자로부터 명령을 받아, 그것을 해석하고 프로그램을 실해하는 역활을 합니다. 리눅스에서 표준으로 사용되는 쉘은 bash입니다.
+* 이 프로젝트에서 저만의 작은(mini) bash를 제작해보았습니다. 그래서 프로젝트 이름은  minishell 입니다.
+
+
+### 문제요약
+1. 구현할 빌트인 함수들
+◦ echo with option -n
+◦ cd with only a relative or absolute path
+◦ pwd with no options
+◦ export with no options
+◦ unset with no options
+◦ env with no options or arguments
+◦ exit with no options
+2. 따옴표 처리
+3. 리다이렉트 파이프 처리
+4. exit status
+5. signal
+
+### 특징
+* c언어를 사용합니다.
+* bash 쉘과 같은 기능을 구현합니다.
+* 프로세스와 관련된 함수들을 사용합니다.
+
+### 기간
+* 2021-08-01 ~ 2021-09-29 (4주)
+
+### 한줄 평가
+* bash 기능들을 테스트해보며, 리다이렉트, 따옴표, 시그널 등 프로그램 기능들을 확실하게 알게 되었다. 
+* 컴퓨터 /bin 이나, /etc /Library 등 폴더별 기능이 다르다는것과 일부 폴더들의 기능을 익혔다. 
+* 협업을 할때 모듈화의 중요성과, 가독성의 중요성을 몸소 체험했다. 
+* pipe(|)를 구현할 때, 프로세스를 코드에서  새로 생성했는데, 부모 프로세스와 자식프로세스의 흐름을 파악했고, 부모 프로세스의 출력을 자식프로세스의 입력으로 바꾸는 등, 프로세스간 통신에 대해 배울 수 있었다. 
+* 다양한 테스트 케이스를 테스트 해보며, 에러처리 할때는 sh파일을 따로 만들어서 중복되는 작업을 자동화 시키는걸 배웠다. 
+`
