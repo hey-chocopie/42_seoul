@@ -6,7 +6,7 @@
  변수명 수정 및 코드정리는 팀원끼리 각자 진행하였습니다.
 
 ### 완료본 링크
-> hoylee : https://github.com/hey-chocopie/42_seoul/tree/main/minishell
+>hoylee : https://github.com/hey-chocopie/42_seoul/tree/main/minishell
 sejpark : https://github.com/sejinpark12
 seuyu : https://github.com/seuyu42
 seojeong : https://github.com/seoysauce
