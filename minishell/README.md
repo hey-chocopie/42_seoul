@@ -1,9 +1,4 @@
 # minishell
-### Example for minishell
-![미니쉘사진1](https://user-images.githubusercontent.com/52343427/143850527-3c7f508c-2967-46b9-960f-7cc7026ae037.gif)
-
-### Example for bash
-![미니쉘사진3](https://user-images.githubusercontent.com/52343427/143851541-2407809a-1029-47a7-a03d-84bb10484b6e.gif)
 
 # 프로젝트 소개
  쉘은 사용자로부터 명령을 받아, 그것을 해석하고 프로그램을 실해하는 역활을 합니다. 리눅스에서 표준으로 사용되는 쉘은 bash입니다.
@@ -83,6 +78,12 @@ CC 				= gcc -g -fsanitize=address
 
 
 # 테스트 케이스 
+### Example for minishell
+![미니쉘사진1](https://user-images.githubusercontent.com/52343427/143850527-3c7f508c-2967-46b9-960f-7cc7026ae037.gif)
+
+### Example for bash
+![미니쉘사진3](https://user-images.githubusercontent.com/52343427/143851541-2407809a-1029-47a7-a03d-84bb10484b6e.gif)
+
 ### simple Command & global
 ```
 /bin/ls
