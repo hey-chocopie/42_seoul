@@ -98,7 +98,6 @@ echo hi > test
 /bin/rm test
 /bin/ls iwejfoij
 ```
-![미니쉘사진1](https://user-images.githubusercontent.com/52343427/143850527-3c7f508c-2967-46b9-960f-7cc7026ae037.gif)
 
 ### echo
 ```
@@ -112,7 +111,6 @@ echo "hio"
 ecoh "h"i"o"
 ```
 
-![미니쉘사진2](https://user-images.githubusercontent.com/52343427/143851102-215defd0-a18e-4d00-a50f-9d33fe426701.gif)
 
 ### exit
 ```
