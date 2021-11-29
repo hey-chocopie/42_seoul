@@ -15,11 +15,15 @@ little bash or zsh. You will learn a lot about processes and file descriptors.
 * 이번 과제에서는 베쉬처럼 동작하는 shell을 만들어보자. 
 
 ### example minishell
+
 ![미니쉘사진1](https://user.githubusercontent.com/52343427/143850527-3c7f508c-2967-46b9-960f-7cc7026ae037.gif)
 
 ### example bash
+
 ![미니쉘사진3](htter-images.githubusercontent.com/52343427/143851541-2407809a-1029-47a7-a03d-84bb10484b6e.gif)
 
+
+![미니쉘사진2](https://user-images.githubusercontent.com/52343427/143851102-215defd0-a18e-4d00-a50f-9d33fe426701.gif)
 
 # 구현목표
 ### 구현할 빌트인 함수들
