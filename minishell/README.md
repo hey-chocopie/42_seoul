@@ -7,10 +7,15 @@
 
 ### 완료본 링크
 hoylee : https://github.com/hey-chocopie/42_seoul/tree/main/minishell
+
 sejpark : https://github.com/sejinpark12
+
 seuyu : https://github.com/seuyu42
+
 seojeong : https://github.com/seoysauce
+
 jiylee : https://github.com/Jiyong95
+
 djeon : https://github.com/Daewoong-Jeon/minishell
 
 # 프로젝트 소개
