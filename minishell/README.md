@@ -1,5 +1,18 @@
 # minishell
 
+
+# 주의 사항.
+ > 해당 코드는 기능구현만 완료된 상태입니다.
+ 변수명 수정 및 코드정리는 팀원끼리 각자 진행하였습니다.
+
+### 완료본 링크
+> hoylee : https://github.com/hey-chocopie/42_seoul/tree/main/minishell
+ sejpark :
+ seuyu :
+ seojeong :
+ jiylee :
+ djeon :
+
 # 프로젝트 소개
  쉘은 사용자로부터 명령을 받아, 그것을 해석하고 프로그램을 실해하는 역활을 합니다. 리눅스에서 표준으로 사용되는 쉘은 bash입니다.
 이 프로젝트에서 저만의 작은(mini) bash를 제작해보았습니다. 그래서 프로젝트 이름은  minishell 입니다.
