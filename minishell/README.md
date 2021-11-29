@@ -15,7 +15,7 @@ little bash or zsh. You will learn a lot about processes and file descriptors.
 * 이번 과제에서는 베쉬처럼 동작하는 shell을 만들어보자. 
 
 ### example minishell
-![미니쉘사진1](https://user-images.githubusercontent.com/52343427/143850527-3c7f508c-2967-46b9-9607026ae037.gif)
+![미니쉘사진1](https://user.githubusercontent.com/52343427/143850527-3c7f508c-2967-46b9-960f-7cc7026ae037.gif)
 
 ### example bash
 ![미니쉘사진3](htter-images.githubusercontent.com/52343427/143851541-2407809a-1029-47a7-a03d-84bb10484b6e.gif)
