@@ -1,8 +1,8 @@
 # CPP Module 00
 이 장에서는 Namespace, class, member functions, stdio stream, initialization lists, static, const, and lots of basic stuf 에 대해 배울 수 있습니다.
 
-### 아래 링크로 이동하면, 개념정리한 글을 볼수 있어요.
-
+### CPP Module 00에 도움되는 개념들을 정리해 두었습니다!
+https://velog.io/@hey-chocopie/cpp-%EA%B0%9C%EB%85%90%EA%B3%B5%EB%B6%80
 
 # Exercise 00: Megaphone
 
