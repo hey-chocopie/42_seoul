@@ -49,3 +49,29 @@ Else if the command is SEARCH:
 ### Else the input is discarded.
 * When a command has been correctly executed, the program waits for another ADD or SEARCH command until an EXIT command.
 
+# Exercise 02: The Job Of Your Dreams
+요약하면, Account.hpp, tests.cpp, origin_print파일이 주어집니다.
+이에 적합한 Account.cpp을 만드세요
+
+>Turn-in directory : ex02/
+Files to turn in : Makefile, Account.cpp, Account.hpp, tests.cpp
+Forbidden functions : None
+
+It’s your first day of work at GlobalBanksters United. You successfully passed the
+hiring tests for the programmers’ team thanks to a few tricks with Microsoft Office
+a friend showed you. But you know that it was your swift installation of Adobe Reader
+that blew your recruiter’s mind. This gave you the little edge needed to beat your opponents for this job.
+
+Anyway, you made it and your boss gave you your first task. You need to recode one
+missing source file because something went wrong. Account.cpp is missing and they use
+USB file sharing and not git.
+At this point, it will be legitimate to quit this place however for the sake of this
+exercise, you will stay.
+
+The Account.hpp file is present and a quick compilation of tests.cpp confirms that
+an Account.cpp file is missing. There’s also an old output log that seems to contain the
+matching output.
+
+So you need to create a Account.cpp file and quickly write some lines of pure awesome
+C++ and after a couple of failed compilations, your program will compiles and passes the
+tests with a perfect output, except for the timestamps differences. Damn you’re
