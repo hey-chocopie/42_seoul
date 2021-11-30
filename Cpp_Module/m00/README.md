@@ -21,9 +21,11 @@ $>
 ```
 
 # Exercise 01: My Awesome PhoneBook
->Turn-in directory : ex01/
+```
+Turn-in directory : ex01/
 Files to turn in : Makefile, *.cpp, *.{h, hpp}
 Forbidden functions : None
+```
 
 Welcome to the 80s and its unbelievable technology! Write a program that behaves
 like a crappy awesome phonebook software. Please take some time to give your executable a relevant name. When the program starts, the user is prompted for input: you
@@ -53,9 +55,11 @@ Else if the command is SEARCH:
 요약하면, Account.hpp, tests.cpp, origin_print파일이 주어집니다.
 이에 적합한 Account.cpp을 만드세요
 
->Turn-in directory : ex02/
+```
+Turn-in directory : ex02/
 Files to turn in : Makefile, Account.cpp, Account.hpp, tests.cpp
 Forbidden functions : None
+```
 
 It’s your first day of work at GlobalBanksters United. You successfully passed the
 hiring tests for the programmers’ team thanks to a few tricks with Microsoft Office
