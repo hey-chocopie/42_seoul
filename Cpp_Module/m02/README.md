@@ -3,7 +3,7 @@ Ad-hoc polymorphism, operators overload and
 orthodox canonical classes
 
 # Exercise 00: My First Orthodox
-### 한줄평 : 부동소수점과 고정소수점 개념을 공부했고, 복사 연산자와 =operator을 사용해 보았다. 
+> 한줄평 : 부동소수점과 고정소수점 개념을 공부했고, 복사 연산자와 =operator을 사용해 보았다. 
 
 ```
 Exercise 00: My First Orthodox Class
@@ -152,7 +152,7 @@ $>
 ```
 
 # Exercise 02: Now we’re talking
-### 한줄평 : operator 연산자를 사용해 보았고, 고정소수점 비교연산자와 산술연산자 모두 사용해 보았다. 고정 소수점을 곱하거나 나눌경우 << 8을 raw_bit에 해준 상태이기 떄문에, raw_bit끼리 곱하거나 나눈후 추가적인 처리를 해주어야한다! 
+> 한줄평 : operator 연산자를 사용해 보았고, 고정소수점 비교연산자와 산술연산자 모두 사용해 보았다. 고정 소수점을 곱하거나 나눌경우 << 8을 raw_bit에 해준 상태이기 떄문에, raw_bit끼리 곱하거나 나눈후 추가적인 처리를 해주어야한다! 
 다른 operator들은 비슷했지만, "<<"을 사용할때는 ostream을 사용해야해서 operator<< 은 전역변수로 선언하고 사용했다. 
 
 
