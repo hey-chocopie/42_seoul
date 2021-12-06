@@ -2,7 +2,7 @@
 #define __FIXED_H__
 #include <iostream>
 #include <ostream>
-
+#include <cmath>
 class Fixed{
 	private:
 		int raw_bit;
