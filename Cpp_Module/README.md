@@ -18,8 +18,7 @@
 * CPP Module 05 : Repetition and Exceptions
 * CPP Module 06 : C++ Casts
 * CPP Module 07 : c++ Templates
-* CPP Module 08 : 
-
+* CPP Module 08 : Templated containers, iterators, algorithms
 # CPP_Module 기본규칙
 • Any function implemented in a header (except in the case of templates), and any
 unprotected header, means 0 to the exercise.
