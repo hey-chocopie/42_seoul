@@ -9,6 +9,17 @@
 * CPP Module 07 : https://velog.io/@hey-chocopie/C-Module-07-unl0fq2z
 * CPP Module 08 : https://velog.io/@hey-chocopie/C-Module-08
 
+# 배우는 내용
+* CPP Module 00 : Namespace, class, member functions, stdio stream, initialization lists, static, const, and lots of basic stuf
+* CPP Module 01 : Memory allocation, references, pointers to members, switch
+* CPP Module 02 : Ad-hoc polymorphism, operators overload and orthodox canonical classes
+* CPP Module 03 : Inheritance
+* CPP Module 04 : Subtype polymorphism, abstract classes, interfaces
+* CPP Module 05 : Repetition and Exceptions
+* CPP Module 06 : C++ Casts
+* CPP Module 07 : c++ Templates
+* CPP Module 08 : Templated containers, iterators, algorithms
+
 # 한줄평
 ### CPP Module 00
 * ex00 : 처음 진행하는 cpp과제였습니다. for문이 과제에서 처음으로 허용되었습니다. std에 포함된  string, tolower, cout, endl등 편리한 기능들을 사용해 볼 수 있어서 좋았습니다.
@@ -53,17 +64,6 @@
 ### CPP Module 08
  작성중
 
-
-# 배우는 내용
-* CPP Module 00 : Namespace, class, member functions, stdio stream, initialization lists, static, const, and lots of basic stuf
-* CPP Module 01 : Memory allocation, references, pointers to members, switch
-* CPP Module 02 : Ad-hoc polymorphism, operators overload and orthodox canonical classes
-* CPP Module 03 : Inheritance
-* CPP Module 04 : Subtype polymorphism, abstract classes, interfaces
-* CPP Module 05 : Repetition and Exceptions
-* CPP Module 06 : C++ Casts
-* CPP Module 07 : c++ Templates
-* CPP Module 08 : Templated containers, iterators, algorithms
 
 # CPP_Module 기본규칙
 * Any function implemented in a header (except in the case of templates), and any unprotected header, means 0 to the exercise.
