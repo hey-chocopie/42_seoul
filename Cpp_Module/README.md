@@ -1,6 +1,13 @@
-기본적으로 표준 라이브러리의 모든 것을 사용할 수 있습니다. 하지만, 새로운 언어인 만큼, c에서 사용했던 비슷한 함수들을 사용하는게 현명하다.그리고 STL함수 사용은 동의 하지 않는다. 정확히 module 08을 진행할때 까지. 이 의미는 벡터/리스트/맵스 등등 algorithm 헤더에 포함된 것들은 모두 불가능.
+# 개념정리
+CPP Module 00 : https://velog.io/@hey-chocopie/cpp-%EA%B0%9C%EB%85%90%EA%B3%B5%EB%B6%80
+CPP Module 01 : https://velog.io/@hey-chocopie/cpp-module-01
+CPP Module 02 : https://velog.io/@hey-chocopie/cpp-module-02
+CPP Module 03 : https://velog.io/@hey-chocopie/cpp-module-03
+CPP Module 04 : https://velog.io/@hey-chocopie/C-Module-04
+CPP Module 05 : https://velog.io/@hey-chocopie/cpp-module-05
+CPP Module 06 : https://velog.io/@hey-chocopie/C-Module-06
+CPP Module 07 : https://velog.io/@hey-chocopie/C-Module-07-unl0fq2z
+CPP Module 08 : https://velog.io/@hey-chocopie/C-Module-08
 
-또한, 달리 명시하지 않는한, namespace 그리고 friend는 금지한다. 사용하면 -42 점, 변명은 통하지 않는다.
 
-컴파일은 clang++
 
