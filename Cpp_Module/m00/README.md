@@ -5,7 +5,7 @@
 https://velog.io/@hey-chocopie/cpp-%EA%B0%9C%EB%85%90%EA%B3%B5%EB%B6%80
 
 # Exercise 00: Megaphone
-
+###  한줄평 : 처음 진행하는 cpp과제였습니다. for문이 과제에서 처음으로 허용되었습니다. std에 포함된  string,     tolower, cout, endl등 편리한 기능들을 사용해 볼 수 있어서 좋았습니다.
 Just to be sure that everybody is awake, write a program that has the following
 behavior:
 (Use C++ style to interact with stdin!)
@@ -21,6 +21,7 @@ $>
 ```
 
 # Exercise 01: My Awesome PhoneBook
+### 한줄평 :  클래스에 static변수를 이용해 공통되는 클래스를 사용하는 객체들은 하나의 static 변수를 공유하며 사용하는 방법을 배웠습니다. 클래스를 이용해 매게함수 사용 및 변수 private, public 권한 지정자 사용법을 익혔습니다.
 ```
 Turn-in directory : ex01/
 Files to turn in : Makefile, *.cpp, *.{h, hpp}
@@ -52,7 +53,9 @@ Else if the command is SEARCH:
 * When a command has been correctly executed, the program waits for another ADD or SEARCH command until an EXIT command.
 
 # Exercise 02: The Job Of Your Dreams
-요약하면, Account.hpp, tests.cpp, origin_print파일이 주어집니다.
+### 한줄평 : 과제에서 주어지는 tests.cpp를 보며, iterator  사용법, vector 초기화 방법, begin, end등 유용한 cpp 기능들을 접해볼수 있었습니다. 
+
+서브젝트 요약하면, Account.hpp, tests.cpp, origin_print파일이 주어집니다.
 이에 적합한 Account.cpp을 만드세요
 
 ```
