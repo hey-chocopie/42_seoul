@@ -2,6 +2,14 @@
 #include "Dog.hpp"
 #include "Cat.hpp"
 #include "Brain.hpp"
+Animal *test(std::string want)
+{
+	if(want == "Dog")
+    	return new Dog();
+    else
+    	return new Cat();
+}
+
 
 int main()
 {
@@ -10,12 +18,20 @@ int main()
 	const Animal* i = new Cat();
 	const Animal *A[50];
 
+	std::cout << "siofoisrjfiow"<< std::endl;
+	Animal *zz = test("Dog");
+	std::cout << zz->getType() << std::endl;
+	zz = test("Cat");
+	std::cout << zz->getType() << std::endl;
+	std::cout << std::endl;
+
 	for (int index = 0; index < 50; index++)
 	{
 		if(index % 2 == 0)
 			A[index] = new Dog();
 		else if(index % 2 == 1)
 			A[index] = new Cat();
+		std::cout <<std::endl;
 	}
 	std::cout << std::endl;
 
