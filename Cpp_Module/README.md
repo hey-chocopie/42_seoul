@@ -11,11 +11,10 @@
 
 # 한줄평
 ### CPP Module 00
-ex00 : 처음 진행하는 cpp과제였습니다. for문이 과제에서 처음으로 허용되었습니다. std에 포함된  string, tolower, cout, endl등 편리한 기능들을 사용해 볼 수 있어서 좋았습니다.
+* ex00 : 처음 진행하는 cpp과제였습니다. for문이 과제에서 처음으로 허용되었습니다. std에 포함된  string, tolower, cout, endl등 편리한 기능들을 사용해 볼 수 있어서 좋았습니다.
+* ex01 : 클래스에 static변수를 이용해 공통되는 클래스를 사용하는 객체들은 하나의 static 변수를 공유하며 사용하는 방법을 배웠습니다. 클래스를 이용해 매게함수 사용 및 변수 private, public 권한 지정자 사용법을 익혔습니다. 
+* ex02 : 과제에서 주어지는 tests.cpp를 보며, iterator  사용법, vector 초기화 방법, begin, end등 유용한 cpp 기능들을 접해볼수 있었습니다.
 
-ex01 : 클래스에 static변수를 이용해 공통되는 클래스를 사용하는 객체들은 하나의 static 변수를 공유하며 사용하는 방법을 배웠습니다. 클래스를 이용해 매게함수 사용 및 변수 private, public 권한 지정자 사용법을 익혔습니다. 
-
-ex02 : 과제에서 주어지는 tests.cpp를 보며, iterator  사용법, vector 초기화 방법, begin, end등 유용한 cpp 기능들을 접해볼수 있었습니다.
 ### CPP Module 01
 ex00 : 인스턴스를 생생할때, 힙으로도 생성해보고 스택으로도 생성해보며 생성자와 소멸자의 심행 순서를 파악하는 과제였습니다.
 
