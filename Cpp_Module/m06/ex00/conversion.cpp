@@ -1,6 +1,6 @@
 	#include "conversion.hpp"
     #include <stdlib.h>
-
+	#include <cmath>
     conversion::conversion ( void )
 	{
 		D_num = 0;
@@ -33,8 +33,6 @@
 	{
 		this->D_num = rhd.D_num;
 	}
-
-
 
 	const char *conversion::WrongInputException::what() const throw()
 	{

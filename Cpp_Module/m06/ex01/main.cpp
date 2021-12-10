@@ -1,4 +1,4 @@
-//#include "Serialization.hpp"a
+//#include "Serialization.hpp"
 #include <iostream>
 #include <stdint.h>
 #include <string>
@@ -11,6 +11,8 @@ struct Data{
 
 uintptr_t serialize(Data *ptr)
 {
+	//reinterpret_cast 은 임의의 포인터 타입끼리 변환을 허용
+	// 또는 포인터를 정수로 변환: 그 반대도 가능.
 	return reinterpret_cast<uintptr_t>(ptr);
 }
 
@@ -29,8 +31,8 @@ int main( void )
 	A->s2 = "bye";
 
 	std::cout << A << std::endl;
-	uintptr_t tmp =  serialize( A );
-	Data *B = deserialize(tmp);
+	uintptr_t tmp =  serialize( A ); //주소를 정수형태로 저장.
+	Data *B = deserialize(tmp); //정수형태를 다시 주소형태로 변환.
 	std::cout << tmp << std::endl;
 	std::cout << A << std::endl;
 	std::cout << B << std::endl;
