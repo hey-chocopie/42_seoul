@@ -52,6 +52,7 @@ Form *Intern::makeForm(std::string name, std::string target)
 		if(name == form_name[i])
 		{
 			return ((this->*f[i])(target));
+			//지금 이런식으로 지역변수를 할당안하고 반환하면, makeForm이 끝나면 f 변수의 공간은 더이상 안전하지 않다. 바로 지워지지는 않을수도 있지만, makeForm가 끝났기 떄문에 해당함수의 지역변수들은 안전하지 않다고 생각해야한다. 과거의 나... 왜 이렇게 짰지?
 		}
 	}
 	std::cout << "Inter misss" << std::endl;

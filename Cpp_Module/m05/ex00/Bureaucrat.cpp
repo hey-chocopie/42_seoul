@@ -10,10 +10,12 @@ Bureaucrat::Bureaucrat ( std::string const &_Name, int const &grade ) : Name(_Na
 	if (grade < 1)
 	{
 		throw GradeTooHighException(  );
+		std::cout << "hihihi";
 	}
 	else if (grade > 150)
 	{
 		throw GradeTooLowException(  );
+		std::cout << "hihiihih" ;
 	}
 		this->grade = grade;
 }
