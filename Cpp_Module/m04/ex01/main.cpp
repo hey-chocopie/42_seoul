@@ -13,11 +13,13 @@ Animal *test(std::string want)
 
 int main()
 {
-
 	const Animal* j = new Dog();
 	const Animal* i = new Cat();
 	const Animal *A[50];
 
+	//업케스팅의 장점을 살펴보기 위해 몇가지 테스트를해봄.
+	//지금 보면 리턴되는게 Dog, Cat 두가지인데, 업케스팅을 이용해
+	//하나의 함수로 둘다 받음. 이런게 업케스팅의 장점.
 	std::cout << "siofoisrjfiow"<< std::endl;
 	Animal *zz = test("Dog");
 	std::cout << zz->getType() << std::endl;
