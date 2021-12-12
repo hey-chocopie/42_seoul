@@ -2,19 +2,20 @@
 #define __ITER_HPP__
 #include <iostream>
 
-template<typename T>
-void    iter(T *point, int length, void test(T))
+template<typename T, typename T2>
+void iter(T *point, T2 length, T test(T))
 {
-    for (int i = 0; i < length; i++)
+    for (size_t i = 0; i < length; i++)
     {
         test(point[i]);
     }
 }
 
 template<typename T>
-void test(T tmp)
+T test(T tmp)
 {
     std::cout << tmp << std::endl;
+	return tmp;
 }
 
 #endif
