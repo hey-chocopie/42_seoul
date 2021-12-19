@@ -3,7 +3,8 @@
 
 template <typename T>
 typename T::iterator easyfind(T container, int search_data)
-{//iterator가 T의 종속이므로 typename을 앞에 붙여주어야함. 
+{
+	//iterator가 T의 종속이므로 typename을 앞에 붙여주어야함. 
 	typename T::iterator it;
 	for (it = std::begin(container); it!=std::end(container); ++it)
 	{
@@ -13,13 +14,14 @@ typename T::iterator easyfind(T container, int search_data)
 	throw std::invalid_argument("Number not found");
 }
 
-template <typename T, >
-typename T::iterator easyfind(T container, int search_data)
-{//iterator가 T의 종속이므로 typename을 앞에 붙여주어야함. 
-	typename T::iterator it;
+template <typename first, typename second>
+typename std::map<first, second>::iterator easyfind(std::map<first, second> container, int search_data)
+{
+	//iterator가 map의 종속이므로 typename을 앞에 붙여주어야함. 
+	typename std::map<first, second>::iterator it;
 	for (it = std::begin(container); it!=std::end(container); ++it)
 	{
-		if(*it == search_data)
+		if(it->first == search_data)
 			return it;
 	}
 	throw std::invalid_argument("Number not found");

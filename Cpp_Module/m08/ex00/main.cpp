@@ -2,6 +2,8 @@
 #include <vector>
 #include <deque>
 #include <list>
+#include <map>
+#include <set>
 #include "easyfind.hpp"
 
 int main(void)
@@ -35,17 +37,31 @@ int main(void)
 	
 	try{
 	std::cout << "==========map========="<< std::endl;
-	std::map<int, string> m_data;
+	std::map<int, std::string> m_data;
 	m_data[1] = "hoylee1";
 	m_data[2] = "hoylee2";
 	m_data[3] = "hoylee3";
 
-	std::map<int, string>::iterator m_iter = easyfind(m_data, 3);
-	std::cout << *d_iter << std::endl;
+	std::map<int, std::string>::iterator m_iter = easyfind(m_data, 3);
+	std::cout << m_iter->first << std::endl;
 	}
 	catch (std::exception& e) {
         std::cout << e.what() << std::endl;
     }
+
+	try{
+	std::cout << "==========set========="<< std::endl;
+	std::set<int> s_data;
+	s_data.insert(1);
+	s_data.insert(2);
+	s_data.insert(3);
+	std::set<int>::iterator s_iter = easyfind(s_data, 3);
+	std::cout << *s_iter << std::endl;
+	}
+	catch (std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
+
 
 	try{
 	std::cout << "==========vector========="<< std::endl;
