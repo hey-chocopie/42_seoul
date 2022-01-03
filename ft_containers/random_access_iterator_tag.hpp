@@ -1,12 +1,14 @@
 #ifndef __RANDOM_ACCESS_ITERATOR_TAG_HPP__
 #define __RANDOM_ACCESS_ITERATOR_TAG_HPP__
+#include <iostream>
+
 template <typename RI_Type> //RI == Random iterator
 class random_access_iterator_tag{
 	protected:
 		RI_Type											*_ptr; //데이터 저장할 배열.
 	public:
 		typedef ptrdiff_t				difference_type;
-
+		
 		random_access_iterator_tag();
 		random_access_iterator_tag(const RI_Type *ptr);
 		random_access_iterator_tag(const random_access_iterator_tag& rhd);

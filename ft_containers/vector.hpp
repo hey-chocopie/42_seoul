@@ -21,11 +21,12 @@ namespace ft
 			typedef typename allocator_type::const_reference	const_reference; //   	const T&
 			typedef typename allocator_type::pointer			pointer; //    	T*
 			typedef typename allocator_type::const_pointer		const_pointer; //    	const T*
+			typedef ptrdiff_t									difference_type;
+			typedef size_t										size_type;
 
-
-			size_t												_size;
 			allocator_type										_alloc;
 			T*													_array;
+			size_type											_size;
 			//지금 이해안되는게, random_access에서 value_type을 받고 
 			// iterator에서 기본 벡터 만들었을때 iterator 주소는 없음. 만들어야 할것만 만들것.
 			//template<class Category, class T, class Pointer = T*, class Reference = T&>
@@ -48,8 +49,27 @@ namespace ft
 			         vector (Inputiterator first, Inputiterator last,
 			                 const allocator_type& alloc = allocator_type());
 //			//copy (4)
-//			vector (const vector& x);
-//			operator= 만들어서 쓰자. 			
+			vector (const vector& x);
+			vector& operator= (const vector& rhd); 			
+
+//===========================iterator=======================
+			iterator begin();
+//			const_iterator begin() const;
+			iterator end();
+//			const_iterator end() const;
+//			reverse_iterator rbegin();
+//			const_reverse_iterator rbegin() const;
+//		    reverse_iterator rend();
+//			const_reverse_iterator rend() const;
+
+
+//==========================Capacity=======================
+			size_type size() const;
+			size_type max_size() const;
+
+
+			reference operator[] (size_type n);			
+			const_reference operator[] (size_type n) const;			
 	};
 
 
@@ -85,11 +105,104 @@ namespace ft
 		}
 	}
 
+	template <typename T, class Alloc>
+	vector<T, Alloc>::vector (const vector& x)
+	{
+		*this = x;
+	}
+
+
+	template <typename T, class Alloc>
+	vector<T, Alloc>& vector<T, Alloc>::operator=(const vector<T, Alloc>& rhd)
+	{
+		if(this == &rhd)
+			return (*this);
+		if (_array)
+		{
+			for (size_type i = 0; i < _size; ++i)
+				_alloc.destroy(_array + i);
+			_alloc.deallocate(_array, _size);
+			_array = 0;
+		}
+		this->_size = rhd._size;
+		this->_alloc = rhd._alloc;
+
+		_array = _alloc.allocate(rhd._size);
+		for (size_t i = 0; i < rhd._size; i++)
+			_alloc.construct(_array + i, rhd._array[i]);
+		return (*this);
+	}
+
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
+	{
+		return (iterator(_array));
+	}
 //	template <typename T, class Alloc>
-//	vector<T, Alloc>::vector (const vector& x);
+//	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin()
 //	{
-//		*this = x;
+//		return (const_iterator(_array));
 //	}
+
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::end()
+	{
+		return (iterator(_array + _size));
+	}
+//	template <typename T, class Alloc>
+//	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end()
+//	{
+//		return (const_iterator(_array + _size));
+//	}
+
+
+//	template <typename T, class Alloc>
+//	typename vector<T, Alloc>::reverse_iterator rbegin()
+//	{
+//		return (reverse_iterator(end()));
+//	}
+//	template <typename T, class Alloc>
+//	typename vector<T, Alloc>::const_reverse_iterator rbegin() const;
+//	{
+//		return (const_reverse_iterator(end()));
+//	}
+//	template <typename T, class Alloc>
+//	typename vector<T, Alloc>::reverse_iterator rend()
+//	{
+//		return (reverse_iterator(begin()));
+//	}
+//	template <typename T, class Alloc>
+//	typename vector<T, Alloc>::const_reverse_iterator rend() const;
+//	{
+//		return (const_reverse_iterator(begin()));
+//	}
+
+
+
+
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::reference vector<T, Alloc>::operator[] (size_type n)
+	{
+		return _alloc[n];
+	}	
+	
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::const_reference vector<T, Alloc>::operator[] (size_type n) const
+	{
+		return _alloc[n];
+	}
+
+				
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::size_type vector<T, Alloc>::size() const
+	{
+		return this->_size;
+	}
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::size_type vector<T, Alloc>::max_size() const
+	{
+		return (_alloc.max_size()); 
+	}
 }
 
 #endif
