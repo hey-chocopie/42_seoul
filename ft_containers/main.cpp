@@ -20,36 +20,34 @@ void reconfirm(void)
 
 int main(void)
 {
-	ft::vector<int> a;
-	ft::vector<int> aa(50);
-	std::vector<int> bb(50);
+//	ft::vector<int> a;
+//	ft::vector<int> aa(50);
+//	std::vector<int> bb(50);
+//
+//	std::cout << aa.max_size() << std::endl;
+//	std::cout << bb.max_size() << std::endl;
+////	ft::vector<int> c(ss.begin(), ss.end());
+//	
 
-	std::cout << aa.max_size() << std::endl;
-	std::cout << bb.max_size() << std::endl;
-//	ft::vector<int> c(ss.begin(), ss.end());
-	
-
-	std::vector<int> ddd(50,48);
-	ft::vector<int> ddd2(50,48);
-	std::cout << ddd2[2] << std::endl;
-	ddd.push_back(12);
-	ddd.push_back(100);
-   std::cout << "The length of storage allocated is now "
-        << ddd.capacity( ) << "." << std::endl;
-	std::vector<int> eee(1000);
-	eee.push_back(120);
-	for(int i = 0; i < 1000; i ++)
-		eee.push_back(120);
-	//eee.push_back(120);
-   std::cout << "The length of storage allocated is now "
-        << eee.capacity( ) << "." << std::endl;
-	std::vector<int> xxx(20000);
-   std::cout << "The length of storage allocated is now "
-        << xxx.capacity( ) << "." << std::endl;
-	std::vector<int> zzz(3000000);
-   std::cout << "The length of storage allocated is now "
-        << zzz.capacity( ) << "." << std::endl;
-	reconfirm();
+//	std::vector<int> ddd(50,48);
+//	ddd.push_back(12);
+//	ddd.push_back(100);
+//   std::cout << "The length of storage allocated is now "
+//        << ddd.capacity( ) << "." << std::endl;
+//	std::vector<int> eee(1000);
+//	eee.push_back(120);
+//	for(int i = 0; i < 1000; i ++)
+//		eee.push_back(120);
+//	//eee.push_back(120);
+//   std::cout << "The length of storage allocated is now "
+//        << eee.capacity( ) << "." << std::endl;
+//	std::vector<int> xxx(20000);
+//   std::cout << "The length of storage allocated is now "
+//        << xxx.capacity( ) << "." << std::endl;
+//	std::vector<int> zzz(3000000);
+//   std::cout << "The length of storage allocated is now "
+//        << zzz.capacity( ) << "." << std::endl;
+//	reconfirm();
 
 	
 	return(0);
