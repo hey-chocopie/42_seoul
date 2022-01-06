@@ -16,6 +16,9 @@ void reconfirm(void)
 	std::cout << RED "check : random_access n + a" << std::endl; //아마 n+a는 n에서 처리해주지 않을까? // 솔직히 난 모르겠다. 이건 넘어가자. 
 	std::cout << RED "check : vector begin, const *a = t" << std::endl;
 	std::cout << RED "check : vector construct, ft::vector<int>::a(50, 50) 이게 주소값에 타버림.." << std::endl;
+	std::cout << RED "check : vector void insert 제대로 동작하는지 모르겟다. 확인필요. " << std::endl;
+	std::cout << RED "check : erase return 값 다시 보기." << std::endl;
+
 }
 
 int main(void)

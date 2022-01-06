@@ -107,6 +107,17 @@ namespace ft
 
 			void push_back (const value_type& val);
 			void pop_back ();
+			//single element (1)
+			iterator insert (iterator position, const value_type& val);
+//			//fill (2)	
+			void insert (iterator position, size_type n, const value_type& val);
+//			//range (3)	
+			template <class InputIterator>
+			    void insert (iterator position, InputIterator first, InputIterator last);
+			iterator erase (iterator position);
+			iterator erase (iterator first, iterator last);
+			void clear();
+			void swap (vector& x);
 
 	};
 	
@@ -124,6 +135,7 @@ namespace ft
 	}
 
 
+
 	/* CONSTRUCTORS + DESTRUCTOR */
 	template <typename T, class Alloc>
 	vector<T, Alloc>::vector(const allocator_type& alloc) : _array(0), _size(0), _alloc(alloc), _capacity(0) //지금 위에서도 빈거 넣었고 _alloc 여기서 또 빈거넣음... 이유가 뭘가?아마 여기 _alloc(alloc)은 지워도 상관없을듯.
@@ -133,7 +145,7 @@ namespace ft
 	}
 
 	template <typename T, class Alloc>
-	vector<T, Alloc>::vector (size_t n, const value_type& val, const allocator_type& alloc) : _size(n), _alloc(alloc), _capacity(n)
+	vector<T, Alloc>::vector (size_t n, const value_type& val, const allocator_type& alloc) : _alloc(alloc),  _size(n),_capacity(n)
 	{
 		//std::cout << " 2  " << std::endl;
 		_array = _alloc.allocate(_capacity);
@@ -375,6 +387,183 @@ void vector<T, Alloc>::pop_back ()
 		_size--;
 	_alloc.destroy(_array + _size); //  이거 아무것도 없는데 계속 destroy해도 상관없는지 테스트해볼땐상관없는데, 한번 다시보자. 
 }
+
+template <typename T, class Alloc>
+void vector<T, Alloc>::swap (vector& x)
+{
+	allocator_type										tmp_alloc = _alloc;
+	T*													tmp_array = _array;
+	size_type											tmp_size = _size;
+	size_type											tmp_capacity = _capacity;
+	
+	_alloc = x._alloc;
+	_array = x._array;
+	_size = x._size;
+	_capacity = x._capacity;
+	
+	x._alloc = tmp_alloc;
+	x._array = tmp_array;
+	x._size = tmp_size;
+	x._capacity = tmp_capacity;
+}
+
+template <typename T, class Alloc>
+void vector<T, Alloc>::clear()
+{
+	for(int i = 0; i < _size; i++)
+	{
+		_alloc.destroy(_array + _size);
+	}
+	_size = 0;
+}
+
+template <typename T, class Alloc>
+typename vector<T, Alloc>::iterator vector<T, Alloc>::insert (iterator position, const value_type& val)
+{
+	//positiond은 현재 벡터를 이용해 생성한  iterato임. 
+	if(_size == _capacity)
+	{
+		_capacity = _capacity * 2;
+	}
+	T* tmp = _alloc.allocate(_capacity);
+	int put_position_ptr_flag = 0; //  이거 그냥, position값 넣고나서 기존 _array 넣을때 인덱스 맞출려고 사용함.
+	for(int i = 0; i < _size + 1; i++)
+	{
+		if(_array == position._ptr)
+		{
+			_alloc.construct(tmp + i, val);
+			put_position_ptr_flag = 1;
+		}
+		else
+			_alloc.construct(tmp + i, *(_array + i - put_position_ptr_flag));
+	}		
+	Array_clear_free();
+	_array = tmp;
+	_size = _size + 1;
+	// 이거 아마 될껄? 
+	difference_type idx = position - this->begin();
+	return (iterator(this->begin() + idx));
+}
+
+template <typename T, class Alloc>
+void vector<T, Alloc>::insert (iterator position, size_type n, const value_type& val)
+{
+	//positiond은 현재 벡터를 이용해 생성한  iterato임.
+	if (n != 0)
+	{
+		while(_size + n < _capacity)
+		{
+			_capacity = _capacity * 2;
+		}
+		T* tmp = _alloc.allocate(_capacity);
+		int put_position_ptr_flag = 0; //  이거 그냥, position값 넣고나서 기존 _array 넣을때 인덱스 맞출려고 사용함.
+		int j = 0;
+		for(int i = 0; i < _size + n; i++)
+		{
+			if(_array == position._ptr)
+			{
+				for(j = 0; j < n; j++)
+				{
+					_alloc.construct(tmp + i + j, val);
+				}
+				put_position_ptr_flag = 1;
+				i = i + j; //인덱스 수정.
+			}
+			else
+				_alloc.construct(tmp + i, *(_array + (i - j) - put_position_ptr_flag));
+		}		
+		Array_clear_free();
+		_array = tmp;
+		_size = _size + n;
+	}
+ 
+}
+
+template <typename T, class Alloc>
+template <class InputIterator>
+    void vector<T, Alloc>::insert (iterator position, InputIterator first, InputIterator last)
+{
+	difference_type cnt = last - first;
+	//positiond은 현재 벡터를 이용해 생성한  iterato임.
+	while(_size + cnt < _capacity)
+	{
+		_capacity = _capacity * 2;
+	}
+	T* tmp = _alloc.allocate(_capacity);
+	int put_position_ptr_flag = 0; //  이거 그냥, position값 넣고나서 기존 _array 넣을때 인덱스 맞출려고 사용함.
+	int j = 0;
+	for(int i = 0; i < _size + cnt; i++)
+	{
+		if(_array == position._ptr)
+		{
+			for(j = 0; first != last; first++)
+			{
+				_alloc.construct(tmp + i + j, *first);
+				j++;
+			}
+			put_position_ptr_flag = 1;
+			i = i + j; //인덱스 수정.
+		}
+		else
+			_alloc.construct(tmp + i, *(_array + (i - j) - put_position_ptr_flag));
+	}		
+	Array_clear_free();
+	_array = tmp;
+	_size = _size + cnt;
+}
+
+template <typename T, class Alloc>
+typename vector<T, Alloc>::iterator vector<T, Alloc>::erase (iterator position)
+{
+	T* tmp = _array;
+	iterator result = position;
+	int erase_later_flag = 0;
+	for(int i = 0; i < _size; i++)
+	{
+		if(erase_later_flag == 1) //지우고 나서 동작
+		{
+			_alloc.construct(tmp + i - 1, *(tmp + i));
+			_alloc.destroy(tmp + i);
+		}
+		if(tmp == position._ptr)
+		{
+			_alloc.destroy(_array + i);
+			erase_later_flag = 1;
+			_size--;
+		}
+		tmp++;
+	}
+	return result;
+}
+template <typename T, class Alloc>
+typename vector<T, Alloc>::iterator vector<T, Alloc>::erase (iterator first, iterator last)
+{
+	T* tmp = _array;
+	difference_type length = last - first;
+	iterator result = first; // 이방법 말고 있을듯 
+	int erase_later_flag = 0;
+	if(length > 0)
+	{
+		for(int i = 0; i < _size; i++)
+		{
+			if(erase_later_flag == 1) //지우고 나서 동작
+			{
+				_alloc.construct(tmp + i - 1, *(tmp + i + length));
+				_alloc.destroy(tmp + i + length);
+			}
+			if(tmp == first._ptr)
+			{
+				for(; first != last; first++)
+					_alloc.destroy(first);
+				erase_later_flag = 1;
+				_size = _size - length;
+			}
+			tmp++;
+		}
+	}
+	return result;
+}
+
 
 }
 
