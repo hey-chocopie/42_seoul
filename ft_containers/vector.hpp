@@ -23,7 +23,6 @@ namespace ft
 			typedef typename allocator_type::const_pointer		const_pointer; //    	const T*
 			typedef ptrdiff_t									difference_type;
 			typedef size_t										size_type;
-//			typedef typename allocator_type::pointer			Inputiterator; //    	T*
 
 			allocator_type										_alloc;
 			T*													_array;
@@ -32,15 +31,13 @@ namespace ft
 			//지금 이해안되는게, random_access에서 value_type을 받고 
 			// iterator에서 기본 벡터 만들었을때 iterator 주소는 없음. 만들어야 할것만 만들것.
 			//template<class Category, class T, class Pointer = T*, class Reference = T&>
-			class iterator : public random_access_iterator_tag<value_type> // 이거 만들어야함. 
-			{
-				private:
-				public:
-					iterator() : random_access_iterator_tag<value_type>(){};
-					iterator(value_type* ptr) : random_access_iterator_tag<value_type>(ptr) {};
-					iterator(const iterator& rhd) : random_access_iterator_tag<value_type>(rhd) {};
-			};
-		
+	
+	        typedef random_access_iterator_tag<value_type>                       iterator;
+	        typedef random_access_iterator_tag<const value_type>                 const_iterator;
+//	        typedef stl::reverse_iterator<iterator>                           reverse_iterator;
+//	        typedef stl::reverse_iterator<const_iterator>                     const_reverse_iterator;
+//	        typedef typename stl::iterator_traits<iterator>::difference_type difference_type;
+
 			//default (1) //explicit 원치않는 형변환은 컴파일러 실행
 			explicit vector (const allocator_type& alloc = allocator_type());
 
@@ -56,21 +53,13 @@ namespace ft
 //			//copy (4)
 			vector (const vector& x);
 
-//```
-//		vector<T, A>(size_type n, value_type const & val = value_type());
-//		vector<T, A>(vector<T> const & src);
-//		vector<T, A>(InputIterator first, InputIterator last);
-//```
-
-
-
 			vector& operator= (const vector& rhd); 			
 
 //===========================iterator=======================
 			iterator begin();
-//			const_iterator begin() const;
+			const_iterator begin() const;
 			iterator end();
-//			const_iterator end() const;
+			const_iterator end() const;
 //			reverse_iterator rbegin();
 //			const_reverse_iterator rbegin() const;
 //		    reverse_iterator rend();
@@ -190,22 +179,22 @@ namespace ft
 	{
 		return (iterator(_array));
 	}
-//	template <typename T, class Alloc>
-//	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin()
-//	{
-//		return (const_iterator(_array));
-//	}
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
+	{
+		return (const_iterator(_array));
+	}
 
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::end()
 	{
 		return (iterator(_array + _size));
 	}
-//	template <typename T, class Alloc>
-//	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end()
-//	{
-//		return (const_iterator(_array + _size));
-//	}
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end() const
+	{
+		return (const_iterator(_array + _size));
+	}
 
 
 //	template <typename T, class Alloc>

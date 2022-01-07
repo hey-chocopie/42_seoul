@@ -19,12 +19,18 @@ void reconfirm(void)
 	std::cout << RED "check : vector void insert 제대로 동작하는지 모르겟다. 확인필요. " << std::endl;
 	std::cout << RED "check : erase return 값 다시 보기." << std::endl;
 
+	std::cout << RED "check : iterator_tag들에서 operator++ 를 virtual로 하니까 스텍을 return한다고 에러남.." << std::endl;
 }
 
 int main(void)
 {
 //	ft::vector<int> a;
-//	ft::vector<int> aa(50);
+	ft::vector<int> aa(50, 2);
+	random_access_iterator_tag<int> b;
+	ft::vector<int>::iterator a;
+	a = (aa.begin());
+//	++a;
+//	std::cout << *a << std::endl;
 //	std::vector<int> bb(50);
 //
 //	std::cout << aa.max_size() << std::endl;
