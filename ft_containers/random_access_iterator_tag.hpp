@@ -3,6 +3,59 @@
 #include <iostream>
 
 //======================type_iter_define==================
+
+template <typename v, bool _bool>
+struct integral_constant
+{
+	typedef bool	value_type;
+
+    typedef v type; //type은 false or true
+    static const value_type value = _bool; // value은 1 or 0
+};
+
+template<typename T>
+struct is_integral : public integral_constant<bool, false> {} ; //  아래 있는 상황들 뺴고 다 false
+
+template<>
+struct is_integral<bool> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<char> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<wchar_t> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<signed char> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<short int> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<int> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<long int> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<long long int> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<unsigned char> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<unsigned short int> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<unsigned int> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<unsigned long int> : public integral_constant<bool, true> {} ;
+
+	template<>
+	struct is_integral<unsigned long long int> : public integral_constant<bool, true> {} ;
+
+
 template <typename T>
 struct iterator_traits
 	{
@@ -66,7 +119,7 @@ struct input_iterator_tag {
 		bool operator==(const input_iterator_tag &rhd) const; // a == b
 		bool operator!=(const input_iterator_tag &rhd) const; // a != b
 	
-		RI_Type operator*() const; //&*a
+		RI_Type& operator*() const; //&*a
 		RI_Type* operator->() const; // a->m
 };
 
@@ -207,7 +260,7 @@ bool input_iterator_tag<RI_Type>::operator!=(const input_iterator_tag &rhd) cons
 
 
 template <typename RI_Type>
-RI_Type input_iterator_tag<RI_Type>::operator*() const//*a
+RI_Type &input_iterator_tag<RI_Type>::operator*() const//*a
 {
 	return (*(this->_ptr));
 }
@@ -396,101 +449,6 @@ RI_Type random_access_iterator_tag<RI_Type>::operator[](const difference_type n)
       }
     
   };
-//
-//  // compare reverse iterator
-//  // ==
-//  template<class Iterator>
-//  bool operator== (const reverse_iterator<Iterator>& left,
-//                  const reverse_iterator<Iterator>& right) {
-//    return (left.base() == right.base());
-//  }
-//  // reverse_iterator == const_reverse_iterator
-//  template<class Iterator_left, class Iterator_right>
-//  bool operator==(const reverse_iterator<Iterator_left>& left,
-//                  const reverse_iterator<Iterator_right>& right) {
-//    return (left.base() == right.base());
-//  }
-//  // !=
-//  template<class Iterator>
-//  bool operator!=(const reverse_iterator<Iterator>& left,
-//                  const reverse_iterator<Iterator>& right) {
-//    return (left.base() != right.base());
-//  }
-//  // reverse_iterator != const_reverse_iterator
-//  template<class Iterator_left, class Iterator_right>
-//  bool operator!=(const reverse_iterator<Iterator_left>& left,
-//                  const reverse_iterator<Iterator_right>& right) {
-//    return (left.base() != right.base());
-//  }
-//  // <
-//  template<class Iterator>
-//  bool operator<(const reverse_iterator<Iterator>& left,
-//                  const reverse_iterator<Iterator>& right) {
-//    return (left.base() > right.base());
-//  }
-//  // reverse_iterator < const_reverse_iterator
-//  template<class Iterator_left, class Iterator_right>
-//  bool operator<(const reverse_iterator<Iterator_left>& left,
-//                  const reverse_iterator<Iterator_right>& right) {
-//    return (left.base() > right.base());
-//  }
-//  // <=
-//  template<class Iterator>
-//  bool operator<=(const reverse_iterator<Iterator>& left,
-//                  const reverse_iterator<Iterator>& right) {
-//    return (left.base() >= right.base());
-//  }
-//  // reverse_iterator <= const_reverse_iterator
-//  template<class Iterator_left, class Iterator_right>
-//  bool operator<=(const reverse_iterator<Iterator_left>& left,
-//                  const reverse_iterator<Iterator_right>& right) {
-//    return (left.base() >= right.base());
-//  }
-//  // >
-//  template<class Iterator>
-//  bool operator>(const reverse_iterator<Iterator>& left,
-//                  const reverse_iterator<Iterator>& right) {
-//    return (left.base() < right.base());
-//  }
-//  // reverse_iterator > const_reverse_iterator
-//  template<class Iterator_left, class Iterator_right>
-//  bool operator>(const reverse_iterator<Iterator_left>& left,
-//                  const reverse_iterator<Iterator_right>& right) {
-//    return (left.base() < right.base());
-//  }
-//  // >=
-//  template<class Iterator>
-//  bool operator>=(const reverse_iterator<Iterator>& left,
-//                  const reverse_iterator<Iterator>& right) {
-//    return (left.base() <= right.base());
-//  }
-//  // reverse_iterator >= const_reverse_iterator
-//  template<class Iterator_left, class Iterator_right>
-//  bool operator>=(const reverse_iterator<Iterator_left>& left,
-//                  const reverse_iterator<Iterator_right>& right) {
-//    return (left.base() <= right.base());
-//  }
-//  // +
-//  template<class Iterator>
-//  reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::difference_type n,
-//                              const reverse_iterator<Iterator>& rev_it) {
-//    return (rev_it + n);
-//  }
-//  // -
-//  template<class Iterator>
-//  typename reverse_iterator<Iterator>::difference_type operator-(
-//                    const reverse_iterator<Iterator>& left,
-//                    const reverse_iterator<Iterator>& right) {
-//    return (left.base() - right.base());
-//  }
-//  // reverse_iterator - const_reverse_iterator
-//  template<class Iterator_left, class Iterator_right>
-//  bool operator-(const reverse_iterator<Iterator_left>& left,
-//                  const reverse_iterator<Iterator_right>& right) {
-//    return (left.base() - right.base());
-//  }
-//}
-
 
 #endif
 

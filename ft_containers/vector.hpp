@@ -34,8 +34,8 @@ namespace ft
 	
 	        typedef random_access_iterator_tag<value_type>                       iterator;
 	        typedef random_access_iterator_tag<const value_type>                 const_iterator;
-	        typedef reverse_iterator_tag<iterator, value_type>                           reverse_iterator;
-//	        typedef stl::reverse_iterator<const_iterator>                     const_reverse_iterator;
+//	        typedef reverse_iterator_tag<iterator, value_type>                           reverse_iterator;
+//	        typedef reverse_iterator_tag<const_iterator, const value_type>                     const_reverse_iterator;
 //	        typedef typename stl::iterator_traits<iterator>::difference_type difference_type;
 
 			//default (1) //explicit 원치않는 형변환은 컴파일러 실행
@@ -45,7 +45,7 @@ namespace ft
 			//fill (2)
 			explicit vector(size_t n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 
-			//range (3)
+//			//range (3)
 //			template <class InputIterator>
 //			         vector (InputIterator first, InputIterator last,
 //			                 const allocator_type& alloc = allocator_type());
@@ -154,13 +154,13 @@ namespace ft
 //	template <typename T, class Alloc>
 //	template <class Inputiterator>
 //    vector<T, Alloc>::vector (Inputiterator first, Inputiterator last,
-//        const allocator_type& alloc) : _alloc(alloc)
+//        const allocator_type& alloc) : _alloc(alloc), _array(0)
 //	{
 ////		this->assign(first, last);
 //	} // 이거 만들때capacity 정의 다시볼것. 
 
 	template <typename T, class Alloc>
-	vector<T, Alloc>::vector (const vector& x)  
+	vector<T, Alloc>::vector (const vector& x) : _array(0)  
 	{
 		*this = x;
 	}
