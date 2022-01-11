@@ -56,7 +56,15 @@ namespace ft
 			vector& operator= (const vector& rhd); 			
 
 //===========================iterator=======================
-			iterator begin();
+			iterator begin()
+			{
+				return (iterator(_array));
+				//iterator(_array)이건 문제없음. 근데 문제가.
+				//iterator begin이니까 return값이 itreator (iterator(_array)); 랑 같은거임..
+				//클래스를 iterator(_array)로 생성하면 반환이 멀로 되는지 정확히 모르겠음. 
+				//iterator == random_access_iterator_tag 인데, 
+				//construct중,  random_access_iterator_tag(const random_access_iterator_tag<RI_Type> & src이 없으면 에러남.
+			}
 			const_iterator begin() const;
 			iterator end();
 			const_iterator end() const;
@@ -127,7 +135,7 @@ namespace ft
 
 	/* CONSTRUCTORS + DESTRUCTOR */
 	template <typename T, class Alloc>
-	vector<T, Alloc>::vector(const allocator_type& alloc) : _array(0), _size(0), _alloc(alloc), _capacity(0) //지금 위에서도 빈거 넣었고 _alloc 여기서 또 빈거넣음... 이유가 뭘가?아마 여기 _alloc(alloc)은 지워도 상관없을듯.
+	vector<T, Alloc>::vector(const allocator_type& alloc) : _array(0), _size(0), _alloc(alloc), _capacity(0)
 	{
 		//std::cout << 1 << std::endl;
 		//alloc에 뭐가 들어있는지 궁금함. vector<int> a();이렇게 했을때 여기 탈텐데';;
@@ -174,11 +182,11 @@ namespace ft
 		return (*this);
 	}
 
-	template <typename T, class Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
-	{
-		return (iterator(_array));
-	}
+//	template <typename T, class Alloc>
+//	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
+//	{
+//		return (iterator(_array));
+//	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
 	{
