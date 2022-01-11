@@ -34,7 +34,7 @@ namespace ft
 	
 	        typedef random_access_iterator_tag<value_type>                       iterator;
 	        typedef random_access_iterator_tag<const value_type>                 const_iterator;
-//	        typedef stl::reverse_iterator<iterator>                           reverse_iterator;
+	        typedef reverse_iterator_tag<iterator, value_type>                           reverse_iterator;
 //	        typedef stl::reverse_iterator<const_iterator>                     const_reverse_iterator;
 //	        typedef typename stl::iterator_traits<iterator>::difference_type difference_type;
 
