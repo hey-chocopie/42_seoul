@@ -4,6 +4,16 @@
 
 //======================type_iter_define==================
 
+
+
+template<bool Cond, class T = void> 
+struct enable_if {};
+
+template<class T> struct enable_if<true, T> 
+{ 
+	typedef T type; 
+};
+
 template <typename v, bool _bool>
 struct integral_constant
 {
@@ -20,40 +30,40 @@ template<>
 struct is_integral<bool> : public integral_constant<bool, true> {} ;
 
 	template<>
-	struct is_integral<char> : public integral_constant<bool, true> {} ;
+	struct is_integral<char> : public integral_constant<char, true> {} ;
 
 	template<>
-	struct is_integral<wchar_t> : public integral_constant<bool, true> {} ;
+	struct is_integral<wchar_t> : public integral_constant<wchar_t, true> {} ;
 
 	template<>
-	struct is_integral<signed char> : public integral_constant<bool, true> {} ;
+	struct is_integral<signed char> : public integral_constant<signed char, true> {} ;
 
 	template<>
-	struct is_integral<short int> : public integral_constant<bool, true> {} ;
+	struct is_integral<short int> : public integral_constant<short int, true> {} ;
 
 	template<>
-	struct is_integral<int> : public integral_constant<bool, true> {} ;
+	struct is_integral<int> : public integral_constant<int, true> {} ;
 
 	template<>
-	struct is_integral<long int> : public integral_constant<bool, true> {} ;
+	struct is_integral<long int> : public integral_constant<long int, true> {} ;
 
 	template<>
-	struct is_integral<long long int> : public integral_constant<bool, true> {} ;
+	struct is_integral<long long int> : public integral_constant<long long int, true> {} ;
 
 	template<>
-	struct is_integral<unsigned char> : public integral_constant<bool, true> {} ;
+	struct is_integral<unsigned char> : public integral_constant<unsigned char, true> {} ;
 
 	template<>
-	struct is_integral<unsigned short int> : public integral_constant<bool, true> {} ;
+	struct is_integral<unsigned short int> : public integral_constant<unsigned short int, true> {} ;
 
 	template<>
-	struct is_integral<unsigned int> : public integral_constant<bool, true> {} ;
+	struct is_integral<unsigned int> : public integral_constant<unsigned int, true> {} ;
 
 	template<>
-	struct is_integral<unsigned long int> : public integral_constant<bool, true> {} ;
+	struct is_integral<unsigned long int> : public integral_constant<unsigned long int, true> {} ;
 
 	template<>
-	struct is_integral<unsigned long long int> : public integral_constant<bool, true> {} ;
+	struct is_integral<unsigned long long int> : public integral_constant<unsigned long long, true> {} ;
 
 
 template <typename T>
@@ -82,6 +92,18 @@ struct iterator_traits
 		typedef const T&						reference;
 		typedef	ptrdiff_t						difference_type;
 	};
+
+template<class InputIterator>
+typename iterator_traits<InputIterator>::difference_type distance2 (InputIterator first, InputIterator last)
+{
+    typename iterator_traits<InputIterator>::difference_type rtn = 0;
+    while (first != last)
+    {
+        first++;
+        rtn++;
+    }
+    return (rtn);
+}
 
 template <typename RI_Type> //RI == Random iterator
 struct input_iterator_tag {
@@ -163,6 +185,7 @@ struct bidirectional_iterator_tag : public forward_iterator_tag<RI_Type>
 {
 	public:
 		typedef ptrdiff_t				difference_type;
+		typedef bidirectional_iterator_tag<RI_Type>							iterator_category;
 //======================all categories	=======================
 		bidirectional_iterator_tag() :forward_iterator_tag<RI_Type>(){};
 		bidirectional_iterator_tag(RI_Type *ptr): forward_iterator_tag<RI_Type>(ptr){};
@@ -188,8 +211,8 @@ struct bidirectional_iterator_tag : public forward_iterator_tag<RI_Type>
 			return(tmp);
 		}
 
-		bidirectional_iterator_tag& operator--(); //--a;
-		bidirectional_iterator_tag& operator--(int);
+		iterator_category& operator--(); //--a;
+		bidirectional_iterator_tag operator--(int);
 };
 
 template <typename RI_Type> //RI == Random iterator
@@ -218,7 +241,7 @@ class random_access_iterator_tag : public bidirectional_iterator_tag<RI_Type>, i
 			return (*this);
 		}
 		random_access_iterator_tag& operator++(); //++a;
-		random_access_iterator_tag& operator++(int); //후위
+		random_access_iterator_tag operator++(int); //후위
 ////======================random_access_iterator_tag==============
 		random_access_iterator_tag operator+(difference_type n) const; //a + n;
 		random_access_iterator_tag operator-(difference_type n) const; // a - n;
@@ -281,7 +304,7 @@ bidirectional_iterator_tag<RI_Type>& bidirectional_iterator_tag<RI_Type>::operat
 	return(*this);
 }
 template <typename RI_Type>
-bidirectional_iterator_tag<RI_Type>& bidirectional_iterator_tag<RI_Type>::operator--(int) //++a;
+bidirectional_iterator_tag<RI_Type> bidirectional_iterator_tag<RI_Type>::operator--(int) //a--;
 {
 	random_access_iterator_tag<RI_Type> tmp(*this);
 	(this->_ptr)--;
@@ -299,7 +322,7 @@ random_access_iterator_tag<RI_Type>& random_access_iterator_tag<RI_Type>::operat
 
 
 template <typename RI_Type>
-random_access_iterator_tag<RI_Type>& random_access_iterator_tag<RI_Type>::operator++(int) //++a;
+random_access_iterator_tag<RI_Type> random_access_iterator_tag<RI_Type>::operator++(int) //++a;
 {
 	random_access_iterator_tag<RI_Type> tmp(*this);
 	(this->_ptr)++;

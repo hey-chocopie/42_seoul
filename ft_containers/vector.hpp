@@ -31,11 +31,12 @@ namespace ft
 			//지금 이해안되는게, random_access에서 value_type을 받고 
 			// iterator에서 기본 벡터 만들었을때 iterator 주소는 없음. 만들어야 할것만 만들것.
 			//template<class Category, class T, class Pointer = T*, class Reference = T&>
-	
-	        typedef random_access_iterator_tag<value_type>                       iterator;
+			//typedef random_access_iter<value_type, random_access_iterator_tag<value_type>> iterator;
+	        // 위의방식처럼 해야. operator--같은거, 방식에 맞게 리턴해줄수 있을듯..
+			typedef random_access_iterator_tag<value_type>                       iterator;
 	        typedef random_access_iterator_tag<const value_type>                 const_iterator;
-//	        typedef reverse_iterator_tag<iterator, value_type>                           reverse_iterator;
-//	        typedef reverse_iterator_tag<const_iterator, const value_type>                     const_reverse_iterator;
+	        typedef reverse_iterator_tag<iterator, value_type>                           reverse_iterator;
+	        typedef reverse_iterator_tag<const_iterator, const value_type>                     const_reverse_iterator;
 //	        typedef typename stl::iterator_traits<iterator>::difference_type difference_type;
 
 			//default (1) //explicit 원치않는 형변환은 컴파일러 실행
@@ -46,9 +47,9 @@ namespace ft
 			explicit vector(size_t n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 
 //			//range (3)
-//			template <class InputIterator>
-//			         vector (InputIterator first, InputIterator last,
-//			                 const allocator_type& alloc = allocator_type());
+			template <class InputIterator>
+			         vector (InputIterator first, InputIterator last,
+			                 const allocator_type& alloc = allocator_type(), typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = nullptr);
 //
 //			//copy (4)
 			vector (const vector& x);
@@ -56,22 +57,14 @@ namespace ft
 			vector& operator= (const vector& rhd); 			
 
 //===========================iterator=======================
-			iterator begin()
-			{
-				return (iterator(_array));
-				//iterator(_array)이건 문제없음. 근데 문제가.
-				//iterator begin이니까 return값이 itreator (iterator(_array)); 랑 같은거임..
-				//클래스를 iterator(_array)로 생성하면 반환이 멀로 되는지 정확히 모르겠음. 
-				//iterator == random_access_iterator_tag 인데, 
-				//construct중,  random_access_iterator_tag(const random_access_iterator_tag<RI_Type> & src이 없으면 에러남.
-			}
+			iterator begin();
 			const_iterator begin() const;
 			iterator end();
 			const_iterator end() const;
-//			reverse_iterator rbegin();
-//			const_reverse_iterator rbegin() const;
-//		    reverse_iterator rend();
-//			const_reverse_iterator rend() const;
+			reverse_iterator rbegin() const ;
+			const_reverse_iterator rbegin();
+		    reverse_iterator rend() const;
+			const_reverse_iterator rend();
 
 
 //==========================Capacity=======================
@@ -98,9 +91,9 @@ namespace ft
 		    reference back();
 			const_reference back() const;
 //=======================Modifers=====================
-//			template <class InputIterator>
-//			void assign (InputIterator first, InputIterator last);
-//			void assign (size_type n, const value_type& val);
+			template <class InputIterator>
+			void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0); //type * 는 InputIterator *가 된다. 
+			void assign (size_type n, const value_type& val);
 
 			void push_back (const value_type& val);
 			void pop_back ();
@@ -135,7 +128,7 @@ namespace ft
 
 	/* CONSTRUCTORS + DESTRUCTOR */
 	template <typename T, class Alloc>
-	vector<T, Alloc>::vector(const allocator_type& alloc) : _array(0), _size(0), _alloc(alloc), _capacity(0)
+	vector<T, Alloc>::vector(const allocator_type& alloc) : _alloc(alloc), _array(0), _size(0),  _capacity(0)
 	{
 		//std::cout << 1 << std::endl;
 		//alloc에 뭐가 들어있는지 궁금함. vector<int> a();이렇게 했을때 여기 탈텐데';;
@@ -151,13 +144,13 @@ namespace ft
 	}
 
 
-//	template <typename T, class Alloc>
-//	template <class Inputiterator>
-//    vector<T, Alloc>::vector (Inputiterator first, Inputiterator last,
-//        const allocator_type& alloc) : _alloc(alloc), _array(0)
-//	{
-////		this->assign(first, last);
-//	} // 이거 만들때capacity 정의 다시볼것. 
+	template <typename T, class Alloc>
+	template <class InputIterator>
+    vector<T, Alloc>::vector (InputIterator first, InputIterator last,
+        const allocator_type& alloc, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type*) : _alloc(alloc), _array(0)
+	{
+		this->assign(first, last);
+	} // 이거 만들때capacity 정의 다시볼것. 
 
 	template <typename T, class Alloc>
 	vector<T, Alloc>::vector (const vector& x) : _array(0)  
@@ -182,11 +175,16 @@ namespace ft
 		return (*this);
 	}
 
-//	template <typename T, class Alloc>
-//	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
-//	{
-//		return (iterator(_array));
-//	}
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
+	{
+		//iterator(_array)이건 문제없음. 근데 문제가.
+		//iterator begin이니까 return값이 itreator (iterator(_array)); 랑 같은거임..
+		//클래스를 iterator(_array)로 생성하면 반환이 멀로 되는지 정확히 모르겠음. 
+		//iterator == random_access_iterator_tag 인데, 
+		//construct중,  random_access_iterator_tag(const random_access_iterator_tag<RI_Type> & src이 없으면 에러남.
+		return (iterator(_array));
+	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
 	{
@@ -205,26 +203,26 @@ namespace ft
 	}
 
 
-//	template <typename T, class Alloc>
-//	typename vector<T, Alloc>::reverse_iterator rbegin()
-//	{
-//		return (reverse_iterator(end()));
-//	}
-//	template <typename T, class Alloc>
-//	typename vector<T, Alloc>::const_reverse_iterator rbegin() const;
-//	{
-//		return (const_reverse_iterator(end()));
-//	}
-//	template <typename T, class Alloc>
-//	typename vector<T, Alloc>::reverse_iterator rend()
-//	{
-//		return (reverse_iterator(begin()));
-//	}
-//	template <typename T, class Alloc>
-//	typename vector<T, Alloc>::const_reverse_iterator rend() const;
-//	{
-//		return (const_reverse_iterator(begin()));
-//	}
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::reverse_iterator rbegin()
+	{
+		return (reverse_iterator(vector<T, Alloc>::end()));
+	}
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::const_reverse_iterator rbegin()
+	{
+		return (const_reverse_iterator(vector<T, Alloc>::end()));
+	}
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::reverse_iterator rend()
+	{
+		return (reverse_iterator(vector<T, Alloc>::begin()));
+	}
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::const_reverse_iterator rend()
+	{
+		return (const_reverse_iterator(vector<T, Alloc>::begin()));
+	}
 
 
 
@@ -292,7 +290,7 @@ namespace ft
 		if(_capacity < n)
 		{	
 			T* tmp = _alloc.allocate(n);
-			for(int i = 0; i < _size; i++)
+			for(size_t i = 0; i < _size; i++)
 			{
 				_alloc.construct(tmp + i, *(_array + i));
 			}		
@@ -340,33 +338,37 @@ namespace ft
 		return (*(this->_array + _size - 1));
 	}
 
-//	template <typename T, class Alloc>
-//	template <class InputIterator>
-//	void vector<T, Alloc>::assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = 0)
-//	{
-//		Array_clear_free();
-//		_size = last - first;
-//		_capacity = last - first;
-//		_array = _alloc.allocate(last - first);
-//		for(int i = 0; first != last; first++)
-//		{
-//			_alloc.construct(_array + i, *first);
-//			i++;
-//		}
-//	}
-//
-//	template <typename T, class Alloc>
-//	void vector<T, Alloc>::assign (size_type n, const value_type& val)
-//	{
-//		Array_clear_free();
-//		_size = n;
-//		_capacity = n;
-//		_array = _alloc.allocate(n);
-//		for(int i = 0; i < n; i++)
-//		{
-//			_alloc.construct(_array + i, val);
-//		}
-//	}//이거 좀더 볼것!
+	template <typename T, class Alloc>
+	template <class InputIterator>
+	void vector<T, Alloc>::assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type*) 
+	//is__integral에 int * 형을 넣었을때 없으면 enable_if<1>::type*= 0임.enable_if<1>은 true이므로 type이 있으므로 assign이 정상적으로 작동됨. . 
+	{
+		Array_clear_free();
+		ptrdiff_t aa = distance2<InputIterator>(first, last);
+		//_size = last - first;
+		//_capacity = (size_t)(last - first);
+		_size = aa;
+		_capacity = aa;
+		_array = _alloc.allocate(aa);
+		for(int i = 0; first != last; i++)
+		{
+			_alloc.construct(_array + i, *first);
+			first++;
+		}
+	}
+
+	template <typename T, class Alloc>
+	void vector<T, Alloc>::assign (size_type n, const value_type& val)
+	{
+		Array_clear_free();
+		_size = n;
+		_capacity = n;
+		_array = _alloc.allocate(n);
+		for(size_type i = 0; i < n; i++)
+		{
+			_alloc.construct(_array + i, val);
+		}
+	}//이거 좀더 볼것!
 
 template <typename T, class Alloc>
 void vector<T, Alloc>::push_back (const value_type& val)
@@ -426,7 +428,7 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::insert (iterator position,
 	int put_position_ptr_flag = 0; //  이거 그냥, position값 넣고나서 기존 _array 넣을때 인덱스 맞출려고 사용함.
 	for(int i = 0; i < _size + 1; i++)
 	{
-		if(_array == position._ptr)
+		if(put_position_ptr_flag == 0 && _array + i == position._ptr)
 		{
 			_alloc.construct(tmp + i, val);
 			put_position_ptr_flag = 1;
@@ -448,7 +450,7 @@ void vector<T, Alloc>::insert (iterator position, size_type n, const value_type&
 	//positiond은 현재 벡터를 이용해 생성한  iterato임.
 	if (n != 0)
 	{
-		while(_size + n < _capacity)
+		while(_size + n > _capacity)
 		{
 			_capacity = _capacity * 2;
 		}
@@ -457,7 +459,7 @@ void vector<T, Alloc>::insert (iterator position, size_type n, const value_type&
 		int j = 0;
 		for(int i = 0; i < _size + n; i++)
 		{
-			if(_array == position._ptr)
+			if(put_position_ptr_flag == 0 && _array + i == position._ptr)
 			{
 				for(j = 0; j < n; j++)
 				{
@@ -480,18 +482,18 @@ template <typename T, class Alloc>
 template <class InputIterator>
     void vector<T, Alloc>::insert (iterator position, InputIterator first, InputIterator last)
 {
-	difference_type cnt = last - first;
+	difference_type cnt = distance2<InputIterator>(first, last);
 	//positiond은 현재 벡터를 이용해 생성한  iterato임.
-	while(_size + cnt < _capacity)
+	while(_size + cnt > _capacity)
 	{
 		_capacity = _capacity * 2;
 	}
 	T* tmp = _alloc.allocate(_capacity);
 	int put_position_ptr_flag = 0; //  이거 그냥, position값 넣고나서 기존 _array 넣을때 인덱스 맞출려고 사용함.
 	int j = 0;
-	for(int i = 0; i < _size + cnt; i++)
+	for(size_t i = 0; i < _size + cnt; i++)
 	{
-		if(_array == position._ptr)
+		if(put_position_ptr_flag != 1 && _array + i == position._ptr) //포지션부터 넣어야하는 만큼 넣어줌.
 		{
 			for(j = 0; first != last; first++)
 			{
@@ -503,7 +505,7 @@ template <class InputIterator>
 		}
 		else
 			_alloc.construct(tmp + i, *(_array + (i - j) - put_position_ptr_flag));
-	}		
+	}
 	Array_clear_free();
 	_array = tmp;
 	_size = _size + cnt;
