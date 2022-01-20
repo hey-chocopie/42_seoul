@@ -4,6 +4,16 @@
 #include <iostream>
 #include <string>
 #include "random_access_iterator_tag.hpp"
+
+size_t increase_capacity(size_t _size, size_t n, size_t _capacity)
+{
+	if(_capacity == 0)
+		_capacity = 1;
+	while(_size + n >= _capacity)
+		_capacity = _capacity * 2;
+	return _capacity;
+}
+
 //class iterator;
 namespace ft
 {
@@ -33,8 +43,8 @@ namespace ft
 			//template<class Category, class T, class Pointer = T*, class Reference = T&>
 			//typedef random_access_iter<value_type, random_access_iterator_tag<value_type>> iterator;
 	        // 위의방식처럼 해야. operator--같은거, 방식에 맞게 리턴해줄수 있을듯..
-			typedef random_access_iterator_tag<value_type>                       iterator;
-	        typedef random_access_iterator_tag<const value_type>                 const_iterator;
+			typedef normal_iter<value_type>                       iterator;
+	        typedef normal_iter<const value_type>                 const_iterator;
 	        typedef reverse_iterator_tag<iterator, value_type>                           reverse_iterator;
 	        typedef reverse_iterator_tag<const_iterator, const value_type>                     const_reverse_iterator;
 //	        typedef typename stl::iterator_traits<iterator>::difference_type difference_type;
@@ -103,7 +113,7 @@ namespace ft
 			void insert (iterator position, size_type n, const value_type& val);
 //			//range (3)	
 			template <class InputIterator>
-			    void insert (iterator position, InputIterator first, InputIterator last);
+			    void insert (iterator position, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = nullptr);
 			iterator erase (iterator position);
 			iterator erase (iterator first, iterator last);
 			void clear();
@@ -344,12 +354,12 @@ namespace ft
 	//is__integral에 int * 형을 넣었을때 없으면 enable_if<1>::type*= 0임.enable_if<1>은 true이므로 type이 있으므로 assign이 정상적으로 작동됨. . 
 	{
 		Array_clear_free();
-		ptrdiff_t aa = distance2<InputIterator>(first, last);
+		ptrdiff_t distan_value = distance2<InputIterator>(first, last);
 		//_size = last - first;
 		//_capacity = (size_t)(last - first);
-		_size = aa;
-		_capacity = aa;
-		_array = _alloc.allocate(aa);
+		_size = distan_value;
+		_capacity = distan_value;
+		_array = _alloc.allocate(distan_value);
 		for(int i = 0; first != last; i++)
 		{
 			_alloc.construct(_array + i, *first);
@@ -373,8 +383,11 @@ namespace ft
 template <typename T, class Alloc>
 void vector<T, Alloc>::push_back (const value_type& val)
 {
-	if(_size == _capacity)
-		reserve(_capacity * 2);
+	if(_size + 1 > _capacity)
+	{
+		_capacity = increase_capacity(_size, 1, _capacity);
+		reserve(_capacity);
+	}
 	_alloc.construct(_array + _size, val);
 	_size++;
 }
@@ -409,7 +422,7 @@ void vector<T, Alloc>::swap (vector& x)
 template <typename T, class Alloc>
 void vector<T, Alloc>::clear()
 {
-	for(int i = 0; i < _size; i++)
+	for(size_t i = 0; i < _size; i++)
 	{
 		_alloc.destroy(_array + _size);
 	}
@@ -419,28 +432,27 @@ void vector<T, Alloc>::clear()
 template <typename T, class Alloc>
 typename vector<T, Alloc>::iterator vector<T, Alloc>::insert (iterator position, const value_type& val)
 {
-	//positiond은 현재 벡터를 이용해 생성한  iterato임. 
-	if(_size == _capacity)
-	{
-		_capacity = _capacity * 2;
-	}
+	//positiond은 현재 벡터를 이용해 생성한  iterato임.
+	_capacity = increase_capacity(_size, 0, _capacity); 
+
+	size_t idx;
 	T* tmp = _alloc.allocate(_capacity);
 	int put_position_ptr_flag = 0; //  이거 그냥, position값 넣고나서 기존 _array 넣을때 인덱스 맞출려고 사용함.
-	for(int i = 0; i < _size + 1; i++)
+	for(size_t i = 0; i < _size + 1; i++)
 	{
 		if(put_position_ptr_flag == 0 && _array + i == position._ptr)
 		{
 			_alloc.construct(tmp + i, val);
 			put_position_ptr_flag = 1;
+			idx = i;
 		}
 		else
 			_alloc.construct(tmp + i, *(_array + i - put_position_ptr_flag));
-	}		
+	}
+		
 	Array_clear_free();
 	_array = tmp;
 	_size = _size + 1;
-	// 이거 아마 될껄? 
-	difference_type idx = position - this->begin();
 	return (iterator(this->begin() + idx));
 }
 
@@ -450,14 +462,11 @@ void vector<T, Alloc>::insert (iterator position, size_type n, const value_type&
 	//positiond은 현재 벡터를 이용해 생성한  iterato임.
 	if (n != 0)
 	{
-		while(_size + n > _capacity)
-		{
-			_capacity = _capacity * 2;
-		}
+		_capacity = increase_capacity(_size, n, _capacity);
 		T* tmp = _alloc.allocate(_capacity);
 		int put_position_ptr_flag = 0; //  이거 그냥, position값 넣고나서 기존 _array 넣을때 인덱스 맞출려고 사용함.
-		int j = 0;
-		for(int i = 0; i < _size + n; i++)
+		size_t j = 0;
+		for(size_t i = 0; i < _size + n + 1; i++)
 		{
 			if(put_position_ptr_flag == 0 && _array + i == position._ptr)
 			{
@@ -469,29 +478,28 @@ void vector<T, Alloc>::insert (iterator position, size_type n, const value_type&
 				i = i + j; //인덱스 수정.
 			}
 			else
-				_alloc.construct(tmp + i, *(_array + (i - j) - put_position_ptr_flag));
-		}		
+			{
+				_alloc.construct(tmp + i - put_position_ptr_flag, *(_array + (i - j) - put_position_ptr_flag));
+			}
+		}
 		Array_clear_free();
 		_array = tmp;
 		_size = _size + n;
 	}
- 
 }
 
 template <typename T, class Alloc>
 template <class InputIterator>
-    void vector<T, Alloc>::insert (iterator position, InputIterator first, InputIterator last)
+    void vector<T, Alloc>::insert (iterator position, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type*)
 {
-	difference_type cnt = distance2<InputIterator>(first, last);
+	difference_type cnt = distance2<T, InputIterator>(first, last);
 	//positiond은 현재 벡터를 이용해 생성한  iterato임.
-	while(_size + cnt > _capacity)
-	{
-		_capacity = _capacity * 2;
-	}
+	_capacity = increase_capacity(_size, cnt, _capacity);
+
 	T* tmp = _alloc.allocate(_capacity);
 	int put_position_ptr_flag = 0; //  이거 그냥, position값 넣고나서 기존 _array 넣을때 인덱스 맞출려고 사용함.
 	int j = 0;
-	for(size_t i = 0; i < _size + cnt; i++)
+	for(size_t i = 0; i < _size + cnt + 1; i++)
 	{
 		if(put_position_ptr_flag != 1 && _array + i == position._ptr) //포지션부터 넣어야하는 만큼 넣어줌.
 		{
@@ -504,7 +512,7 @@ template <class InputIterator>
 			i = i + j; //인덱스 수정.
 		}
 		else
-			_alloc.construct(tmp + i, *(_array + (i - j) - put_position_ptr_flag));
+			_alloc.construct(tmp + i - put_position_ptr_flag, *(_array + (i - j) - put_position_ptr_flag));
 	}
 	Array_clear_free();
 	_array = tmp;
@@ -517,7 +525,7 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::erase (iterator position)
 	T* tmp = _array;
 	iterator result = position;
 	int erase_later_flag = 0;
-	for(int i = 0; i < _size; i++)
+	for(size_t i = 0; i < _size; i++)
 	{
 		if(erase_later_flag == 1) //지우고 나서 동작
 		{
@@ -543,7 +551,7 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::erase (iterator first, ite
 	int erase_later_flag = 0;
 	if(length > 0)
 	{
-		for(int i = 0; i < _size; i++)
+		for(size_t i = 0; i < _size; i++)
 		{
 			if(erase_later_flag == 1) //지우고 나서 동작
 			{

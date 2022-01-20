@@ -66,22 +66,43 @@ struct is_integral<bool> : public integral_constant<bool, true> {} ;
 	struct is_integral<unsigned long long int> : public integral_constant<unsigned long long, true> {} ;
 
 
-template <typename T>
-struct iterator_traits
-	{
-		typedef	T			value_type;
-		typedef T*		pointer;
-		typedef T&	reference;
-		typedef ptrdiff_t	difference_type;
+struct input_iterator_tag {};
+struct output_iterator_tag {};
+struct forward_iterator_tag : public input_iterator_tag, output_iterator_tag {};
+struct bidirectional_iterator_tag : public forward_iterator_tag {};
+struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+
+
+
+template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
+struct iterator
+{
+	typedef T         value_type;
+	typedef Distance  difference_type;
+	typedef Pointer   pointer;
+	typedef Reference reference;
+	typedef Category  iterator_category;
 };
+
+
+  template<class iterator>
+  struct iterator_traits {
+    typedef typename iterator::iterator_category     iterator_category;
+    typedef typename iterator::value_type            value_type;
+    typedef typename iterator::difference_type       difference_type;
+    typedef typename iterator::pointer               pointer;
+    typedef typename iterator::reference             reference;
+  };
 	
-	template<typename T>
-	struct iterator_traits<T*>
+	template<typename RI_Type>
+	struct iterator_traits<RI_Type*>
 	{
-		typedef T								value_type;
-		typedef T*								pointer;
-		typedef T&								reference;
+		typedef RI_Type								value_type;
+		typedef RI_Type*								pointer;
+		typedef RI_Type&								reference;
 		typedef	ptrdiff_t						difference_type;
+		typedef random_access_iterator_tag		iterator_category;
+
 	};
 	
 	template<typename T>
@@ -91,12 +112,15 @@ struct iterator_traits
 		typedef const T*						pointer;
 		typedef const T&						reference;
 		typedef	ptrdiff_t						difference_type;
+		typedef random_access_iterator_tag		iterator_category;
 	};
 
-template<class InputIterator>
-typename iterator_traits<InputIterator>::difference_type distance2 (InputIterator first, InputIterator last)
+
+
+template<typename T, class InputIterator>
+typename iterator_traits<T*>::difference_type distance2 (InputIterator first, InputIterator last)
 {
-    typename iterator_traits<InputIterator>::difference_type rtn = 0;
+    typename iterator_traits<T*>::difference_type rtn = 0;
     while (first != last)
     {
         first++;
@@ -106,160 +130,64 @@ typename iterator_traits<InputIterator>::difference_type distance2 (InputIterato
 }
 
 template <typename RI_Type> //RI == Random iterator
-struct input_iterator_tag {
-	protected:
-
+class normal_iter : public iterator<std::random_access_iterator_tag, RI_Type >
+{
 	public:
-
 		RI_Type											*_ptr;
-		typedef ptrdiff_t				difference_type;
 
-//======================all categories	=======================
-		input_iterator_tag() :_ptr(0){};
-		input_iterator_tag(RI_Type *ptr): _ptr(ptr){};
-		input_iterator_tag(input_iterator_tag& rhd) : _ptr(rhd._ptr){};
-		input_iterator_tag(const input_iterator_tag<RI_Type> & rhd) : _ptr(rhd._ptr){};
-		virtual input_iterator_tag& operator=(const input_iterator_tag &rhd) //b = a;
-		{
-			if(this == &rhd)
-				return (*this);
-			this->_ptr = rhd._ptr;
-			return (*this);
-		}
-		input_iterator_tag<RI_Type>& operator++()//++a;
-		{
-			++(this->_ptr);
-			return(*this);
-		}
-		input_iterator_tag<RI_Type>& operator++(int) //후위
-		{
-			input_iterator_tag<RI_Type> tmp(*this);
-			(this->_ptr)++;
-			return(tmp);
-		}
+		typedef RI_Type														iterator_type;
+   		typedef typename iterator_traits<iterator_type*>::iterator_category	iterator_category;
+   		typedef typename iterator_traits<iterator_type*>::value_type			value_type;
+   		typedef typename iterator_traits<iterator_type*>::difference_type	difference_type;
+   		typedef typename iterator_traits<iterator_type*>::pointer			pointer;
+   		typedef typename iterator_traits<iterator_type*>::reference			reference;
 
-		bool operator==(const input_iterator_tag &rhd) const; // a == b
-		bool operator!=(const input_iterator_tag &rhd) const; // a != b
+//======================construct	=======================
+		explicit normal_iter() : _ptr(0){};
+		explicit normal_iter(RI_Type *ptr) : _ptr(ptr){};
+		normal_iter(normal_iter<RI_Type>& rhd) : _ptr(rhd._ptr){};
+		normal_iter(const normal_iter<RI_Type> & rhd) : _ptr(rhd._ptr){};
+
+//====================input_iterator_tag==================
+
+		bool operator==(const normal_iter &rhd) const; // a == b
+		bool operator!=(const normal_iter &rhd) const; // a != b
 	
 		RI_Type& operator*() const; //&*a
 		RI_Type* operator->() const; // a->m
-};
 
-template <typename RI_Type> //RI == Random iterator
-struct output_iterator_tag {
 
-		typedef ptrdiff_t				difference_type;
-};
-template <typename RI_Type> //RI == Random iterator
-struct forward_iterator_tag : public input_iterator_tag<RI_Type>, output_iterator_tag<RI_Type>
-{
-	public:
-		typedef ptrdiff_t				difference_type;
-//======================all categories	=======================
-		forward_iterator_tag() : input_iterator_tag<RI_Type>(){};
-		forward_iterator_tag(RI_Type *ptr): input_iterator_tag<RI_Type>(ptr){};
-		forward_iterator_tag(forward_iterator_tag& rhd) : input_iterator_tag<RI_Type>(rhd){};
-		forward_iterator_tag(const forward_iterator_tag<RI_Type> & rhd) : input_iterator_tag<RI_Type>(rhd){};
-		virtual forward_iterator_tag& operator=(const forward_iterator_tag &rhd) //b = a;
+//====================bidirectional_iterator_tag=======================
+		normal_iter& operator--(); //--a;
+		normal_iter operator--(int);
+
+		normal_iter& operator=(const normal_iter &rhd) //b = a;
 		{
 			if(this == &rhd)
 				return (*this);
 			this->_ptr = rhd._ptr;
 			return (*this);
 		}
-		forward_iterator_tag& operator++()//++a;
-		{
-			++(this->_ptr);
-			return(*this);
-		}
-		forward_iterator_tag& operator++(int) //후위 // 이거 virtual 로 하니까  tmp 가 스텍데이터라고 안되네? 그냥하면 되는데;;
-		{
-			forward_iterator_tag<RI_Type> tmp(*this);
-			(this->_ptr)++;
-			return(tmp);
-		}
-};
-
-template <typename RI_Type> //RI == Random iterator
-struct bidirectional_iterator_tag : public forward_iterator_tag<RI_Type>
-{
-	public:
-		typedef ptrdiff_t				difference_type;
-		typedef bidirectional_iterator_tag<RI_Type>							iterator_category;
-//======================all categories	=======================
-		bidirectional_iterator_tag() :forward_iterator_tag<RI_Type>(){};
-		bidirectional_iterator_tag(RI_Type *ptr): forward_iterator_tag<RI_Type>(ptr){};
-		bidirectional_iterator_tag(bidirectional_iterator_tag& rhd) : forward_iterator_tag<RI_Type>(rhd){};
-		bidirectional_iterator_tag(const bidirectional_iterator_tag<RI_Type> & rhd) : forward_iterator_tag<RI_Type>(rhd){};
-		virtual bidirectional_iterator_tag& operator=(const bidirectional_iterator_tag &rhd) //b = a;
-		{
-			if(this == &rhd)
-				return (*this);
-			this->_ptr = rhd._ptr;
-			return (*this);
-		}
-
-		bidirectional_iterator_tag& operator++()//++a;
-		{
-			++(this->_ptr);
-			return(*this);
-		}
-		bidirectional_iterator_tag& operator++(int) //후위
-		{
-			bidirectional_iterator_tag<RI_Type> tmp(*this);
-			(this->_ptr)++;
-			return(tmp);
-		}
-
-		iterator_category& operator--(); //--a;
-		bidirectional_iterator_tag operator--(int);
-};
-
-template <typename RI_Type> //RI == Random iterator
-class random_access_iterator_tag : public bidirectional_iterator_tag<RI_Type>, iterator_traits<RI_Type>
-{
-	public:
-		typedef random_access_iterator_tag<RI_Type>							iterator_category;
-		typedef typename iterator_traits<RI_Type>::value_type				value_type;
-		typedef typename iterator_traits<RI_Type>::difference_type			difference_type;
-		typedef typename iterator_traits<RI_Type>::pointer					pointer;
-		typedef typename iterator_traits<RI_Type>::reference				reference;
-
-//======================all categories	=======================
-//		random_access_iterator_tag(pointer d){std::cout << "ok"<<std::e{};//ndl};
-		explicit random_access_iterator_tag() : bidirectional_iterator_tag<RI_Type>(){};
-		explicit random_access_iterator_tag(RI_Type *ptr) : bidirectional_iterator_tag<RI_Type>(ptr){};
-		random_access_iterator_tag(random_access_iterator_tag<RI_Type>& rhd) : bidirectional_iterator_tag<RI_Type>(rhd){};
-		random_access_iterator_tag(const random_access_iterator_tag<RI_Type> & rhd) : bidirectional_iterator_tag<RI_Type>(rhd){};
-
-
-		random_access_iterator_tag& operator=(const random_access_iterator_tag &rhd) //b = a;
-		{
-			if(this == &rhd)
-				return (*this);
-			this->_ptr = rhd._ptr;
-			return (*this);
-		}
-		random_access_iterator_tag& operator++(); //++a;
-		random_access_iterator_tag operator++(int); //후위
-////======================random_access_iterator_tag==============
-		random_access_iterator_tag operator+(difference_type n) const; //a + n;
-		random_access_iterator_tag operator-(difference_type n) const; // a - n;
-		difference_type operator-(const random_access_iterator_tag &rhd) const; //a - b;
-		friend random_access_iterator_tag operator+(difference_type n, const random_access_iterator_tag &rhd) //n + a 이게 왜 되는건지 모르겠음., 전역으로 할려면 원래 선언하고 써야할텐데 왜 그냥 friend 만 쓰고 되지? friend이해가 필요할듯. 
+		normal_iter& operator++(); //++a;
+		normal_iter operator++(int); //후위
+////======================normal_iter==============
+		normal_iter operator+(difference_type n) const; //a + n;
+		normal_iter operator-(difference_type n) const; // a - n;
+		difference_type operator-(const normal_iter &rhd) const; //a - b;
+		friend normal_iter operator+(difference_type n, const normal_iter &rhd) //n + a 이게 왜 되는건지 모르겠음., 전역으로 할려면 원래 선언하고 써야할텐데 왜 그냥 friend 만 쓰고 되지? friend이해가 필요할듯. 
 		{
 			return rhd.operator+(n);
 		}
 
 
-		bool operator<(const random_access_iterator_tag &rhd);
-		bool operator>(const random_access_iterator_tag &rhd);
-		bool operator<=(const random_access_iterator_tag &rhd);
+		bool operator<(const normal_iter &rhd);
+		bool operator>(const normal_iter &rhd);
+		bool operator<=(const normal_iter &rhd);
 
-		bool operator>=(const random_access_iterator_tag &rhd);
+		bool operator>=(const normal_iter &rhd);
 
-		random_access_iterator_tag& operator+=(difference_type n); //a + n;
-		random_access_iterator_tag& operator-=(difference_type n); // a - n;
+		normal_iter& operator+=(difference_type n); //a + n;
+		normal_iter& operator-=(difference_type n); // a - n;
 
 		RI_Type operator[](const difference_type n) const;
 
@@ -270,27 +198,27 @@ class random_access_iterator_tag : public bidirectional_iterator_tag<RI_Type>, i
 //=============================input_iter==================================
 
 template <typename RI_Type> //RI == Random iterator
-bool input_iterator_tag<RI_Type>::operator==(const input_iterator_tag &rhd) const
+bool normal_iter<RI_Type>::operator==(const normal_iter &rhd) const
 {
 	return (this->_ptr == rhd._ptr);
 }
 
 template <typename RI_Type>
-bool input_iterator_tag<RI_Type>::operator!=(const input_iterator_tag &rhd) const
+bool normal_iter<RI_Type>::operator!=(const normal_iter &rhd) const
 {
 	return (this->_ptr != rhd._ptr);
 }
 
 
 template <typename RI_Type>
-RI_Type &input_iterator_tag<RI_Type>::operator*() const//*a
+RI_Type &normal_iter<RI_Type>::operator*() const//*a
 {
 	return (*(this->_ptr));
 }
 
 //pointer is T*
 template <typename RI_Type>
-RI_Type* input_iterator_tag<RI_Type>::operator->() const // 잘모르겠음. 
+RI_Type* normal_iter<RI_Type>::operator->() const // 잘모르겠음. 
 {
 		return (this->_ptr);
 }
@@ -298,15 +226,15 @@ RI_Type* input_iterator_tag<RI_Type>::operator->() const // 잘모르겠음.
 //===========================Bidirectional======================
 
 template <typename RI_Type>
-bidirectional_iterator_tag<RI_Type>& bidirectional_iterator_tag<RI_Type>::operator--()//--a;
+normal_iter<RI_Type>& normal_iter<RI_Type>::operator--()//--a;
 {
 	--(this->_ptr);
 	return(*this);
 }
 template <typename RI_Type>
-bidirectional_iterator_tag<RI_Type> bidirectional_iterator_tag<RI_Type>::operator--(int) //a--;
+normal_iter<RI_Type> normal_iter<RI_Type>::operator--(int) //a--;
 {
-	random_access_iterator_tag<RI_Type> tmp(*this);
+	normal_iter<RI_Type> tmp(*this);
 	(this->_ptr)--;
 	return(tmp);
 }
@@ -314,81 +242,79 @@ bidirectional_iterator_tag<RI_Type> bidirectional_iterator_tag<RI_Type>::operato
 
 
 template <typename RI_Type>
-random_access_iterator_tag<RI_Type>& random_access_iterator_tag<RI_Type>::operator++() //++a;
+normal_iter<RI_Type>& normal_iter<RI_Type>::operator++() //++a;
 {
 	++(this->_ptr);
 	return(*this);
 }
-
-
 template <typename RI_Type>
-random_access_iterator_tag<RI_Type> random_access_iterator_tag<RI_Type>::operator++(int) //++a;
+normal_iter<RI_Type> normal_iter<RI_Type>::operator++(int) //++a;
 {
-	random_access_iterator_tag<RI_Type> tmp(*this);
+	normal_iter<RI_Type> tmp(*this);
 	(this->_ptr)++;
 	return(tmp);
 }
 
 
 template <typename RI_Type>
-random_access_iterator_tag<RI_Type> random_access_iterator_tag<RI_Type>::operator+(difference_type n) const
+normal_iter<RI_Type> normal_iter<RI_Type>::operator+(difference_type n) const
 {
-	return random_access_iterator_tag<RI_Type> (this->_ptr + n);
+	return normal_iter<RI_Type> (this->_ptr + n);
 }
 template <typename RI_Type>
-random_access_iterator_tag<RI_Type> random_access_iterator_tag<RI_Type>::operator-(difference_type n) const
+normal_iter<RI_Type> normal_iter<RI_Type>::operator-(difference_type n) const
 {
-	return random_access_iterator_tag<RI_Type> (this->_ptr - n);
+	return normal_iter<RI_Type> (this->_ptr - n);
 }
 
 //template <typename RI_Type>
-//ptrdiff_t random_access_iterator_tag<RI_Type>::operator-(const random_access_iterator_tag &rhd) const //a - b;
+//ptrdiff_t normal_iter<RI_Type>::operator-(const normal_iter &rhd) const //a - b;
 //{
 //	return (this->_ptr - rhd._ptr);
 //}
 template <typename RI_Type>
-typename iterator_traits<RI_Type>::difference_type random_access_iterator_tag<RI_Type>::operator-(const random_access_iterator_tag &rhd) const //a - b; //리턴값 ptrdiff_t이거 왜 안됨.?
+typename iterator_traits<RI_Type*>::difference_type normal_iter<RI_Type>::operator-(const normal_iter &rhd) const //a - b; //리턴값 ptrdiff_t이거 왜 안됨.?
 {
 	return (this->_ptr - rhd._ptr);
 }
 
 
 template <typename RI_Type>
-bool random_access_iterator_tag<RI_Type>::operator<(const random_access_iterator_tag &rhd)
+bool normal_iter<RI_Type>::operator<(const normal_iter &rhd)
 {
 	return (this->_ptr < rhd._ptr);
 }
 template <typename RI_Type>
-bool random_access_iterator_tag<RI_Type>::operator>(const random_access_iterator_tag &rhd)
+bool normal_iter<RI_Type>::operator>(const normal_iter &rhd)
 {
 	return (this->_ptr > rhd._ptr);
 }
 template <typename RI_Type>
-bool random_access_iterator_tag<RI_Type>::operator<=(const random_access_iterator_tag &rhd)
+bool normal_iter<RI_Type>::operator<=(const normal_iter &rhd)
 {
 	return (this->_ptr <= rhd._ptr);
 }
 template <typename RI_Type>
-bool random_access_iterator_tag<RI_Type>::operator>=(const random_access_iterator_tag &rhd)
+bool normal_iter<RI_Type>::operator>=(const normal_iter &rhd)
 {
 	return (this->_ptr >= rhd._ptr);
 }
 
 template <typename RI_Type>
-random_access_iterator_tag<RI_Type>& random_access_iterator_tag<RI_Type>::operator+=(difference_type n)
+normal_iter<RI_Type>& normal_iter<RI_Type>::operator+=(difference_type n)
 {
 	this->_ptr = this->_ptr + n;
 	return (*this);
 }
 template <typename RI_Type>
-random_access_iterator_tag<RI_Type>& random_access_iterator_tag<RI_Type>::operator-=(difference_type n)
+normal_iter<RI_Type>& normal_iter<RI_Type>::operator-=(difference_type n)
 {
 	this->_ptr = this->_ptr - n;
 	return (*this);
 }
 
 template <typename RI_Type>
-RI_Type random_access_iterator_tag<RI_Type>::operator[](const difference_type n) const
+RI_Type normal_iter<RI_Type>::operator[](const difference_type n) const
 {
 	return (*(this->_ptr + n));
 }
@@ -400,13 +326,20 @@ RI_Type random_access_iterator_tag<RI_Type>::operator[](const difference_type n)
   template<class Iterator, typename RI_Type>
   class reverse_iterator_tag  {
     public:
-		typedef Iterator                                                    iterator_type;
-		
-		typedef random_access_iterator_tag<RI_Type>							iterator_category;
-		typedef typename iterator_traits<RI_Type>::value_type				value_type;
-		typedef typename iterator_traits<RI_Type>::difference_type			difference_type;
-		typedef typename iterator_traits<RI_Type>::pointer					pointer;
-		typedef typename iterator_traits<RI_Type>::reference				reference;
+		typedef RI_Type														iterator_type;
+   		typedef typename iterator_traits<iterator_type>::iterator_category	iterator_category;
+   		typedef typename iterator_traits<iterator_type>::value_type			value_type;
+   		typedef typename iterator_traits<iterator_type>::difference_type	difference_type;
+   		typedef typename iterator_traits<iterator_type>::pointer			pointer;
+   		typedef typename iterator_traits<iterator_type>::reference			reference;
+
+
+//		typedef Iterator                                                    iterator_type;	
+//		typedef <RI_Type>							iterator_category;
+//		typedef typename iterator_traits<RI_Type>::value_type				value_type;
+//		typedef typename iterator_traits<RI_Type>::difference_type			difference_type;
+//		typedef typename iterator_traits<RI_Type>::pointer					pointer;
+//		typedef typename iterator_traits<RI_Type>::reference				reference;
 
     private:
       iterator_type origin_iter;

@@ -25,37 +25,18 @@ void reconfirm(void)
 	std::cout << RED "check : iterator_tag들에서 operator++ 를 virtual로 하니까 스텍을 return한다고 에러남.." << std::endl;
 }
 
-void at_TEST(void)
-{
-	ft::vector<TESTED_TYPE> vct(7);
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-	{
-		vct.at(i) = (vct.size() - i) * 3;
-		std::cout << "vct.at(): " << vct.at(i) << " | ";
-		std::cout << "vct[]: " << vct[i] << std::endl;
-	}
-	printSize(vct);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> const vct_c(vct);
-	
-	std::cout << "front(): " << vct.front() << " " << vct_c.front() << std::endl;
-	std::cout << "back(): " << vct.back() << " " <<  vct_c.back() << std::endl;
 
-	try {
-		vct.at(10) = 42;
-	}
-	catch (std::out_of_range &e) {
-		std::cout << "Catch out_of_range exception!" << std::endl;
-	}
-	catch (std::exception &e) {
-		std::cout << "Catch exception: " << e.what() << std::endl;
-	}
-	return (0);
-}
+
 int main(void)
 {
-	ft::vector<int> aa(50, 2);
+	ft::vector<int> aa(5, 20);
 
-	std::cout << *(aa.begin()) << std::endl;
-
+	aa.erase (aa.begin()+2);
+	ft::vector<int>::iterator aa2 = aa.begin();
+	for(int i = 0 ; i < 5; i++)
+	{
+		std::cout << *aa2 << std::endl;
+		aa2++;
+	}
 	return(0);
 }
