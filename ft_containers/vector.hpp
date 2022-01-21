@@ -525,6 +525,7 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::erase (iterator position)
 	T* tmp = _array;
 	iterator result = position;
 	int erase_later_flag = 0;
+	size_t idx = 0;
 	for(size_t i = 0; i < _size; i++)
 	{
 		if(erase_later_flag == 1) //지우고 나서 동작
@@ -537,10 +538,11 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::erase (iterator position)
 			_alloc.destroy(_array + i);
 			erase_later_flag = 1;
 			_size--;
+			idx = i;
 		}
 		tmp++;
 	}
-	return result;
+	return (result + idx);
 }
 template <typename T, class Alloc>
 typename vector<T, Alloc>::iterator vector<T, Alloc>::erase (iterator first, iterator last)
@@ -549,6 +551,7 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::erase (iterator first, ite
 	difference_type length = last - first;
 	iterator result = first; // 이방법 말고 있을듯 
 	int erase_later_flag = 0;
+	size_t idx = 0;
 	if(length > 0)
 	{
 		for(size_t i = 0; i < _size; i++)
@@ -564,11 +567,12 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::erase (iterator first, ite
 					_alloc.destroy(first);
 				erase_later_flag = 1;
 				_size = _size - length;
+				idx = i;
 			}
 			tmp++;
 		}
 	}
-	return result;
+	return (result + idx);
 }
 
 
