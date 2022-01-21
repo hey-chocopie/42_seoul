@@ -29,14 +29,17 @@ void reconfirm(void)
 
 int main(void)
 {
-	ft::vector<int> aa(5, 20);
-
-	aa.erase (aa.begin()+2);
-	ft::vector<int>::iterator aa2 = aa.begin();
-	for(int i = 0 ; i < 5; i++)
-	{
-		std::cout << *aa2 << std::endl;
-		aa2++;
-	}
+	ft::vector<int> ab(5);
+	ft::vector<int>::const_iterator it = ab.begin();
+//
+//	ft::vector<int> aa(5, 20);
+//
+//	aa.erase (aa.begin()+2);
+//	ft::vector<int>::iterator aa2 = aa.begin();
+//	for(int i = 0 ; i < 5; i++)
+//	{
+//		std::cout << *aa2 << std::endl;
+//		aa2++;
+//	}
 	return(0);
 }

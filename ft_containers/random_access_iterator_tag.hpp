@@ -78,26 +78,25 @@ namespace ft
 		typedef typename iterator::pointer               pointer;
 		typedef typename iterator::reference             reference;
 	};
-		
+
 	template<typename RI_Type>
 	struct iterator_traits<RI_Type*>
 	{
-		typedef RI_Type								value_type;
+		typedef RI_Type									value_type;
 		typedef RI_Type*								pointer;
 		typedef RI_Type&								reference;
-		typedef	ptrdiff_t						difference_type;
-		typedef random_access_iterator_tag		iterator_category;
-
+		typedef	ptrdiff_t								difference_type;
+		typedef random_access_iterator_tag				iterator_category;
 	};
 
 	template<typename T>
 	struct iterator_traits<T *const>
 	{
-		typedef T								value_type;
-		typedef const T*						pointer;
-		typedef const T&						reference;
-		typedef	ptrdiff_t						difference_type;
-		typedef random_access_iterator_tag		iterator_category;
+		typedef T										value_type;
+		typedef const T*								pointer;
+		typedef const T&								reference;
+		typedef	ptrdiff_t								difference_type;
+		typedef random_access_iterator_tag				iterator_category;
 	};
 
 
@@ -115,56 +114,60 @@ namespace ft
 	}
 
 	//RI == Random iterator
-	template <typename RI_Type> class normal_iter : public iterator<std::random_access_iterator_tag, RI_Type >
+	template <typename RI_Type>
+	class normal_iter : public iterator<std::random_access_iterator_tag, RI_Type >
 	{
 	public:
 		RI_Type											*_ptr;
 
 		typedef RI_Type														iterator_type;
 		typedef typename iterator_traits<iterator_type*>::iterator_category	iterator_category;
-		typedef typename iterator_traits<iterator_type*>::value_type			value_type;
+		typedef typename iterator_traits<iterator_type*>::value_type		value_type;
 		typedef typename iterator_traits<iterator_type*>::difference_type	difference_type;
 		typedef typename iterator_traits<iterator_type*>::pointer			pointer;
 		typedef typename iterator_traits<iterator_type*>::reference			reference;
 
-	//======================construct	=======================
+		//======================construct	=======================
 		explicit normal_iter() : _ptr(0){};
 		explicit normal_iter(RI_Type *ptr) : _ptr(ptr){};
-		normal_iter(normal_iter<RI_Type>& rhd) : _ptr(rhd._ptr){};
-		normal_iter(const normal_iter<RI_Type> & rhd) : _ptr(rhd._ptr){};
+		normal_iter(normal_iter<RI_Type> &rhd) : _ptr(rhd._ptr){};
+		template<typename rhd_RI_type>
+		normal_iter(const normal_iter<rhd_RI_type> &rhd) : _ptr(rhd._ptr){};
+		//설명 : 처음에 템플릿없었음. 
+		//
 
-	//====================input_iterator_tag==================
-		bool operator==(const normal_iter &rhd) const; // a == b
-		bool operator!=(const normal_iter &rhd) const; // a != b
-		RI_Type& operator*() const; //&*a
-		RI_Type* operator->() const; // a->m
+		//====================input_iterator_tag==================
+		bool				operator==(const normal_iter &rhd) const; // a == b
+		bool				operator!=(const normal_iter &rhd) const; // a != b
+		RI_Type&			operator*() const; //&*a
+		RI_Type*			operator->() const; // a->m
 
-	//====================bidirectional_iterator_tag=======================
-		normal_iter& operator--(); //--a;
-		normal_iter operator--(int);
-		normal_iter& operator=(const normal_iter &rhd) //b = a;
+		//====================bidirectional_iterator_tag=======================
+		normal_iter&		operator--(); //--a;
+		normal_iter			operator--(int);
+		normal_iter&		operator=(const normal_iter &rhd) //b = a;
 		{
 			if(this == &rhd)
 				return (*this);
 			this->_ptr = rhd._ptr;
 			return (*this);
 		}
-		normal_iter& operator++(); //++a;
-		normal_iter operator++(int); //a++
-	////==================normal_iter==============
-		normal_iter operator+(difference_type n) const; //a + n;
-		normal_iter operator-(difference_type n) const; // a - n;
-		difference_type operator-(const normal_iter &rhd) const; //a - b;
-		friend normal_iter operator+(difference_type n, const normal_iter &rhd) 
+		normal_iter&		operator++(); //++a;
+		normal_iter			operator++(int); //a++
+		////==================normal_iter==============
+		normal_iter			operator+(difference_type n) const; //a + n;
+		normal_iter			operator-(difference_type n) const; // a - n;
+		difference_type		operator-(const normal_iter &rhd) const; //a - b;
+		friend normal_iter	operator+(difference_type n, const normal_iter &rhd) 
 		//설명 : 전역으로 할려면 원래 선언하고 써야할텐데 왜 그냥 friend 만 쓰고 되지? friend 이해가 필요할듯. 
 		{
 			return rhd.operator+(n);
 		}
-		bool operator<(const normal_iter &rhd);
-		bool operator>(const normal_iter &rhd);
-		bool operator<=(const normal_iter &rhd);
-		bool operator>=(const normal_iter &rhd);
-		normal_iter& operator+=(difference_type n); //a + n;
+		bool				operator<(const normal_iter &rhd);
+		bool				operator>(const normal_iter &rhd);
+		bool				operator<=(const normal_iter &rhd);
+		bool				operator>=(const normal_iter &rhd);
+		normal_iter&		operator+=(difference_type n); //a + n;
 		normal_iter& operator-=(difference_type n); // a - n;
 		RI_Type operator[](const difference_type n) const;
 	};
@@ -276,6 +279,38 @@ namespace ft
 	{
 		return (*(this->_ptr + n));
 	}
+
+//	// const_iterator
+//	template <typename RI_Type>
+//	class const_iterator : public iterator<std::random_access_iterator_tag, RI_Type > {
+//	protected:
+//	typedef RandIte<RI_Type> super;
+//	const_iterator(RI_Type *src) : RandIte<RI_Type>(src) {};
+//	public:
+//	const_iterator(void) : RandIte<RI_Type>() {};
+//	const_iterator(const RandIte<RI_Type> &src) : RandIte<RI_Type>(src) {};
+//
+//	typedef const &		reference;
+//	typedef const value_type*		pointer;
+//
+//	reference			operator*(void) const;
+//	pointer				operator->(void) const;
+//	const_iterator		&operator+=(difference_type n);
+//	const_iterator		&operator-=(difference_type n);
+//	reference			operator[](difference_type n) const;
+//
+//	difference_type		operator-(const RandIte<value_type> &n) const { return super::operator-(n); };
+//	const_iterator		operator-(difference_type n) const { return super::operator-(n); };
+//	const_iterator		operator+(difference_type n) const { return super::operator+(n); };
+//	friend const_iterator	operator+(difference_type n, const const_iterator &rhs) { return rhs.operator+(n); };
+//
+//	const_iterator		&operator++(void) { super::operator++(); return *this; };
+//	const_iterator		operator++(int) { return super::operator++(0); };
+//	const_iterator		&operator--(void) { super::operator--(); return *this; };
+//	const_iterator		operator--(int) { return super::operator--(0); };
+//
+//	friend class vector;
+//	};
 
 	// reverse iterator
 	template<class Iterator, typename RI_Type>

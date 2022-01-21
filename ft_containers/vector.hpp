@@ -42,6 +42,8 @@ namespace ft
 		typedef reverse_iterator_tag<iterator, value_type>					reverse_iterator;
 		typedef reverse_iterator_tag<const_iterator, const value_type>		const_reverse_iterator;
 
+
+
 		//===========================construct=======================
 		//default (1) 설명 : explicit는 원치않는 형변환 방지
 		explicit vector(const allocator_type& alloc = allocator_type());
@@ -154,7 +156,7 @@ namespace ft
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::iterator					vector<T, Alloc>::begin()
 	{
-		return (iterator(_array));
+		return (normal_iter<T>(_array));
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::const_iterator			vector<T, Alloc>::begin() const
@@ -466,7 +468,7 @@ namespace ft
 				_alloc.construct(tmp + i - 1, *(tmp + i));
 				_alloc.destroy(tmp + i);
 			}
-			if(tmp == position._ptr)
+			else if(tmp == position._ptr)
 			{
 				_alloc.destroy(_array + i);
 				erase_later_flag = 1;
@@ -495,10 +497,10 @@ namespace ft
 					_alloc.construct(tmp + i - 1, *(tmp + i + length));
 					_alloc.destroy(tmp + i + length);
 				}
-				if(tmp == first._ptr)
+				else if(tmp == first._ptr)
 				{
-					for(; first != last; first++)
-						_alloc.destroy(first);
+					for(int j = 0; first != last; first++, j++)
+						_alloc.destroy(_array + i + j);
 					erase_later_flag = 1;
 					_size = _size - length;
 					idx = i;
