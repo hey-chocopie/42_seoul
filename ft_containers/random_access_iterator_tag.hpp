@@ -130,12 +130,10 @@ namespace ft
 		//======================construct	=======================
 		explicit normal_iter() : _ptr(0){};
 		explicit normal_iter(RI_Type *ptr) : _ptr(ptr){};
-		normal_iter(normal_iter<RI_Type> &rhd) : _ptr(rhd._ptr){};
+		//normal_iter(normal_iter<RI_Type> &rhd) : _ptr(rhd._ptr){};
 		template<typename rhd_RI_type>
 		normal_iter(const normal_iter<rhd_RI_type> &rhd) : _ptr(rhd._ptr){};
 		//설명 : 처음에 템플릿없었음. 
-		//
-
 		//====================input_iterator_tag==================
 		bool				operator==(const normal_iter &rhd) const; // a == b
 		bool				operator!=(const normal_iter &rhd) const; // a != b
@@ -169,7 +167,7 @@ namespace ft
 		bool				operator>=(const normal_iter &rhd);
 		normal_iter&		operator+=(difference_type n); //a + n;
 		normal_iter& operator-=(difference_type n); // a - n;
-		RI_Type operator[](const difference_type n) const;
+		RI_Type& operator[](const difference_type n) const;
 	};
 
 
@@ -275,7 +273,7 @@ namespace ft
 		return (*this);
 	}
 	template <typename RI_Type>
-	RI_Type normal_iter<RI_Type>::operator[](const difference_type n) const
+	RI_Type& normal_iter<RI_Type>::operator[](const difference_type n) const
 	{
 		return (*(this->_ptr + n));
 	}
@@ -318,11 +316,11 @@ namespace ft
 	{
 	public:
 		typedef RI_Type														iterator_type;
-		typedef typename iterator_traits<iterator_type>::iterator_category	iterator_category;
-		typedef typename iterator_traits<iterator_type>::value_type			value_type;
-		typedef typename iterator_traits<iterator_type>::difference_type	difference_type;
-		typedef typename iterator_traits<iterator_type>::pointer			pointer;
-		typedef typename iterator_traits<iterator_type>::reference			reference;
+		typedef typename iterator_traits<iterator_type*>::iterator_category	iterator_category;
+		typedef typename iterator_traits<iterator_type*>::value_type			value_type;
+		typedef typename iterator_traits<iterator_type*>::difference_type	difference_type;
+		typedef typename iterator_traits<iterator_type*>::pointer			pointer;
+		typedef typename iterator_traits<iterator_type*>::reference			reference;
 
 	private:
 		iterator_type origin_iter;
@@ -371,7 +369,7 @@ namespace ft
 		}
 		pointer operator->() const { return &(operator*()); }
 		reference operator[](difference_type n) const {
-		return (this->base()[-n - 1]);
+		return (this->_arrau[-n - 1]);
 		}
 	};
 }

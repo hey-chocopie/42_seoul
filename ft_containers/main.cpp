@@ -29,8 +29,15 @@ void reconfirm(void)
 
 int main(void)
 {
-	ft::vector<int> ab(5);
-	ft::vector<int>::const_iterator it = ab.begin();
+//	ft::vector<int> ab(5);
+//	ft::vector<int>::const_iterator it = ab.begin();
+
+  ft::vector<int> vct(5);
+  ft::vector<int>::iterator it(vct.begin());
+  ft::vector<int>::const_iterator ite(vct.end());
+
+  for (int i = 1; it != ite; ++i)
+     *it++ = i;
 //
 //	ft::vector<int> aa(5, 20);
 //

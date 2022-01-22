@@ -55,8 +55,14 @@ namespace ft
 				const allocator_type& alloc = allocator_type(), 
 				typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = nullptr);
 		//copy (4)
-		vector (const vector& x);
+		vector (vector const& x);
 		vector& operator= (const vector& rhd); 			
+
+//      explicit vector(const allocator_type& alloc = allocator_type())
+//      explicit vector(size_type size, const value_type& val = value_type(),
+//      vector(InputIterator first, InputIterator last,
+//      vector(vector const& v)
+//
 
 		//===========================iterator=======================
 		iterator					begin();
@@ -146,7 +152,7 @@ namespace ft
 		this->assign(first, last);
 	} 
 	template <typename T, class Alloc>
-	vector<T, Alloc>::vector (const vector& x) : _array(0)  
+	vector<T, Alloc>::vector (vector const& x) : _array(0)  
 	{
 		*this = x;
 	}
@@ -351,8 +357,7 @@ namespace ft
 	{
 		if(_size + 1 > _capacity)
 		{
-			_capacity = increase_capacity(_size, 1, _capacity);
-			reserve(_capacity);
+			reserve(increase_capacity(_size, 1, _capacity));
 		}
 		_alloc.construct(_array + _size, val);
 		_size++;
@@ -456,59 +461,53 @@ namespace ft
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::iterator	vector<T, Alloc>::erase(iterator position)
 	{
-		int										erase_later_flag = 0;
 		size_t									idx = 0;
 
 		T* tmp = _array;
-		iterator result = position;
 		for(size_t i = 0; i < _size; i++)
 		{
-			if(erase_later_flag == 1) //지우고 나서 동작
+			if(tmp == position._ptr)
 			{
-				_alloc.construct(tmp + i - 1, *(tmp + i));
-				_alloc.destroy(tmp + i);
-			}
-			else if(tmp == position._ptr)
-			{
-				_alloc.destroy(_array + i);
-				erase_later_flag = 1;
-				_size--;
 				idx = i;
+				_alloc.destroy(_array + i);
+				for(; i < _size; i++)
+				{
+					_alloc.construct(_array + i, *(_array + i + 1));
+					_alloc.destroy(tmp + i);
+				}
+				_size--;
 			}
 			tmp++;
 		}
-		return (result + idx);
+		return (iterator(_array + idx));
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last)
 	{
-		int										erase_later_flag = 0;
 		size_t									idx = 0;
 
 		T* tmp = _array;
 		difference_type length = last - first;
-		iterator result = first; // 이방법 말고 있을듯 
 		if(length > 0)
 		{
 			for(size_t i = 0; i < _size; i++)
 			{
-				if(erase_later_flag == 1) //지우고 나서 동작
+				if(tmp == first._ptr)
 				{
-					_alloc.construct(tmp + i - 1, *(tmp + i + length));
-					_alloc.destroy(tmp + i + length);
-				}
-				else if(tmp == first._ptr)
-				{
+					idx = i;
 					for(int j = 0; first != last; first++, j++)
 						_alloc.destroy(_array + i + j);
-					erase_later_flag = 1;
+					for(; i < _size - length; i++)
+					{
+						_alloc.construct(_array + i, *(_array + i + length));
+						_alloc.destroy(_array + i + length);
+					}	
 					_size = _size - length;
-					idx = i;
 				}
 				tmp++;
 			}
 		}
-		return (result + idx);
+		return iterator(_array + idx);
 	}
 	template <typename T, class Alloc>
 	void									vector<T, Alloc>::clear()
