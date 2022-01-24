@@ -162,7 +162,7 @@ namespace ft
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::iterator					vector<T, Alloc>::begin()
 	{
-		return (normal_iter<T>(_array));
+		return ((_array));
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::const_iterator			vector<T, Alloc>::begin() const
@@ -172,12 +172,14 @@ namespace ft
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::iterator					vector<T, Alloc>::end()
 	{
-		return (iterator(_array + _size));
+		std::cout << "1" <<std::endl;
+		return ((_array + _size));
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::const_iterator			vector<T, Alloc>::end() const
 	{
-		return (const_iterator(_array + _size));
+		std::cout << "2" <<std::endl;
+		return ((_array + _size));
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::reverse_iterator			rbegin()

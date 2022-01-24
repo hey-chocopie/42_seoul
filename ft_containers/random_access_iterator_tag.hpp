@@ -118,21 +118,24 @@ namespace ft
 	class normal_iter : public iterator<std::random_access_iterator_tag, RI_Type >
 	{
 	public:
-		RI_Type											*_ptr;
 
 		typedef RI_Type														iterator_type;
 		typedef typename iterator_traits<iterator_type*>::iterator_category	iterator_category;
 		typedef typename iterator_traits<iterator_type*>::value_type		value_type;
 		typedef typename iterator_traits<iterator_type*>::difference_type	difference_type;
 		typedef typename iterator_traits<iterator_type*>::pointer			pointer;
+		RI_Type*										_ptr;
 		typedef typename iterator_traits<iterator_type*>::reference			reference;
 
 		//======================construct	=======================
-		explicit normal_iter() : _ptr(0){};
-		explicit normal_iter(RI_Type *ptr) : _ptr(ptr){};
+		normal_iter() : _ptr(0){};
+		normal_iter(RI_Type *ptr) : _ptr(ptr){};
+//		random_access_iterator(pointer elem) : _elem(elem) {}
+
+
 		//normal_iter(normal_iter<RI_Type> &rhd) : _ptr(rhd._ptr){};
-		template<typename rhd_RI_type>
-		normal_iter(const normal_iter<rhd_RI_type> &rhd) : _ptr(rhd._ptr){};
+		//template<typename rhd_RI_type>
+		normal_iter(const normal_iter &rhd) : _ptr(rhd._ptr){};
 		//설명 : 처음에 템플릿없었음. 
 		//====================input_iterator_tag==================
 		bool				operator==(const normal_iter &rhd) const; // a == b
@@ -180,6 +183,7 @@ namespace ft
 		return (this->_ptr == rhd._ptr);
 	}
 	template <typename RI_Type>
+//		template<typename U>
 	bool normal_iter<RI_Type>::operator!=(const normal_iter &rhd) const
 	{
 		return (this->_ptr != rhd._ptr);
