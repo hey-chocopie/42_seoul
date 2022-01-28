@@ -128,14 +128,18 @@ namespace ft
 		typedef typename iterator_traits<iterator_type*>::reference			reference;
 
 		//======================construct	=======================
-		normal_iter() : _ptr(0){};
-		normal_iter(RI_Type *ptr) : _ptr(ptr){};
-//		random_access_iterator(pointer elem) : _elem(elem) {}
+		normal_iter() : _ptr(0){std::cout << " caaaaaaaaaa" << std::endl;};
+		
+		//random_access_iterator(pointer elem) : _elem(elem) {}
+		normal_iter(RI_Type *ptr) : _ptr(ptr){std::cout << "cbbbbbbbbbbb" << std::endl;};
+		//normal_iter(pointer ptr) : _ptr(ptr) {}
 
 
 		//normal_iter(normal_iter<RI_Type> &rhd) : _ptr(rhd._ptr){};
-		//template<typename rhd_RI_type>
-		normal_iter(const normal_iter &rhd) : _ptr(rhd._ptr){};
+		normal_iter(const normal_iter &rhd) : _ptr(rhd._ptr){std::cout << "ccccccccccc" << std::endl;};
+		
+		//random_access_iterator(const random_access_iterator& ri) : _elem(ri._elem) {}
+
 		//설명 : 처음에 템플릿없었음. 
 		//====================input_iterator_tag==================
 		bool				operator==(const normal_iter &rhd) const; // a == b

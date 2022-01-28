@@ -33,7 +33,7 @@ namespace ft
 		typedef size_t														size_type;
 
 		allocator_type														_alloc;
-		T*																	_array;
+		value_type*																	_array;
 		size_type															_size;
 		size_type															_capacity;
 
@@ -109,8 +109,56 @@ namespace ft
 		void						insert(iterator position, InputIterator first, InputIterator last,
 									typename enable_if<!is_integral<InputIterator>::value, 
 									InputIterator>::type* = nullptr);
-		iterator					erase(iterator position);
-		iterator					erase(iterator first, iterator last);
+		iterator					erase(iterator position)
+		{
+		size_t									idx = 0;
+
+		T* tmp = _array;
+		for(size_t i = 0; i < _size; i++)
+		{
+			if(tmp == position._ptr)
+			{
+				idx = i;
+				_alloc.destroy(_array + i);
+				for(; i < _size; i++)
+				{
+					_alloc.construct(_array + i, *(_array + i + 1));
+					_alloc.destroy(tmp + i);
+				}
+				_size--;
+			}
+			tmp++;
+		}
+		std::cout << "cute"<<std::endl;
+		return (iterator(_array + idx));
+		}
+		iterator					erase(iterator first, iterator last)
+		{
+		size_t									idx = 0;
+
+		T* tmp = _array;
+		difference_type length = last - first;
+		if(length > 0)
+		{
+			for(size_t i = 0; i < _size; i++)
+			{
+				if(tmp == first._ptr)
+				{
+					idx = i;
+					for(int j = 0; first != last; first++, j++)
+						_alloc.destroy(_array + i + j);
+					for(; i < _size - length; i++)
+					{
+						_alloc.construct(_array + i, *(_array + i + length));
+						_alloc.destroy(_array + i + length);
+					}	
+					_size = _size - length;
+				}
+				tmp++;
+			}
+		}
+		return iterator(_array + idx);
+		}
 		void						clear();
 		void						swap(vector& x);
 	};
@@ -167,19 +215,17 @@ namespace ft
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::const_iterator			vector<T, Alloc>::begin() const
 	{
-		return (const_iterator(_array));
+		return (_array);
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::iterator					vector<T, Alloc>::end()
 	{
-		std::cout << "1" <<std::endl;
-		return ((_array + _size));
+		return (_array + _size);
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::const_iterator			vector<T, Alloc>::end() const
 	{
-		std::cout << "2" <<std::endl;
-		return ((_array + _size));
+		return (_array + _size);
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::reverse_iterator			rbegin()
@@ -460,57 +506,57 @@ namespace ft
 		_array = tmp;
 		_size = _size + cnt;
 	}
-	template <typename T, class Alloc>
-	typename vector<T, Alloc>::iterator	vector<T, Alloc>::erase(iterator position)
-	{
-		size_t									idx = 0;
-
-		T* tmp = _array;
-		for(size_t i = 0; i < _size; i++)
-		{
-			if(tmp == position._ptr)
-			{
-				idx = i;
-				_alloc.destroy(_array + i);
-				for(; i < _size; i++)
-				{
-					_alloc.construct(_array + i, *(_array + i + 1));
-					_alloc.destroy(tmp + i);
-				}
-				_size--;
-			}
-			tmp++;
-		}
-		return (iterator(_array + idx));
-	}
-	template <typename T, class Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last)
-	{
-		size_t									idx = 0;
-
-		T* tmp = _array;
-		difference_type length = last - first;
-		if(length > 0)
-		{
-			for(size_t i = 0; i < _size; i++)
-			{
-				if(tmp == first._ptr)
-				{
-					idx = i;
-					for(int j = 0; first != last; first++, j++)
-						_alloc.destroy(_array + i + j);
-					for(; i < _size - length; i++)
-					{
-						_alloc.construct(_array + i, *(_array + i + length));
-						_alloc.destroy(_array + i + length);
-					}	
-					_size = _size - length;
-				}
-				tmp++;
-			}
-		}
-		return iterator(_array + idx);
-	}
+//	template <typename T, class Alloc>
+//	typename vector<T, Alloc>::iterator	vector<T, Alloc>::erase(iterator position)
+//	{
+//		size_t									idx = 0;
+//
+//		T* tmp = _array;
+//		for(size_t i = 0; i < _size; i++)
+//		{
+//			if(tmp == position._ptr)
+//			{
+//				idx = i;
+//				_alloc.destroy(_array + i);
+//				for(; i < _size; i++)
+//				{
+//					_alloc.construct(_array + i, *(_array + i + 1));
+//					_alloc.destroy(tmp + i);
+//				}
+//				_size--;
+//			}
+//			tmp++;
+//		}
+//		return (iterator(_array + idx));
+//	}
+//	template <typename T, class Alloc>
+//	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last)
+//	{
+//		size_t									idx = 0;
+//
+//		T* tmp = _array;
+//		difference_type length = last - first;
+//		if(length > 0)
+//		{
+//			for(size_t i = 0; i < _size; i++)
+//			{
+//				if(tmp == first._ptr)
+//				{
+//					idx = i;
+//					for(int j = 0; first != last; first++, j++)
+//						_alloc.destroy(_array + i + j);
+//					for(; i < _size - length; i++)
+//					{
+//						_alloc.construct(_array + i, *(_array + i + length));
+//						_alloc.destroy(_array + i + length);
+//					}	
+//					_size = _size - length;
+//				}
+//				tmp++;
+//			}
+//		}
+//		return iterator(_array + idx);
+//	}
 	template <typename T, class Alloc>
 	void									vector<T, Alloc>::clear()
 	{
