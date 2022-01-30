@@ -399,6 +399,13 @@ namespace ft
 		{
 			return (this->_ptr);
 		}
+		//설명 : operator= c+11에 있는데 사용하는 테스트기에 테스트가 있어서 만듬
+		template <class Iter>
+		reverse_iterator_tag& operator= (const reverse_iterator_tag<Iter>& rev_it)
+		{
+			this->_ptr = rev_it.base();
+			return (*this);
+		}
 	};
 
 	//===========================Non-member function overloads======================
@@ -433,19 +440,19 @@ template <class Iterator1, class Iterator2>
 template <class Iterator1, class Iterator2>
   bool operator<  (const reverse_iterator_tag<Iterator1>& lhs,
                    const reverse_iterator_tag<Iterator2>& rhs)
-	{ return (lhs.base() < rhs.base()); }
+	{ return (lhs.base() > rhs.base()); }
 template <class Iterator1, class Iterator2>
   bool operator<= (const reverse_iterator_tag<Iterator1>& lhs,
                    const reverse_iterator_tag<Iterator2>& rhs)
-	{ return (lhs.base() <= rhs.base()); }
+	{ return (lhs.base() >= rhs.base()); }
 template <class Iterator1, class Iterator2>
   bool operator>  (const reverse_iterator_tag<Iterator1>& lhs,
                    const reverse_iterator_tag<Iterator2>& rhs)
-	{ return (lhs.base() > rhs.base()); }
+	{ return (lhs.base() < rhs.base()); }
 template <class Iterator1, class Iterator2>
   bool operator>= (const reverse_iterator_tag<Iterator1>& lhs,
                    const reverse_iterator_tag<Iterator2>& rhs)
-	{ return (lhs.base() >= rhs.base()); }
+	{ return (lhs.base() <= rhs.base()); }
 
 
 

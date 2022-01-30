@@ -214,11 +214,11 @@ namespace ft
 			_size = n;
 		else if(n > _size)
 		{
-			if(n >_capacity)
+			if(n > _capacity)
 			{
-				for(; _size < n; _size++)
+				for(; _size < n; )
 					push_back(val);
-				_capacity = n;
+				//설명 : push_back 안에 _size++있음.
 			}
 			else if(n <= _capacity)
 			{
@@ -236,7 +236,7 @@ namespace ft
 	template <typename T, class Alloc>
 	bool												vector<T, Alloc>::empty() const
 	{
-		return (_size != 0 ? true : false);
+		return (_size == 0 ? true : false);
 	}			
 	template <typename T, class Alloc>
 	void												vector<T, Alloc>::reserve(size_type n)
