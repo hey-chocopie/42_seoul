@@ -128,22 +128,17 @@ namespace ft
 		typedef typename iterator_traits<iterator_type*>::reference			reference;
 
 		//======================construct	=======================
-		normal_iter() : _ptr(0){std::cout << " caaaaaaaaaa" << std::endl;};
+		normal_iter() : _ptr(0){};
 		
-		//random_access_iterator(pointer elem) : _elem(elem) {}
-		normal_iter(RI_Type *ptr) : _ptr(ptr){std::cout << "cbbbbbbbbbbb" << std::endl;};
-		//normal_iter(pointer ptr) : _ptr(ptr) {}
-
-
-		//normal_iter(normal_iter<RI_Type> &rhd) : _ptr(rhd._ptr){};
-		normal_iter(const normal_iter &rhd) : _ptr(rhd._ptr){std::cout << "ccccccccccc" << std::endl;};
+		normal_iter(RI_Type *ptr) : _ptr(ptr){};
+		normal_iter(const normal_iter &rhd) : _ptr(rhd._ptr){};
 		
-		//random_access_iterator(const random_access_iterator& ri) : _elem(ri._elem) {}
-
-		//설명 : 처음에 템플릿없었음. 
+		//설명 : 
 		//====================input_iterator_tag==================
-		bool				operator==(const normal_iter &rhd) const; // a == b
-		bool				operator!=(const normal_iter &rhd) const; // a != b
+		template<typename U>
+		bool				operator==(const normal_iter<U> &rhd) const; // a == b
+		template<typename U>
+		bool				operator!=(const normal_iter<U> &rhd) const; // a != b
 		RI_Type&			operator*() const; //&*a
 		RI_Type*			operator->() const; // a->m
 
@@ -162,19 +157,29 @@ namespace ft
 		////==================normal_iter==============
 		normal_iter			operator+(difference_type n) const; //a + n;
 		normal_iter			operator-(difference_type n) const; // a - n;
-		difference_type		operator-(const normal_iter &rhd) const; //a - b;
+		template<typename U>
+		difference_type		operator-(const normal_iter<U> &rhd) const; //a - b;
 		friend normal_iter	operator+(difference_type n, const normal_iter &rhd) 
 		//설명 : 전역으로 할려면 원래 선언하고 써야할텐데 왜 그냥 friend 만 쓰고 되지? friend 이해가 필요할듯. 
 		{
 			return rhd.operator+(n);
 		}
-		bool				operator<(const normal_iter &rhd);
-		bool				operator>(const normal_iter &rhd);
-		bool				operator<=(const normal_iter &rhd);
-		bool				operator>=(const normal_iter &rhd);
+		template<typename U>
+		bool				operator<(const normal_iter<U> &rhd) const;
+		template<typename U>
+		bool				operator>(const normal_iter<U> &rhd) const;
+		template<typename U>
+		bool				operator<=(const normal_iter<U> &rhd) const;
+		template<typename U>
+		bool				operator>=(const normal_iter<U> &rhd) const;
 		normal_iter&		operator+=(difference_type n); //a + n;
 		normal_iter& operator-=(difference_type n); // a - n;
 		RI_Type& operator[](const difference_type n) const;
+
+		//변환 연산자 개념 공부!!!
+		operator normal_iter<const RI_Type> () const {
+         return (normal_iter<const RI_Type>(this->_ptr));
+       }
 	};
 
 
@@ -182,13 +187,14 @@ namespace ft
 	//=============================input_iter==================================
 	//RI == Random iterator
 	template <typename RI_Type> 
-	bool normal_iter<RI_Type>::operator==(const normal_iter &rhd) const
+	template<typename U>
+	bool normal_iter<RI_Type>::operator==(const normal_iter<U> &rhd) const
 	{
 		return (this->_ptr == rhd._ptr);
 	}
 	template <typename RI_Type>
-//		template<typename U>
-	bool normal_iter<RI_Type>::operator!=(const normal_iter &rhd) const
+	template<typename U>
+	bool normal_iter<RI_Type>::operator!=(const normal_iter<U> &rhd) const
 	{
 		return (this->_ptr != rhd._ptr);
 	}
@@ -243,28 +249,33 @@ namespace ft
 		return normal_iter<RI_Type> (this->_ptr - n);
 	}
 	template <typename RI_Type>
-	typename iterator_traits<RI_Type*>::difference_type normal_iter<RI_Type>::operator-(const normal_iter &rhd) const 
+	template<typename U>
+	typename iterator_traits<RI_Type*>::difference_type normal_iter<RI_Type>::operator-(const normal_iter<U> &rhd) const 
 	// 보류 : a - b; 리턴값 ptrdiff_t 이거 왜 안됨.?
 	{
 		return (this->_ptr - rhd._ptr);
 	}
 	template <typename RI_Type>
-	bool normal_iter<RI_Type>::operator<(const normal_iter &rhd)
+	template<typename U>
+	bool normal_iter<RI_Type>::operator<(const normal_iter<U> &rhd) const
 	{
 		return (this->_ptr < rhd._ptr);
 	}
 	template <typename RI_Type>
-	bool normal_iter<RI_Type>::operator>(const normal_iter &rhd)
+	template<typename U>
+	bool normal_iter<RI_Type>::operator>(const normal_iter<U> &rhd) const
 	{
 		return (this->_ptr > rhd._ptr);
 	}
 	template <typename RI_Type>
-	bool normal_iter<RI_Type>::operator<=(const normal_iter &rhd)
+	template<typename U>
+	bool normal_iter<RI_Type>::operator<=(const normal_iter<U> &rhd) const
 	{
 		return (this->_ptr <= rhd._ptr);
 	}
 	template <typename RI_Type>
-	bool normal_iter<RI_Type>::operator>=(const normal_iter &rhd)
+	template<typename U>
+	bool normal_iter<RI_Type>::operator>=(const normal_iter<U> &rhd) const
 	{
 		return (this->_ptr >= rhd._ptr);
 	}
@@ -319,35 +330,37 @@ namespace ft
 //	};
 
 	// reverse iterator
-	template<class Iterator, typename RI_Type>
+	template<class Iterator>
 	class reverse_iterator_tag  
 	{
 	public:
-		typedef RI_Type														iterator_type;
-		typedef typename iterator_traits<iterator_type*>::iterator_category	iterator_category;
-		typedef typename iterator_traits<iterator_type*>::value_type			value_type;
-		typedef typename iterator_traits<iterator_type*>::difference_type	difference_type;
-		typedef typename iterator_traits<iterator_type*>::pointer			pointer;
-		typedef typename iterator_traits<iterator_type*>::reference			reference;
+		typedef Iterator											iterator_type;
+		typedef typename iterator_traits<Iterator>::iterator_category		iterator_category;
+		typedef typename iterator_traits<Iterator>::value_type				value_type;
+		typedef typename iterator_traits<Iterator>::difference_type			difference_type;
+		typedef typename iterator_traits<Iterator>::pointer					pointer;
+		typedef typename iterator_traits<Iterator>::reference				reference;
 
 	private:
-		iterator_type origin_iter;
+		iterator_type _ptr;
 	public:
-		reverse_iterator_tag() : origin_iter() {};
-		explicit reverse_iterator_tag(iterator_type it) : origin_iter(it) {};
+		reverse_iterator_tag() : _ptr() {};
+		reverse_iterator_tag(iterator_type ptr) : _ptr(ptr) {};
 		template<class iter>
-		reverse_iterator_tag(const reverse_iterator_tag<iterator_type, RI_Type>& rev_it) : origin_iter(rev_it.origin_iter) {};
+		reverse_iterator_tag(const reverse_iterator_tag<iter>& rev_it) : _ptr(rev_it.base()) {};
 		virtual ~reverse_iterator_tag() {}
 
-		reference operator*() const {
-		iterator_type tmp = origin_iter;
+		reference operator*() const 
+		{
+		iterator_type tmp = _ptr;
 		return (*(--tmp));
 		}
+
 		reverse_iterator_tag operator+(difference_type n) const {
-		return (reverse_iterator(origin_iter - n));
+		return (reverse_iterator_tag(_ptr - n));
 		}
 		reverse_iterator_tag& operator++() {
-		--origin_iter;
+		--_ptr;
 		return (*this);
 		}
 		reverse_iterator_tag operator++(int) {
@@ -356,30 +369,86 @@ namespace ft
 		return(rhd);
 		}
 		reverse_iterator_tag& operator+=(difference_type n) {
-		origin_iter -= n;
+		_ptr -= n;
 		return (*this);
 		}
 		reverse_iterator_tag operator-(difference_type n) const {
-		return (reverse_iterator(origin_iter + n));
+		return (reverse_iterator_tag(_ptr + n));
 		}
 		reverse_iterator_tag& operator--() {
-		++origin_iter;
+		++_ptr;
 		return (*this);
 		}
-		reverse_iterator_tag operator--(int) {
+		reverse_iterator_tag operator--(int) 
+		{
 		reverse_iterator_tag rhd = *this;
-		--(*this);
+		++(_ptr);
 		return (rhd);
 		}
+
 		reverse_iterator_tag& operator-=(difference_type n) {
-		origin_iter += n;
+		_ptr += n;
 		return (*this);
 		}
 		pointer operator->() const { return &(operator*()); }
-		reference operator[](difference_type n) const {
-		return (this->_arrau[-n - 1]);
+//		reference operator[](difference_type n) const {
+//		return (this->_arrau[-n - 1]);
+//		}
+		reference operator[](difference_type n) const { return *this->operator+(n); };
+		iterator_type base() const
+		{
+			return (this->_ptr);
 		}
 	};
+
+	//===========================Non-member function overloads======================
+	template <class Iterator>
+	reverse_iterator_tag<Iterator> operator+ (
+            typename reverse_iterator_tag<Iterator>::difference_type n,
+             const reverse_iterator_tag<Iterator>& rev_it)
+	{
+		return (reverse_iterator_tag<Iterator>(rev_it.base() - n)); //base 이름 바꾸자.
+	}
+	 
+	// 설명 : reverse_iterator - const_reverse_iterator
+	// 설명 : 이거 c+11기능인데, 테스트케이스에 있어서 그냥 해줬음.
+	// 설명 : c+98에는 left, right같은 타입만 받음.
+	template <class Iterator_left, class Iterator_right>
+	ptrdiff_t operator- (
+            const reverse_iterator_tag<Iterator_left>& lhs,
+             const reverse_iterator_tag<Iterator_right>& rhs)
+	{
+		return (rhs.base() - lhs.base()); //base 이름 바꾸자.
+	}
+
+template <class Iterator1, class Iterator2>
+  bool operator== (const reverse_iterator_tag<Iterator1>& lhs,
+                   const reverse_iterator_tag<Iterator2>& rhs)
+	{ return (lhs.base() == rhs.base()); }
+template <class Iterator1, class Iterator2>
+  bool operator!= (const reverse_iterator_tag<Iterator1>& lhs,
+                   const reverse_iterator_tag<Iterator2>& rhs)
+	{ return (lhs.base() != rhs.base()); }
+
+template <class Iterator1, class Iterator2>
+  bool operator<  (const reverse_iterator_tag<Iterator1>& lhs,
+                   const reverse_iterator_tag<Iterator2>& rhs)
+	{ return (lhs.base() < rhs.base()); }
+template <class Iterator1, class Iterator2>
+  bool operator<= (const reverse_iterator_tag<Iterator1>& lhs,
+                   const reverse_iterator_tag<Iterator2>& rhs)
+	{ return (lhs.base() <= rhs.base()); }
+template <class Iterator1, class Iterator2>
+  bool operator>  (const reverse_iterator_tag<Iterator1>& lhs,
+                   const reverse_iterator_tag<Iterator2>& rhs)
+	{ return (lhs.base() > rhs.base()); }
+template <class Iterator1, class Iterator2>
+  bool operator>= (const reverse_iterator_tag<Iterator1>& lhs,
+                   const reverse_iterator_tag<Iterator2>& rhs)
+	{ return (lhs.base() >= rhs.base()); }
+
+
+
 }
 
 #endif

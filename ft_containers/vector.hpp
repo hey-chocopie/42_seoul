@@ -3,6 +3,7 @@
 #include <memory>
 #include <iostream>
 #include <string>
+#include "./utility.hpp"
 #include "random_access_iterator_tag.hpp"
 
 size_t increase_capacity(size_t _size, size_t n, size_t _capacity)
@@ -39,10 +40,8 @@ namespace ft
 
 		typedef normal_iter<value_type>										iterator;
 		typedef normal_iter<const value_type>								const_iterator;
-		typedef reverse_iterator_tag<iterator, value_type>					reverse_iterator;
-		typedef reverse_iterator_tag<const_iterator, const value_type>		const_reverse_iterator;
-
-
+		typedef reverse_iterator_tag<iterator>					reverse_iterator;
+		typedef reverse_iterator_tag<const_iterator>		const_reverse_iterator;
 
 		//===========================construct=======================
 		//default (1) 설명 : explicit는 원치않는 형변환 방지
@@ -58,21 +57,15 @@ namespace ft
 		vector (vector const& x);
 		vector& operator= (const vector& rhd); 			
 
-//      explicit vector(const allocator_type& alloc = allocator_type())
-//      explicit vector(size_type size, const value_type& val = value_type(),
-//      vector(InputIterator first, InputIterator last,
-//      vector(vector const& v)
-//
-
 		//===========================iterator=======================
 		iterator					begin();
 		const_iterator				begin() const;
 		iterator					end();
 		const_iterator				end() const;
-		reverse_iterator			rbegin() const ;
-		const_reverse_iterator		rbegin();
-		reverse_iterator			rend() const;
-		const_reverse_iterator		rend();
+		reverse_iterator			rbegin();
+		const_reverse_iterator		rbegin() const;
+		reverse_iterator			rend();
+		const_reverse_iterator		rend() const;
 
 		//==========================Capacity=======================
 		size_type					size() const;
@@ -109,57 +102,12 @@ namespace ft
 		void						insert(iterator position, InputIterator first, InputIterator last,
 									typename enable_if<!is_integral<InputIterator>::value, 
 									InputIterator>::type* = nullptr);
-		iterator					erase(iterator position)
-		{
-		size_t									idx = 0;
-
-		T* tmp = _array;
-		for(size_t i = 0; i < _size; i++)
-		{
-			if(tmp == position._ptr)
-			{
-				idx = i;
-				_alloc.destroy(_array + i);
-				for(; i < _size; i++)
-				{
-					_alloc.construct(_array + i, *(_array + i + 1));
-					_alloc.destroy(tmp + i);
-				}
-				_size--;
-			}
-			tmp++;
-		}
-		std::cout << "cute"<<std::endl;
-		return (iterator(_array + idx));
-		}
-		iterator					erase(iterator first, iterator last)
-		{
-		size_t									idx = 0;
-
-		T* tmp = _array;
-		difference_type length = last - first;
-		if(length > 0)
-		{
-			for(size_t i = 0; i < _size; i++)
-			{
-				if(tmp == first._ptr)
-				{
-					idx = i;
-					for(int j = 0; first != last; first++, j++)
-						_alloc.destroy(_array + i + j);
-					for(; i < _size - length; i++)
-					{
-						_alloc.construct(_array + i, *(_array + i + length));
-						_alloc.destroy(_array + i + length);
-					}	
-					_size = _size - length;
-				}
-				tmp++;
-			}
-		}
-		return iterator(_array + idx);
-		}
+		iterator					erase(iterator position);
+		iterator					erase(iterator first, iterator last);
 		void						clear();
+
+		allocator_type get_allocator() const;
+
 		void						swap(vector& x);
 	};
 	
@@ -228,22 +176,22 @@ namespace ft
 		return (_array + _size);
 	}
 	template <typename T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator			rbegin()
+	typename vector<T, Alloc>::reverse_iterator			vector<T, Alloc>::rbegin()
 	{
 		return (reverse_iterator(vector<T, Alloc>::end()));
 	}
 	template <typename T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator	rbegin()
+	typename vector<T, Alloc>::const_reverse_iterator	vector<T, Alloc>::rbegin() const
 	{
 		return (const_reverse_iterator(vector<T, Alloc>::end()));
 	}
 	template <typename T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator			rend()
+	typename vector<T, Alloc>::reverse_iterator			vector<T, Alloc>::rend()
 	{
 		return (reverse_iterator(vector<T, Alloc>::begin()));
 	}
 	template <typename T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator	rend()
+	typename vector<T, Alloc>::const_reverse_iterator	vector<T, Alloc>::rend() const
 	{
 		return (const_reverse_iterator(vector<T, Alloc>::begin()));
 	}
@@ -277,6 +225,7 @@ namespace ft
 				for(; _size < n; _size++)
 					_array[_size] = val;
 			}
+			_size = n;
 		}
 	}
 	template <typename T, class Alloc>
@@ -506,57 +455,57 @@ namespace ft
 		_array = tmp;
 		_size = _size + cnt;
 	}
-//	template <typename T, class Alloc>
-//	typename vector<T, Alloc>::iterator	vector<T, Alloc>::erase(iterator position)
-//	{
-//		size_t									idx = 0;
-//
-//		T* tmp = _array;
-//		for(size_t i = 0; i < _size; i++)
-//		{
-//			if(tmp == position._ptr)
-//			{
-//				idx = i;
-//				_alloc.destroy(_array + i);
-//				for(; i < _size; i++)
-//				{
-//					_alloc.construct(_array + i, *(_array + i + 1));
-//					_alloc.destroy(tmp + i);
-//				}
-//				_size--;
-//			}
-//			tmp++;
-//		}
-//		return (iterator(_array + idx));
-//	}
-//	template <typename T, class Alloc>
-//	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last)
-//	{
-//		size_t									idx = 0;
-//
-//		T* tmp = _array;
-//		difference_type length = last - first;
-//		if(length > 0)
-//		{
-//			for(size_t i = 0; i < _size; i++)
-//			{
-//				if(tmp == first._ptr)
-//				{
-//					idx = i;
-//					for(int j = 0; first != last; first++, j++)
-//						_alloc.destroy(_array + i + j);
-//					for(; i < _size - length; i++)
-//					{
-//						_alloc.construct(_array + i, *(_array + i + length));
-//						_alloc.destroy(_array + i + length);
-//					}	
-//					_size = _size - length;
-//				}
-//				tmp++;
-//			}
-//		}
-//		return iterator(_array + idx);
-//	}
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::iterator	vector<T, Alloc>::erase(iterator position)
+	{
+		size_t									idx = 0;
+
+		T* tmp = _array;
+		for(size_t i = 0; i < _size; i++)
+		{
+			if(tmp == position._ptr)
+			{
+				idx = i;
+				_alloc.destroy(_array + i);
+				for(; i < _size; i++)
+				{
+					_alloc.construct(_array + i, *(_array + i + 1));
+					_alloc.destroy(tmp + i);
+				}
+				_size--;
+			}
+			tmp++;
+		}
+		return (iterator(_array + idx));
+	}
+	template <typename T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last)
+	{
+		size_t									idx = 0;
+
+		T* tmp = _array;
+		difference_type length = last - first;
+		if(length > 0)
+		{
+			for(size_t i = 0; i < _size; i++)
+			{
+				if(tmp == first._ptr)
+				{
+					idx = i;
+					for(int j = 0; first != last; first++, j++)
+						_alloc.destroy(_array + i + j);
+					for(; i < _size - length; i++)
+					{
+						_alloc.construct(_array + i, *(_array + i + length));
+						_alloc.destroy(_array + i + length);
+					}	
+					_size = _size - length;
+				}
+				tmp++;
+			}
+		}
+		return iterator(_array + idx);
+	}
 	template <typename T, class Alloc>
 	void									vector<T, Alloc>::clear()
 	{
@@ -566,6 +515,12 @@ namespace ft
 		}
 		_size = 0;
 	}
+	template <typename T, class Alloc>
+	typename::ft::vector<T, Alloc>::allocator_type				vector<T, Alloc>::get_allocator() const
+	{
+		return (_alloc);
+	}
+
 	template <typename T, class Alloc>
 	void						vector<T, Alloc>::swap(vector& x)
 	{
@@ -584,6 +539,67 @@ namespace ft
 		x._size = tmp_size;
 		x._capacity = tmp_capacity;
 	}
+
+//	template <class T, class Alloc>
+//	bool equal_check (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) //==
+//	{
+//		if (lhs._size != rhs._size)
+//			return (false);
+//		for (size_t i = 0; i < lhs._size; i++)
+//			if (lhs._array[i] != rhs._array[i])
+//				return (false);
+//		return (true);
+//	}
+//
+//	template <class T, class Alloc>
+//	bool right_compare_check (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) //<
+//	{
+//		for (size_t i = 0; i < lhs._size && i < rhs._size; i++)
+//			if (lhs._array[i] < rhs._array[i])
+//				return (true);
+//			else if(lhs._array[i] > rhs._array[i])
+//				return (false);
+//		return ((lhs._size < rhs._size) ? true : false);
+//	}
+//	template <class T, class Alloc>
+//	bool left_compare_check (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) //>
+//	{
+//		for (size_t i = 0; i < lhs._size && i < rhs._size; i++)
+//			if (lhs._array[i] > rhs._array[i])
+//				return (true);
+//			else if(lhs._array[i] < rhs._array[i])
+//				return (false);
+//		return ((lhs._size > rhs._size) ? true : false);
+//	}
+//	template <class T, class Alloc, typename Func>
+//	bool all_check (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs, Func ((left_or_right))) //<=
+//	{
+//		if ( equal_check(lhs, rhs) == 1 )
+//			return ( true );
+//		if ( left_or_right(lhs, rhs) == 1 )
+//			return ( true );
+//		return (false);
+//	 }
+
+	//=======================Non-member function overloads=====================
+	template <class T, class Alloc>
+	bool operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{ return ( equal_check(lhs, rhs) ? 1 : 0); }
+	template <class T, class Alloc>
+	bool operator!= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{ return ( equal_check(lhs, rhs) ? 0 : 1); }
+	template <class T, class Alloc>
+	bool operator<	(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{ return ( right_compare_check(lhs, rhs) ?  1 : 0); }
+	template <class T, class Alloc>
+	bool operator<= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{ return ( all_check(lhs, rhs, right_compare_check<const ft::vector<T,Alloc>, const ft::vector<T,Alloc> >) ? 1 : 0); }
+	template <class T, class Alloc>
+	bool operator>  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{return ( ft::left_compare_check(lhs, rhs) ?  1 : 0); }
+	template <class T, class Alloc>
+	bool operator>= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{ return ( ft::all_check(lhs, rhs, ft::left_compare_check<const ft::vector<T,Alloc> , const ft::vector<T,Alloc> >) ? 1 : 0); }
 
 }
 
