@@ -2,6 +2,29 @@
 #define __UTILITY_HPP__
 namespace ft
 {
+	//=======================Mycustom_funtion=====================
+
+	size_t increase_capacity(size_t _size, size_t n, size_t _capacity)
+	{
+	    if(_capacity == 0)
+	        _capacity = 1;
+	    while(_size + n >= _capacity)
+	        _capacity = _capacity * 2;
+	    return _capacity;
+	}
+
+	template <typename size_type, typename value_type, typename Alloc>
+	void Array_clear_free(size_type &_size, size_type &_capacity, value_type* _array, Alloc _alloc)
+	{
+		if (_array)
+		{
+			for (size_t i = 0; i < _size; ++i)
+				_alloc.destroy(_array + i);
+			_alloc.deallocate(_array, _capacity);
+			_array = 0;
+		}
+	}
+
 	template <class L_vector, class R_vector>
 	bool equal_check(L_vector& lhs, R_vector& rhs) //==
 	{

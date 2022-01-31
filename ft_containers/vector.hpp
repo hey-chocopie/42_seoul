@@ -6,45 +6,33 @@
 #include "./utility.hpp"
 #include "random_access_iterator_tag.hpp"
 
-size_t increase_capacity(size_t _size, size_t n, size_t _capacity)
-{
-	if(_capacity == 0)
-		_capacity = 1;
-	while(_size + n >= _capacity)
-		_capacity = _capacity * 2;
-	return _capacity;
-}
-
 namespace ft
 {
 	template < class T, class Alloc = std::allocator<T> >
 	class vector{
-	private:
-		void Array_clear_free();
 	public:
 		//===========================Member types=======================
-		typedef T															value_type;		//T
-		typedef Alloc														allocator_type;
-		
-		typedef typename allocator_type::reference							reference;		//T&
-		typedef typename allocator_type::const_reference					const_reference;//const T&
-		typedef typename allocator_type::pointer							pointer;		//T*
-		typedef typename allocator_type::const_pointer						const_pointer;	//const T*
-		typedef ptrdiff_t													difference_type;
-		typedef size_t														size_type;
+		typedef T											value_type;		//T
+		typedef Alloc										allocator_type;
+		typedef typename allocator_type::reference			reference;		//T&
+		typedef typename allocator_type::const_reference	const_reference;//const T&
+		typedef typename allocator_type::pointer			pointer;		//T*
+		typedef typename allocator_type::const_pointer		const_pointer;	//const T*
+		typedef ptrdiff_t									difference_type;
+		typedef size_t										size_type;
 
-		allocator_type														_alloc;
-		value_type*																	_array;
-		size_type															_size;
-		size_type															_capacity;
+		allocator_type										_alloc;
+		value_type*											_array;
+		size_type											_size;
+		size_type											_capacity;
 
-		typedef normal_iter<value_type>										iterator;
-		typedef normal_iter<const value_type>								const_iterator;
-		typedef reverse_iterator_tag<iterator>					reverse_iterator;
+		typedef normal_iter<value_type>						iterator;
+		typedef normal_iter<const value_type>				const_iterator;
+		typedef reverse_iterator_tag<iterator>				reverse_iterator;
 		typedef reverse_iterator_tag<const_iterator>		const_reverse_iterator;
 
 		//===========================construct=======================
-		//default (1) 설명 : explicit는 원치않는 형변환 방지
+		//default (1) 설명 : vector<int> tmp = 6 같이 의도치않은 생성제외
 		explicit vector(const allocator_type& alloc = allocator_type());
 		//fill (2)
 		explicit vector(size_t n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
@@ -89,7 +77,6 @@ namespace ft
 		template <class InputIterator>
 		void						assign(InputIterator first, InputIterator last,
 									typename enable_if<!is_integral<InputIterator>::value>::type* = 0); 
-		//설명 : type * 는 InputIterator *가 된다. 
 		void						assign(size_type n, const value_type& val);
 		void						push_back(const value_type& val);
 		void						pop_back ();
@@ -105,35 +92,21 @@ namespace ft
 		iterator					erase(iterator position);
 		iterator					erase(iterator first, iterator last);
 		void						clear();
-
-		allocator_type get_allocator() const;
-
+		allocator_type				get_allocator() const;
 		void						swap(vector& x);
 	};
 	
-	//=======================Mycustom_funtion=====================
-	template <typename T, class Alloc>
-	void vector<T, Alloc>::Array_clear_free()
-	{
-		if (_array)
-		{
-			for (size_type i = 0; i < _size; ++i)
-				_alloc.destroy(_array + i);
-			_alloc.deallocate(_array, _capacity);
-			_array = 0;
-		}
-	}
-
 	//=======================Construct=====================
 	template <typename T, class Alloc>
-	vector<T, Alloc>::vector(const allocator_type& alloc)
-					: _alloc(alloc), _array(0), _size(0),  _capacity(0)
+	vector<T, Alloc>::vector
+		(const allocator_type& alloc)
+		: _alloc(alloc), _array(0), _size(0),  _capacity(0)
 	{
 	}
 	template <typename T, class Alloc>
-	vector<T, Alloc>::vector (size_t n, const value_type& val,
-					const allocator_type& alloc)
-					: _alloc(alloc),  _size(n),_capacity(n)
+	vector<T, Alloc>::vector
+		(size_t n, const value_type& val, const allocator_type& alloc)
+		: _alloc(alloc),  _size(n),_capacity(n)
 	{
 		_array = _alloc.allocate(_capacity);
 		for (size_t i = 0; i < _size; i++)
@@ -141,18 +114,18 @@ namespace ft
 	}
 	template <typename T, class Alloc>
 	template <class InputIterator>
-	vector<T, Alloc>::vector (InputIterator first, InputIterator last, const allocator_type& alloc,
-					typename enable_if<!is_integral<InputIterator>::value,
-					InputIterator>::type*) : _alloc(alloc), _array(0)
+	vector<T, Alloc>::vector
+		(InputIterator first, InputIterator last, const allocator_type& alloc,
+		typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type*)
+		: _alloc(alloc), _array(0)
 	{
 		this->assign(first, last);
 	} 
 	template <typename T, class Alloc>
-	vector<T, Alloc>::vector (vector const& x) : _array(0)  
+	vector<T, Alloc>::vector (vector const& rhs) : _array(0)  
 	{
-		*this = x;
+		*this = rhs;
 	}
-
 
 	//===========================iterator=======================
 	template <typename T, class Alloc>
@@ -247,8 +220,8 @@ namespace ft
 			for(size_t i = 0; i < _size; i++)
 			{
 				_alloc.construct(tmp + i, *(_array + i));
-			}		
-			Array_clear_free();
+			}
+			Array_clear_free(_size, _capacity, _array, _alloc);
 			_array = tmp;
 			_capacity = n;
 		}
@@ -289,7 +262,6 @@ namespace ft
 	typename vector<T, Alloc>::const_reference	vector<T, Alloc>::front() const
 	{
 		return (*(this->_array));
-		return (*(this->_array + _size - 1));
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::reference		vector<T, Alloc>::back()
@@ -310,10 +282,8 @@ namespace ft
 	//설명 : is__integral에 int * 형 넣으면 enable_if<1>::type*= 0임.
 	//설명 : enable_if<1>은 true이므로 type이 있으므로 assign이 정상적으로 작동 . 
 	{
-		Array_clear_free();
+		Array_clear_free(_size, _capacity, _array, _alloc);
 		ptrdiff_t distan_value = distance2<InputIterator>(first, last);
-		//_size = last - first;
-		//_capacity = (size_t)(last - first);
 		_size = distan_value;
 		_capacity = distan_value;
 		_array = _alloc.allocate(distan_value);
@@ -326,7 +296,7 @@ namespace ft
 	template <typename T, class Alloc>
 	void						vector<T, Alloc>::assign(size_type n, const value_type& val)
 	{
-		Array_clear_free();
+		Array_clear_free(_size, _capacity, _array, _alloc);
 		_size = n;
 		_capacity = n;
 		_array = _alloc.allocate(n);
@@ -340,7 +310,7 @@ namespace ft
 	{
 		if(this == &rhd)
 			return (*this);
-		Array_clear_free();
+		Array_clear_free(_size, _capacity, _array, _alloc);
 		this->_size = rhd._size;
 		this->_alloc = rhd._alloc;
 		this->_capacity = rhd._capacity;
@@ -365,7 +335,6 @@ namespace ft
 		if(_size != 0)
 			_size--;
 		_alloc.destroy(_array + _size);
-		//보충 : 아무것도 없는데 계속 destroy해도 상관없는지 테스트해볼땐 상관없는데, 한번 다시보자. 
 	}
 	template <typename T, class Alloc>
 	typename					vector<T, Alloc>::iterator vector<T, Alloc>::insert
@@ -387,7 +356,7 @@ namespace ft
 			else
 				_alloc.construct(tmp + i, *(_array + i - put_position_ptr_flag));
 		}
-		Array_clear_free();
+		Array_clear_free(_size, _capacity, _array, _alloc);
 		_array = tmp;
 		_size = _size + 1;
 		return (iterator(this->begin() + idx));
@@ -412,14 +381,15 @@ namespace ft
 						_alloc.construct(tmp + i + j, val);
 					}
 					put_position_ptr_flag = 1;
-					i = i + j; //인덱스 수정.
+					i = i + j; 
+					//수정 : 인덱스 조정.
 				}
 				else
 				{
 					_alloc.construct(tmp + i - put_position_ptr_flag, *(_array + (i - j) - put_position_ptr_flag));
 				}
 			}
-			Array_clear_free();
+			Array_clear_free(_size, _capacity, _array, _alloc);
 			_array = tmp;
 			_size = _size + n;
 		}
@@ -451,7 +421,7 @@ namespace ft
 			else
 				_alloc.construct(tmp + i - put_position_ptr_flag, *(_array + (i - j) - put_position_ptr_flag));
 		}
-		Array_clear_free();
+		Array_clear_free(_size, _capacity, _array, _alloc);
 		_array = tmp;
 		_size = _size + cnt;
 	}
@@ -539,47 +509,6 @@ namespace ft
 		x._size = tmp_size;
 		x._capacity = tmp_capacity;
 	}
-
-//	template <class T, class Alloc>
-//	bool equal_check (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) //==
-//	{
-//		if (lhs._size != rhs._size)
-//			return (false);
-//		for (size_t i = 0; i < lhs._size; i++)
-//			if (lhs._array[i] != rhs._array[i])
-//				return (false);
-//		return (true);
-//	}
-//
-//	template <class T, class Alloc>
-//	bool right_compare_check (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) //<
-//	{
-//		for (size_t i = 0; i < lhs._size && i < rhs._size; i++)
-//			if (lhs._array[i] < rhs._array[i])
-//				return (true);
-//			else if(lhs._array[i] > rhs._array[i])
-//				return (false);
-//		return ((lhs._size < rhs._size) ? true : false);
-//	}
-//	template <class T, class Alloc>
-//	bool left_compare_check (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) //>
-//	{
-//		for (size_t i = 0; i < lhs._size && i < rhs._size; i++)
-//			if (lhs._array[i] > rhs._array[i])
-//				return (true);
-//			else if(lhs._array[i] < rhs._array[i])
-//				return (false);
-//		return ((lhs._size > rhs._size) ? true : false);
-//	}
-//	template <class T, class Alloc, typename Func>
-//	bool all_check (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs, Func ((left_or_right))) //<=
-//	{
-//		if ( equal_check(lhs, rhs) == 1 )
-//			return ( true );
-//		if ( left_or_right(lhs, rhs) == 1 )
-//			return ( true );
-//		return (false);
-//	 }
 
 	//=======================Non-member function overloads=====================
 	template <class T, class Alloc>
