@@ -25,45 +25,43 @@ namespace ft
 		}
 	}
 
-	template <class L_vector, class R_vector>
-	bool equal_check(L_vector& lhs, R_vector& rhs) //==
+	//default (1)	
+	template <class InputIterator1, class InputIterator2>
+	bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
+								InputIterator2 first2, InputIterator2 last2)
 	{
-	    if (lhs.size() != rhs.size())
-	        return (false);
-	    for (size_t i = 0; i < lhs.size(); i++)
-	        if (lhs._array[i] != rhs._array[i])
-	            return (false);
-	    return (true);
+		while (first1!=last1)
+		{
+			if (first2==last2 || *first2<*first1) return false;
+			else if (*first1<*first2) return true;
+			++first1; ++first2;
+		}
+		return (first2!=last2);
 	}
-	template <class L_vector, class R_vector>
-	bool right_compare_check(L_vector& lhs, R_vector& rhs) //<
+	//custom (2)	
+	template <class InputIterator1, class InputIterator2, class Compare>
+	bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
+								InputIterator2 first2, InputIterator2 last2,
+								Compare comp)
 	{
-	    for (size_t i = 0; i < lhs.size() && i < rhs.size(); i++)
-	        if (lhs._array[i] < rhs._array[i])
-	            return (true);
-	        else if(lhs._array[i] > rhs._array[i])
-	            return (false);
-	    return ((lhs.size() < rhs.size()) ? true : false);
+		while (first1 != last1) {
+			if (first2 == last2 || comp(*first2, *first1)) return false;
+			else if (comp(*first1, *first2)) return true;
+			++first1; ++first2;
+		}
+		return (first2 != last2);
 	}
-	template <class L_vector, class R_vector>
-	bool left_compare_check(L_vector& lhs, R_vector& rhs) //>
+
+	template <class InputIterator1, class InputIterator2>
+	bool equal ( InputIterator1 first1, InputIterator1 last1, InputIterator2 first2 )
 	{
-	    for (size_t i = 0; i < lhs.size() && i < rhs.size(); i++)
-	        if (lhs._array[i] > rhs._array[i])
-	            return (true);
-	        else if(lhs._array[i] < rhs._array[i])
-	            return (false);
-	    return ((lhs.size() > rhs.size()) ? true : false);
+		while (first1!=last1) {
+			if (!(*first1 == *first2))   // or: if (!pred(*first1,*first2)), for version 2
+				return false;
+			++first1; ++first2;
+		}
+		return true;
 	}
-	template <class L_vector, class R_vector, typename Func>
-	bool all_check(L_vector& lhs, R_vector& rhs, Func ((left_or_right))) //<=
-	{
-	    if (equal_check(lhs, rhs) == 1)
-	        return (true);
-	    if (left_or_right(lhs, rhs) == 1)
-	        return (true);
-	    return (false);
-	 }
 }
 
 #endif

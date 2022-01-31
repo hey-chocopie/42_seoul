@@ -1,15 +1,19 @@
-#ifndef __VECTOR_HPP__
-#define __VECTOR_HPP__
+#ifndef __MAP_HPP__
+#define __MAP_HPP__
 #include <memory>
 #include <iostream>
 #include <string>
+#include "pair.hpp"
 #include "./utility.hpp"
 #include "random_access_iterator_tag.hpp"
-
+// ex : map<int, int> m;
 namespace ft
 {
-	template < class T, class Alloc = std::allocator<T> >
-	class vector{
+	template < class Key,                                     // map::key_type
+           class T,                                       // map::mapped_type
+           class Compare = less<Key>,                     // map::key_compare
+           class Alloc = allocator<pair<const Key,T> >    // map::allocator_type
+    > class map{
 	public:
 		//===========================Member types=======================
 		typedef T											value_type;		//T
@@ -20,7 +24,7 @@ namespace ft
 		typedef typename allocator_type::const_pointer		const_pointer;	//const T*
 		typedef ptrdiff_t									difference_type;
 		typedef size_t										size_type;
-
+		std::pair
 		allocator_type										_alloc;
 		value_type*											_array;
 		size_type											_size;
@@ -513,26 +517,23 @@ namespace ft
 	//=======================Non-member function overloads=====================
 	template <class T, class Alloc>
 	bool operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-	{
-		if (lhs.size() != rhs.size())
-			return false;
-		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()) ? true : false);
-	}
+	{ return ( equal_check(lhs, rhs) ? 1 : 0); }
 	template <class T, class Alloc>
 	bool operator!= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-	{ return (!(lhs == rhs)); }
+	{ return ( equal_check(lhs, rhs) ? 0 : 1); }
 	template <class T, class Alloc>
 	bool operator<	(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-	{ return lexicographical_compare (lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) ? true : false; }
+	{ return ( right_compare_check(lhs, rhs) ?  1 : 0); }
 	template <class T, class Alloc>
 	bool operator<= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-	{ return ( !(rhs < lhs) ); }
+	{ return ( all_check(lhs, rhs, right_compare_check<const ft::vector<T,Alloc>, const ft::vector<T,Alloc> >) ? 1 : 0); }
 	template <class T, class Alloc>
 	bool operator>  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-	{ return ( rhs < lhs ); }
+	{return ( ft::left_compare_check(lhs, rhs) ?  1 : 0); }
 	template <class T, class Alloc>
 	bool operator>= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-	{ return ( !(lhs < rhs) ); }
+	{ return ( ft::all_check(lhs, rhs, ft::left_compare_check<const ft::vector<T,Alloc> , const ft::vector<T,Alloc> >) ? 1 : 0); }
+
 }
 
 #endif
