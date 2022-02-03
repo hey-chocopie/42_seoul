@@ -106,7 +106,7 @@ namespace ft
 	template <typename T, class Alloc>
 	vector<T, Alloc>::vector
 		(size_t n, const value_type& val, const allocator_type& alloc)
-		: _alloc(alloc),  _size(n),_capacity(n)
+		: _alloc(alloc), _size(n), _capacity(n)
 	{
 		_array = _alloc.allocate(_capacity);
 		for (size_t i = 0; i < _size; i++)
