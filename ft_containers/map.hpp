@@ -7,22 +7,7 @@
 #include "./utility.hpp"
 #include "random_access_iterator_tag.hpp"
 #include "map_iter.hpp"
-// ex : map<int, int> m;
-// 자 지금 할게, less파악이랑, value_comp 파악이다. 
-//
-//
-template <class pair_t>
-class map_Node
-{
-public:
-	int data;
-	Node* leftChild = NULL;
-	Node* rightChild = NULL;
 
-	Node(int _data, Node* _leftChild, Node* _rightChild)
-		:data(_data), leftChild(_leftChild), rightChild(_rightChild)
-	{ }
-};
 namespace ft
 {
 	template <class Arg1, class Arg2, class Result>
@@ -58,10 +43,10 @@ namespace ft
 		typedef typename allocator_type::pointer			pointer;		//T*
 		typedef typename allocator_type::const_pointer		const_pointer;	//const T*
 
-	typedef ft::mapIte<value_type, node_type>			iterator;
-	typedef ft::mapIte<const value_type, node_type>		const_iterator;
-	typedef ft::reverse_iterator<iterator>				reverse_iterator;
-	typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+		typedef ft::mapIte<value_type, node_type>			iterator;
+		typedef ft::mapIte<const value_type, node_type>		const_iterator;
+		typedef ft::reverse_iterator<iterator>				reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 
 		typedef ptrdiff_t									difference_type;
@@ -70,10 +55,13 @@ namespace ft
 		//설명 : map은 이진탐색트리형태로 구현되어있다. 
 		//설명 : 그에 사용할 노드
 		typedef ft::map_Node<value_type>						node_type;
+		typedef node_type*										node_ptr;
+		node_ptr												_Node;
+		allocator_type											_alloc;
+		key_compare												_comp;
 
-
-//		allocator_type										_alloc;
 //		value_type*											_array;
+//		allocator_type										_alloc;
 //		size_type											_size;
 //		size_type											_capacity;
 
@@ -81,14 +69,29 @@ namespace ft
 		//empty (1)
 		explicit map (const key_compare& comp = key_compare(),
 		              const allocator_type& alloc = allocator_type())
-		{};
+						: _alloc(alloc), _comp(comp), (_Node)(0)
+		{ new _Node = Node_ptr (0) };
 		//range (2)
 		template <class InputIterator>
 		  map (InputIterator first, InputIterator last,
 		       const key_compare& comp = key_compare(),
-		       const allocator_type& alloc = allocator_type()) {};
+		       const allocator_type& alloc = allocator_type()) : _alloc(alloc), _comp(comp), _Node(0)
+		{
+			insert(first, last);
+//			for(; first != last; first++)
+//			{
+//				map_Node tmp(*first);
+//				if(_Node == 0)
+//					_Node  = tmp;
+//				else
+//					BST_InsertNode(&_Node, &tmp);
+//			}
+		};
 		//copy (3)
-		map (const map& x) {};
+		map (const map& x) : _alloc(x._alloc), _comp(x._comp), _Node(0)
+		{
+			//this = x;
+		};
 
 
 		value_compare value_comp() const {
