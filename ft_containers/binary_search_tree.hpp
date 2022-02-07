@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include "pair.hpp"
+#include "utility.hpp"
 namespace ft
 {
     template <typename pair_t>
@@ -16,8 +17,8 @@ namespace ft
     public:
         pair_t					data;
 //        map_Node     *parent = NULL;
-        map_Node     *leftChild = NULL;
-        map_Node     *rightChild = NULL;
+        map_Node     *leftChild;
+        map_Node     *rightChild;
         map_Node(const pair_t &src = pair_t()) : \
         data(src),  leftChild(NULL), rightChild(NULL) {};
     };
@@ -35,20 +36,21 @@ namespace ft
 	        return BST_SearchNode(tree->leftChild, target);
 	    else if (tree->data.first < target.first)
 	        return BST_SearchNode(tree->rightChild, target);
+		return (true);
 	}
 
 	// 트리에 target 이 있다면 해당 노드 리턴
     template <typename pair_t>
-	map_Node<pair_t>* BST_SearchNode(map_Node<pair_t>* tree, pair_t target)
+	map_Node<pair_t>& BST_SearchNode(map_Node<pair_t>& tree, pair_t target)
 	{
 	    if (tree == NULL)
 	        return NULL;
 	
-	    if (tree->data.first == target.first)
+	    if (tree._Node.first == target.first)
 	        return tree;
-	    else if (tree->data.first > target.first)
+	    else if (tree._Node.first > target.first)
 	        return BST_SearchNode(tree->leftChild, target);
-	    else if (tree->data.first < target.first)
+	    else if (tree._Node.first < target.first)
 	        return BST_SearchNode(tree->rightChild, target);
 	}
 
@@ -137,9 +139,7 @@ namespace ft
 	    }	
 	    return removedNode;
 	}
-
-
-
-
 }
+
+#endif
 
