@@ -67,12 +67,10 @@ namespace ft
 		typedef Distance  difference_type;
 		typedef Pointer   pointer;
 		typedef Reference reference;
-		typedef Category  iterator_category;
 	};
 
 	template<class iterator>
 	struct iterator_traits {
-		typedef typename iterator::iterator_category     iterator_category;
 		typedef typename iterator::value_type            value_type;
 		typedef typename iterator::difference_type       difference_type;
 		typedef typename iterator::pointer               pointer;
@@ -86,7 +84,6 @@ namespace ft
 		typedef RI_Type*								pointer;
 		typedef RI_Type&								reference;
 		typedef	ptrdiff_t								difference_type;
-		typedef random_access_iterator_tag				iterator_category;
 	};
 
 	template<typename T>
@@ -96,7 +93,6 @@ namespace ft
 		typedef const T*								pointer;
 		typedef const T&								reference;
 		typedef	ptrdiff_t								difference_type;
-		typedef random_access_iterator_tag				iterator_category;
 	};
 
 
@@ -120,7 +116,6 @@ namespace ft
 	public:
 
 		typedef RI_Type														iterator_type;
-		typedef typename iterator_traits<iterator_type*>::iterator_category	iterator_category;
 		typedef typename iterator_traits<iterator_type*>::value_type		value_type;
 		typedef typename iterator_traits<iterator_type*>::difference_type	difference_type;
 		typedef typename iterator_traits<iterator_type*>::pointer			pointer;
@@ -335,7 +330,6 @@ namespace ft
 	{
 	public:
 		typedef Iterator											iterator_type;
-		typedef typename iterator_traits<Iterator>::iterator_category		iterator_category;
 		typedef typename iterator_traits<Iterator>::value_type				value_type;
 		typedef typename iterator_traits<Iterator>::difference_type			difference_type;
 		typedef typename iterator_traits<Iterator>::pointer					pointer;
