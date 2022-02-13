@@ -22,7 +22,6 @@ namespace ft{
 
 		pair& operator= (const pair& pr);
 
-
 	};
 	template <class T1, class T2>
 	pair<T1, T2>::pair() : first(), second() {}
