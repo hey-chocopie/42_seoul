@@ -7,7 +7,7 @@ namespace ft {
 
 template <typename T, typename node_type>
 class mapIte {
-	protected:
+	public:
 		node_type						*_node;
 		mapIte(node_type *src);
 
@@ -18,7 +18,11 @@ class mapIte {
 		typedef value_type*				pointer;
 
 		mapIte(void);
-		mapIte(const mapIte &src);
+
+		template <typename RmapIte>
+		mapIte(const RmapIte &src);
+
+//		mapIte(const mapIte &src);
 		virtual ~mapIte(void);
 		mapIte	&operator=(mapIte const &rhs);
 
@@ -37,6 +41,7 @@ class mapIte {
 			return mapIte<const T, node_type>(this->_node);
 		}
 
+
 		template <class, class, class, class>
 		friend class map;
 
@@ -46,13 +51,29 @@ class mapIte {
 }; // ****************************************************** class mapIte end //
 
 template <typename T, typename node_type>
-mapIte<T, node_type>::mapIte(void) : _node(NULL) { return ; }
+mapIte<T, node_type>::mapIte(void) : _node(NULL) { }
 
 template <typename T, typename node_type>
-mapIte<T, node_type>::mapIte(node_type *src) { this->_node = src; }
+mapIte<T, node_type>::mapIte(node_type *src)
+{
+	this->_node = src; 
+}
 
 template <typename T, typename node_type>
-mapIte<T, node_type>::mapIte(const mapIte &src) { *this = src; }
+template <typename RmapIte>
+mapIte<T, node_type>::mapIte(const RmapIte &src) 
+{
+	this->_node = src._node;
+	//*this = src; 
+	//this->operator=(src);
+	
+}
+//template <typename T, typename node_type>
+//mapIte<T, node_type>::mapIte(const mapIte &src) 
+//{
+////	this->_node = src._node;
+//	*this = src; 
+//}
 
 template <typename T, typename node_type>
 mapIte<T, node_type>::~mapIte(void) { return ; }
@@ -77,14 +98,16 @@ bool	mapIte<T, node_type>::operator!=(const mapIte<U, node_type> &rhs) const {
 
 template <typename T, typename node_type>
 mapIte<T, node_type> &mapIte<T, node_type>::operator++(void) {
-	if (this->_node->right != NULL)
-		this->_node = farLeft(this->_node->right);
+	if (this->_node->rightChild != NULL)
+	{
+		this->_node = minNode(this->_node->rightChild);
+	}
 	else
 	{
 		node_type	*child = this->_node;
 
 		this->_node = this->_node->parent;
-		while (this->_node && child == this->_node->right)
+		while (this->_node && child == this->_node->rightChild)
 		{
 			child = this->_node;
 			this->_node = this->_node->parent;
@@ -102,14 +125,14 @@ mapIte<T, node_type> mapIte<T, node_type>::operator++(int) {
 
 template <typename T, typename node_type>
 mapIte<T, node_type>& mapIte<T, node_type>::operator--(void) {
-	if (this->_node->left != NULL)
-		this->_node = farRight(this->_node->left);
+	if (this->_node->leftChild != NULL)
+		this->_node = maxNode(this->_node->leftChild);
 	else
 	{
 		node_type	*child = this->_node;
 
 		this->_node = this->_node->parent;
-		while (this->_node && child == this->_node->left)
+		while (this->_node && child == this->_node->leftChild)
 		{
 			child = this->_node;
 			this->_node = this->_node->parent;
@@ -132,7 +155,7 @@ typename mapIte<T, node_type>::reference mapIte<T, node_type>::operator*(void) c
 
 template <typename T, typename node_type>
 typename mapIte<T, node_type>::pointer mapIte<T, node_type>::operator->(void) const {
-	return &this->operator*();
+	return &(this->operator*());
 }
 
 } // ******************************************************* ft namespace end //
