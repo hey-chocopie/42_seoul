@@ -474,7 +474,6 @@ namespace ft
 	}
 
 	//=======================Non-member function overloads=====================
-	
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator== (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs)
 	{

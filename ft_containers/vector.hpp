@@ -3,8 +3,8 @@
 #include <memory>
 #include <iostream>
 #include <string>
-#include "./utility.hpp"
-#include "random_access_iterator_tag.hpp"
+#include "utility.hpp"
+#include "vector_iter.hpp"
 
 namespace ft
 {
@@ -26,8 +26,8 @@ namespace ft
 		size_type											_size;
 		size_type											_capacity;
 
-		typedef normal_iter<value_type>						iterator;
-		typedef normal_iter<const value_type>				const_iterator;
+		typedef vector_iter<value_type>						iterator;
+		typedef vector_iter<const value_type>				const_iterator;
 		typedef reverse_iterator_tag<iterator>				reverse_iterator;
 		typedef reverse_iterator_tag<const_iterator>		const_reverse_iterator;
 
