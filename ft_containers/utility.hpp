@@ -14,14 +14,16 @@ namespace ft
 	}
 
 	template <typename size_type, typename value_type, typename Alloc>
-	void Array_clear_free(size_type &_size, size_type &_capacity, value_type* _array, Alloc _alloc)
+	void Array_clear_free(size_type &_size, size_type &_capacity, value_type** _array, Alloc _alloc)
 	{
-		if (_array)
+		if ((*_array) != NULL)
 		{
 			for (size_t i = 0; i < _size; ++i)
-				_alloc.destroy(_array + i);
-			_alloc.deallocate(_array, _capacity);
-			_array = 0;
+				_alloc.destroy((*_array) + i);
+			_alloc.deallocate((*_array), _capacity);
+			(*_array) = 0;
+			_size = 0;
+			_capacity = 0;
 		}
 	}
 
