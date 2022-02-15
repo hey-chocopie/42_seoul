@@ -41,6 +41,7 @@ namespace ft
 				vector (InputIterator first, InputIterator last,
 				const allocator_type& alloc = allocator_type(), 
 				typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = nullptr);
+		~vector(void);
 		//copy (4)
 		vector (vector const& x);
 		vector& operator= (const vector& rhd); 			
@@ -100,13 +101,13 @@ namespace ft
 	template <typename T, class Alloc>
 	vector<T, Alloc>::vector
 		(const allocator_type& alloc)
-		: _alloc(alloc), _array(0), _size(0),  _capacity(0)
+		: _alloc(alloc), _array(0), _size(0), _capacity(0)
 	{
 	}
 	template <typename T, class Alloc>
 	vector<T, Alloc>::vector
 		(size_t n, const value_type& val, const allocator_type& alloc)
-		: _alloc(alloc), _size(n), _capacity(n)
+		: _alloc(alloc), _array(0), _size(n), _capacity(n)
 	{
 		_array = _alloc.allocate(_capacity);
 		for (size_t i = 0; i < _size; i++)
@@ -117,14 +118,22 @@ namespace ft
 	vector<T, Alloc>::vector
 		(InputIterator first, InputIterator last, const allocator_type& alloc,
 		typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type*)
-		: _alloc(alloc), _array(0)
+		: _alloc(alloc), _array(0),  _size(0), _capacity(0)
 	{
 		this->assign(first, last);
 	} 
 	template <typename T, class Alloc>
-	vector<T, Alloc>::vector (vector const& rhs) : _array(0)  
+	vector<T, Alloc>::vector (vector const& rhs) : _array(0),  _size(0), _capacity(0)
 	{
 		*this = rhs;
+	}
+
+	template <typename T, class Alloc>
+	vector<T, Alloc>::~vector(void) {
+		this->clear();
+		if(_array != NULL)
+			_alloc.deallocate(_array, this->capacity());
+		_array = NULL;
 	}
 
 	//===========================iterator=======================
@@ -217,13 +226,15 @@ namespace ft
 		if(_capacity < n)
 		{	
 			T* tmp = _alloc.allocate(n);
+			size_type tmp_size = _size;
 			for(size_t i = 0; i < _size; i++)
 			{
 				_alloc.construct(tmp + i, *(_array + i));
 			}
-			Array_clear_free(_size, _capacity, _array, _alloc);
+			Array_clear_free(_size, _capacity, &_array, _alloc);
 			_array = tmp;
 			_capacity = n;
+			_size = tmp_size;
 		}
 	}
 
@@ -243,14 +254,17 @@ namespace ft
 	{
 		if (n >= size())
 			throw std::out_of_range("vector");
-			//보충 : std의 에러를 던짐 한번 보기. 
+		//보충 : std의 에러를 던짐 한번 보기. 
+
 		return (*(this->_array + n));
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::const_reference	vector<T, Alloc>::at (size_type n) const
 	{
 		if (n >= size())
-			throw std::out_of_range("vector"); 
+			throw std::out_of_range("vector");
+		//보충 : std의 에러를 던짐 한번 보기.
+
 		return (*(this->_array + n));
 	}
 	template <typename T, class Alloc>
@@ -282,21 +296,23 @@ namespace ft
 	//설명 : is__integral에 int * 형 넣으면 enable_if<1>::type*= 0임.
 	//설명 : enable_if<1>은 true이므로 type이 있으므로 assign이 정상적으로 작동 . 
 	{
-		Array_clear_free(_size, _capacity, _array, _alloc);
 		ptrdiff_t distan_value = distance2<InputIterator>(first, last);
-		_size = distan_value;
-		_capacity = distan_value;
-		_array = _alloc.allocate(distan_value);
+		pointer tmp_array = _alloc.allocate(distan_value);
+		//설명 : tmp_array를 만든 이유는, _alloc을 헤제하면, first를 못씀 그래서 헤제하기 전에 데이터 백업.
 		for(int i = 0; first != last; i++)
 		{
-			_alloc.construct(_array + i, *first);
+			_alloc.construct((tmp_array + i), (*first));
 			first++;
 		}
+		Array_clear_free(_size, _capacity, &_array, _alloc);
+		_size = distan_value;
+		_capacity = distan_value;
+		_array = tmp_array;
 	}
 	template <typename T, class Alloc>
 	void						vector<T, Alloc>::assign(size_type n, const value_type& val)
 	{
-		Array_clear_free(_size, _capacity, _array, _alloc);
+		Array_clear_free(_size, _capacity, &_array, _alloc);
 		_size = n;
 		_capacity = n;
 		_array = _alloc.allocate(n);
@@ -310,7 +326,7 @@ namespace ft
 	{
 		if(this == &rhd)
 			return (*this);
-		Array_clear_free(_size, _capacity, _array, _alloc);
+		Array_clear_free(_size, _capacity, &_array, _alloc);
 		this->_size = rhd._size;
 		this->_alloc = rhd._alloc;
 		this->_capacity = rhd._capacity;
@@ -345,6 +361,8 @@ namespace ft
 
 		_capacity = increase_capacity(_size, 0, _capacity); 
 		T* tmp = _alloc.allocate(_capacity);
+		size_type tmp_capacity = _capacity;
+		size_type tmp_size = _size;
 		for(size_t i = 0; i < _size + 1; i++)
 		{
 			if(put_position_ptr_flag == 0 && _array + i == position._ptr)
@@ -356,9 +374,10 @@ namespace ft
 			else
 				_alloc.construct(tmp + i, *(_array + i - put_position_ptr_flag));
 		}
-		Array_clear_free(_size, _capacity, _array, _alloc);
+		Array_clear_free(_size, _capacity, &_array, _alloc);
 		_array = tmp;
-		_size = _size + 1;
+		_size = tmp_size + 1;
+		_capacity = tmp_capacity;
 		return (iterator(this->begin() + idx));
 	}
 	template <typename T, class Alloc>
@@ -372,6 +391,8 @@ namespace ft
 
 			_capacity = increase_capacity(_size, n, _capacity);
 			T* tmp = _alloc.allocate(_capacity);
+			size_type tmp_capacity = _capacity;
+			size_type tmp_size = _size;
 			for(size_t i = 0; i < _size + n + 1; i++)
 			{
 				if(put_position_ptr_flag == 0 && _array + i == position._ptr)
@@ -389,9 +410,10 @@ namespace ft
 					_alloc.construct(tmp + i - put_position_ptr_flag, *(_array + (i - j) - put_position_ptr_flag));
 				}
 			}
-			Array_clear_free(_size, _capacity, _array, _alloc);
+			Array_clear_free(_size, _capacity, &_array, _alloc);
 			_array = tmp;
-			_size = _size + n;
+			_capacity = tmp_capacity;
+			_size = tmp_size + n;
 		}
 	}
 	template <typename T, class Alloc>
@@ -404,26 +426,31 @@ namespace ft
 		int										j = 0;
 
 		difference_type cnt = distance2<T, InputIterator>(first, last);
-		_capacity = increase_capacity(_size, cnt, _capacity);
-		T* tmp = _alloc.allocate(_capacity);
+		size_type tmp_size = cnt + _size;
+		size_type tmp_capacity = increase_capacity(_size, cnt, _capacity);
+		T* tmp = _alloc.allocate(tmp_capacity);
+
 		for(size_t i = 0; i < _size + cnt + 1; i++)
 		{
 			if(put_position_ptr_flag != 1 && _array + i == position._ptr)
 			{
 				for(j = 0; first != last; first++)
 				{
-					_alloc.construct(tmp + i + j, *first);
+					_alloc.construct(tmp + i + j, (*first));
 					j++;
 				}
 				put_position_ptr_flag = 1;
 				i = i + j;
 			}
 			else
+			{
 				_alloc.construct(tmp + i - put_position_ptr_flag, *(_array + (i - j) - put_position_ptr_flag));
+			}
 		}
-		Array_clear_free(_size, _capacity, _array, _alloc);
+		Array_clear_free(_size, _capacity, &_array, _alloc);
 		_array = tmp;
-		_size = _size + cnt;
+		_capacity = tmp_capacity;
+		_size = tmp_size;
 	}
 	template <typename T, class Alloc>
 	typename vector<T, Alloc>::iterator	vector<T, Alloc>::erase(iterator position)
@@ -481,7 +508,7 @@ namespace ft
 	{
 		for(size_t i = 0; i < _size; i++)
 		{
-			_alloc.destroy(_array + _size);
+			_alloc.destroy(_array + i);
 		}
 		_size = 0;
 	}
@@ -523,7 +550,7 @@ namespace ft
 	{ return (!(lhs == rhs)); }
 	template <class T, class Alloc>
 	bool operator<	(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-	{ return lexicographical_compare (lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) ? true : false; }
+	{ return ft::lexicographical_compare (lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) ? true : false; }
 	template <class T, class Alloc>
 	bool operator<= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{ return ( !(rhs < lhs) ); }
