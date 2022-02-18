@@ -39,14 +39,6 @@ class mapIte {
 		operator mapIte<const T, node_type>(void) const {
 			return mapIte<const T, node_type>(this->_node);
 		}
-
-
-		template <class, class, class, class>
-		friend class map;
-
-		template <class, class>
-		friend class mapIte;
-
 }; 
 
 template <typename T, typename node_type>

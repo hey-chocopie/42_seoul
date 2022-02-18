@@ -20,12 +20,12 @@ namespace ft
 		typedef typename allocator_type::const_pointer		const_pointer;	//const T*
 		typedef ptrdiff_t									difference_type;
 		typedef size_t										size_type;
-
+	protected:
 		allocator_type										_alloc;
 		value_type*											_array;
 		size_type											_size;
 		size_type											_capacity;
-
+	public:
 		typedef vector_iter<value_type>						iterator;
 		typedef vector_iter<const value_type>				const_iterator;
 		typedef reverse_iterator_tag<iterator>				reverse_iterator;
@@ -560,6 +560,13 @@ namespace ft
 	template <class T, class Alloc>
 	bool operator>= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{ return ( !(lhs < rhs) ); }
+
+	template <class T, class Alloc>
+	void swap (ft::vector<T,Alloc>& x, ft::vector<T,Alloc>& y)
+	{
+		x.swap(y);
+	}
+
 }
 
 #endif

@@ -44,12 +44,14 @@ namespace ft
 		//설명 : map 이진탐색트리로 구현했음. 
 		typedef ft::map_Node<value_type>						node_type;
 		typedef node_type*										node_ptr;
+	private:
 		node_ptr												_Node;
 		std::allocator<node_type>								_allocNode;
 		allocator_type											_alloc;
 		key_compare												k_comp;
 		size_t													_size;
 
+	public:
 		//===========================Member types=======================
 		typedef ft::mapIte<value_type, node_type>				iterator;
 		typedef ft::mapIte<const value_type, node_type>			const_iterator;
@@ -144,6 +146,8 @@ namespace ft
 		allocator_type						get_allocator() const;
 
 		//=====================my_custom fun========================//
+
+	private:
 		bool						_key_eq(const key_type &k1, const key_type &k2) const;
 		node_ptr					new_setNode(Key first);
 		node_ptr					new_setNode(Key first, T second);
@@ -291,7 +295,7 @@ namespace ft
 		
 		if (element == this->end())
 			return (0);
-		BST_RemoveNode(&(element._node), &_Node);
+		BST_RemoveNode(&(element._node), &_Node, _allocNode);
 		_size--;
 		return (1);
 	}
@@ -346,6 +350,8 @@ namespace ft
 	class map<Key,T,Compare,Alloc>::value_compare : binary_function<value_type,value_type,bool>
 	{
 	friend class map;
+	// 설명 : comp를 protected로 선언해야하는데, 그러면 상위클래스인 map에서 못씀.
+	// 설명 : 그래서 map에서도 접근 가능하게 해줄려고 friend사용.
 	protected:
 		Compare comp;
 		value_compare (Compare c) : comp(c) {}

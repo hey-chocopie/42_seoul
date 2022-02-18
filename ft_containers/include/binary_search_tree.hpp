@@ -142,8 +142,8 @@ namespace ft
 		tree = NULL;
 	}
 	//설명 : 해당 노드 제거
-    template <class node_ptr>
-	void BST_RemoveNode(node_ptr *rmNode, node_ptr *_Node) 
+    template <class node_ptr, typename alloc_Node_type>
+	void BST_RemoveNode(node_ptr *rmNode, node_ptr *_Node, alloc_Node_type _allocNode) 
 	{
 		node_ptr	replaceNode = NULL;
 		node_ptr	*rmPlace = _Node;
@@ -177,7 +177,7 @@ namespace ft
 			}
 		}
 		*rmPlace = replaceNode;
-		delete (*rmNode);
+		_allocNode.deallocate((*rmNode), 1);
 	}
 }
 #endif
