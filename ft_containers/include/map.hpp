@@ -65,7 +65,9 @@ namespace ft
 		              const allocator_type& alloc = allocator_type())
 						:  _Node(0), _alloc(alloc), k_comp(comp), _size(0)
 		{
-			this->_Node = new node_type; 
+			this->_Node = _allocNode.allocate(1);
+			allocNode_construct(&_Node);
+			//설명 : allocator는 생성자를 거치지 않아서 초기화 함수를 구현.
 		};
 		//range (2)
 		template <class InputIterator>
@@ -73,13 +75,15 @@ namespace ft
 		       const key_compare& _comp = key_compare(),
 		       const allocator_type& alloc = allocator_type()) : _Node(0), _alloc(alloc), k_comp(_comp), _size(0)
 		{
-			this->_Node = new node_type; 
+			this->_Node = _allocNode.allocate(1);
+			allocNode_construct(&_Node);
 			insert(first, last); 
 		};
 		//copy (3)
 		map (const map& x) : _Node(0), _alloc(x._alloc), k_comp(x.k_comp) , _size(0)
 		{ 
-			this->_Node = new node_type;
+			this->_Node = _allocNode.allocate(1);
+			allocNode_construct(&_Node);
 			(*this) = x; 
 		};
 		map& operator= (const map& x);
@@ -116,7 +120,7 @@ namespace ft
 		template <class InputIterator>
 		void insert (InputIterator first, InputIterator last);
 
-		void erase (iterator position);
+		void erase (iterator position, typename ft::enable_if<!ft::is_integral<iterator>::value, iterator>::type* = nullptr);
 		size_type erase (const key_type& k);
 		void erase (iterator first, iterator last);
 		void swap (map& x);
@@ -141,8 +145,13 @@ namespace ft
 
 		//=====================my_custom fun========================//
 		bool						_key_eq(const key_type &k1, const key_type &k2) const;
+		node_ptr					new_setNode(Key first);
 		node_ptr					new_setNode(Key first, T second);
 		void						tree_clear(node_ptr node);
+		
+
+		template <class node_ptr2>
+		void						allocNode_construct(node_ptr2 *Node);
 	};
 
 	template <class Key, class T, class Compare, class Alloc>
@@ -223,7 +232,14 @@ namespace ft
 	template<class Key, class T, class Compare, class Alloc>
 	typename map<Key, T, Compare, Alloc>::mapped_type&			map<Key, T, Compare, Alloc>::operator[] (const key_type& k)
 	{
-		return (insert(value_type(k, mapped_type()))).first->second;
+		if(_size != 0 && BST_SearchNode<node_ptr, Key>(_Node, maxNode(_Node), k))
+			;
+		else
+		{
+			BST_InsertNode<value_type, key_compare>((&_Node), new_setNode(k),maxNode(_Node), _size);
+			_size++;
+		}
+		return (this->find(k)->second);
 	} 
 
 	//single element (1)	
@@ -233,21 +249,24 @@ namespace ft
 		ft::pair<iterator, bool> res;
 
 		res.second = 1;
-		if(_size != 0 && BST_SearchNode<node_ptr, Key>(_Node, val.first))
+		if(_size != 0 && BST_SearchNode_bool<node_ptr, Key>(_Node, maxNode(_Node), val.first))
+		{
 			res.second = 0; //설명 : 이미 _Node에 있음. 
+		}
 		else
 		{
 			BST_InsertNode<value_type, key_compare>((&_Node), new_setNode(val.first, val.second),maxNode(_Node), _size);
 			_size++;
 		}
 		res.first = this->find(val.first);
-		return res;
+		return (res);
 	}
 	//with hint (2)	
 	template < class Key, class T, class Compare, class Alloc >
 	typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::insert (iterator position, const value_type& val)
 	{
 		static_cast<void>(position);
+		this->insert(val);
 		//설명 : position 안쓰고 구현함. unsed 컴파일 에러떄문에 캐스팅함.
 		return this->insert(val).first;
 	}
@@ -261,7 +280,7 @@ namespace ft
 	}
 
 	template < class Key, class T, class Compare, class Alloc >
-	void ft::map<Key, T, Compare, Alloc>::erase (iterator position)
+	void ft::map<Key, T, Compare, Alloc>::erase (iterator position, typename enable_if<!is_integral<iterator>::value, iterator>::type* )
 	{
 		erase((*position).first);
 	}
@@ -279,8 +298,14 @@ namespace ft
 	template < class Key, class T, class Compare, class Alloc >
 	void ft::map<Key, T, Compare, Alloc>::erase(iterator first, iterator last)
 	{
-		for(; first != last; first++)
+		for(; first != last; )
+		{
+			iterator next = first;
+			next++;
 			erase(first);
+			//설명 : first를 지우고 오퍼레이트 바꾸니까 안됨.
+			first = next;
+		}
 	}
 
 
@@ -301,7 +326,8 @@ namespace ft
 	{
 		_size = 0;
 		tree_clear(_Node);
-		_Node = new node_type;
+		this->_Node = _allocNode.allocate(1);
+		allocNode_construct(&_Node);
 		//설명 : endNode 다시 넣어줌.
 	}
 
@@ -322,7 +348,7 @@ namespace ft
 	friend class map;
 	protected:
 		Compare comp;
-		value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
+		value_compare (Compare c) : comp(c) {}
 	public:
 		typedef bool result_type;
 		typedef value_type first_argument_type;
@@ -365,7 +391,7 @@ namespace ft
 	template<class Key, class T, class Compare, class Alloc>
 	typename map<Key, T, Compare, Alloc>::size_type	map<Key, T, Compare, Alloc>::count (const key_type& k) const
 	{
-		return (BST_SearchNode_bool<node_ptr, Key>(_Node, k));
+		return (BST_SearchNode_bool<node_ptr, Key>(_Node, maxNode(_Node), k));
 	}
 	template<class Key, class T, class Compare, class Alloc>
 	typename map<Key, T, Compare, Alloc>::iterator			map<Key, T, Compare, Alloc>::lower_bound (const key_type& k)
@@ -409,7 +435,6 @@ namespace ft
 			++it;
 		}
 		return (it);
-		//return ( BST_SearchNode<node_ptr, Key>(_Node, k) );
 	}
 	template<class Key, class T, class Compare, class Alloc>
 	typename map<Key, T, Compare, Alloc>::const_iterator		map<Key, T, Compare, Alloc>::upper_bound (const key_type& k) const
@@ -436,7 +461,7 @@ namespace ft
 			typename map<Key, T, Compare, Alloc>::iterator>
 																map<Key, T, Compare, Alloc>::equal_range (const key_type& k)
 	{
-		return (make_pair<iterator, iterator> (lower_bound(k), upper_bound(k)));
+		return (pair<iterator, iterator> (lower_bound(k), upper_bound(k)));
 	}
 
 	template<class Key, class T, class Compare, class Alloc>
@@ -456,13 +481,22 @@ namespace ft
 		node = NULL;
 	}
 	template <class Key, class T, class Compare, class Alloc>
+	typename ft::map<Key, T, Compare, Alloc>::node_ptr			ft::map<Key, T, Compare, Alloc>::new_setNode(Key first)
+	{
+		node_ptr tmp = _allocNode.allocate(1);
+		_allocNode.construct(tmp, node_type(pair<Key, T>()));
+		//설명 : m[1] = "sd" 이런식으로 값 넣을려면, pair의 자료형을 정확히 정해줘야한다.
+		//설명 : 이거떔에 개 고생했네;; allocate 로 생성하니까 생성자가 실행안해서, constuct써서 원하는 생성자를 실행해서 해결함.
+		tmp->data.first = first;
+		return tmp;
+	}
+	template <class Key, class T, class Compare, class Alloc>
 	typename ft::map<Key, T, Compare, Alloc>::node_ptr			ft::map<Key, T, Compare, Alloc>::new_setNode(Key first, T second)
 	{
 		node_ptr tmp = _allocNode.allocate(1);
-		tmp->data = pair<const Key, T> (first, second);
-		tmp->data.first = first;
-		tmp->data.second = second;
-
+		_allocNode.construct(tmp, node_type(pair<Key, T>(first, second)));
+		allocNode_construct(&tmp);
+;
 		return tmp;
 	}
 	template<class Key, class T, class Compare, class Alloc>
@@ -472,6 +506,14 @@ namespace ft
 		//설명 : 같을 땐 항상 fail
 	}
 
+	template<class Key, class T, class Compare, class Alloc>
+	template <class node_ptr2>
+	void						map<Key, T, Compare, Alloc>::allocNode_construct(node_ptr2 *Node)
+	{
+		(*Node)->parent = 0;
+		(*Node)->leftChild = 0;
+		(*Node)->rightChild = 0;
+	}
 	//=======================Non-member function overloads=====================
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator== (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs)
@@ -495,6 +537,12 @@ namespace ft
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator>= (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs)
 	{ return ( !(lhs < rhs) ); }
+
+	template <class Key, class T, class Compare, class Alloc>
+	void swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y)
+	{
+		x.swap(y);
+	}
 }
 
 #endif

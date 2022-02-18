@@ -16,9 +16,9 @@ namespace ft{
 		//default (1)
 		pair();
 		//copy (2)
-		template<class U, class V> pair (const pair<U,V>& pr);
+		template<class U, class V> pair (const pair<U,V> &pr);
 		//initialization (3)
-		pair (const first_type& a, const second_type& b);
+		pair (const first_type &a, const second_type &b);
 
 		pair& operator= (const pair& pr);
 
@@ -28,10 +28,10 @@ namespace ft{
 	
 	template <class T1, class T2>
 	template<class U, class V>
-	pair<T1, T2>::pair(const pair<U,V>& pr) : first(pr.first), second(pr.second) {}
+	pair<T1, T2>::pair(const pair<U,V> &pr) : first(pr.first), second(pr.second) {}
 	
 	template <class T1, class T2>
-	pair<T1, T2>::pair (const first_type& a, const second_type& b) : first(a), second(b) {}
+	pair<T1, T2>::pair (const first_type &a, const second_type &b) : first(a), second(b) {}
 	
 	template <class T1, class T2>
 	pair<T1, T2>& pair<T1, T2>::operator= (const pair& pr)

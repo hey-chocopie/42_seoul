@@ -1,6 +1,7 @@
 CXX				= clang++
 RM				= rm -f
-CXXFLAGS		= -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+CXXFLAGS		= -fsanitize=address
+#-Wall -Wextra -Werror -std=c++98 -fsanitize=address
 NAME			= test
 
 SRCS			= main.cpp
@@ -17,6 +18,12 @@ all:			$(NAME)
 $(NAME):		$(OBJS)
 				$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
 
+test-vector:
+	$(CXX) $(CXXFLAGS) ./tester/vector_test.cpp
+test-map:
+	$(CXX) $(CXXFLAGS) ./tester/map_test.cpp
+test-stack:
+	$(CXX) $(CXXFLAGS) ./tester/stack_test.cpp
 clean:
 				$(RM) $(OBJS)
 				rm -rf $(OBJS_DIR)

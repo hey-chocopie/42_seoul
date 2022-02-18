@@ -22,8 +22,7 @@ namespace ft
 	};
 
 	template<typename T>
-	struct is_integral : public integral_constant<bool, false> {} ; 
-	//  설명 : 아래 있는 상황들 뺴고 다 false
+	struct is_integral : public integral_constant<T, false> {} ; 
 	template<>
 	struct is_integral<bool> : public integral_constant<bool, true> {} ;
 	template<>
@@ -50,6 +49,10 @@ namespace ft
 	struct is_integral<unsigned long int> : public integral_constant<unsigned long int, true> {} ;
 	template<>
 	struct is_integral<unsigned long long int> : public integral_constant<unsigned long long, true> {} ;
+	template<>
+	struct is_integral<char *> : public integral_constant<char *, true> {} ;
+	template<>
+	struct is_integral<std::string> : public integral_constant<std::string, true> {} ;
 
 	struct input_iterator_tag {};
 	struct output_iterator_tag {};

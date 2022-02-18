@@ -55,32 +55,31 @@ namespace ft
 	}
 	// 설명 : target이 있으면 true 리턴
     template <class node_ptr, typename Key>
-	bool BST_SearchNode_bool(node_ptr tree, Key target) 
+	bool BST_SearchNode_bool(node_ptr tree, node_ptr endNode, Key target) 
 	{
-	    if (tree == NULL) 
+	    if (tree == NULL || tree == endNode) 
 	        return false;
 	
 	    if (tree->data.first == target)
 	        return true;
 	    else if (tree->data.first > target)
-	        return BST_SearchNode_bool(tree->leftChild, target);
+	        return BST_SearchNode_bool(tree->leftChild, endNode, target);
 	    else if (tree->data.first < target)
-	        return BST_SearchNode_bool(tree->rightChild, target);
+	        return BST_SearchNode_bool(tree->rightChild, endNode, target);
 		return (true);
 	}
 	// 설명 : target 이 있는 노드 리턴
     template <class node_ptr, typename Key>
-	node_ptr BST_SearchNode(node_ptr tree, Key target)
+	node_ptr BST_SearchNode(node_ptr tree, node_ptr endNode, Key target)
 	{
-	    if (tree == NULL)
+	    if (tree == NULL || tree == endNode)
 	        return NULL;
-	
 	    if (tree->data.first == target)
 	        return tree;
 	    else if (tree->data.first > target)
-	        return BST_SearchNode(tree->leftChild, target);
+	        return BST_SearchNode(tree->leftChild, endNode, target);
 	    else
-	        return BST_SearchNode(tree->rightChild, target);
+	        return BST_SearchNode(tree->rightChild, endNode, target);
 	}
 
 	// 설명 : 적절한 위치에 값 삽입.

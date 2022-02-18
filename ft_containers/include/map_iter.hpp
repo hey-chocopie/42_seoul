@@ -22,7 +22,6 @@ class mapIte {
 		template <typename RmapIte>
 		mapIte(const RmapIte &src);
 
-//		mapIte(const mapIte &src);
 		virtual ~mapIte(void);
 		mapIte	&operator=(mapIte const &rhs);
 
@@ -48,7 +47,7 @@ class mapIte {
 		template <class, class>
 		friend class mapIte;
 
-}; // ****************************************************** class mapIte end //
+}; 
 
 template <typename T, typename node_type>
 mapIte<T, node_type>::mapIte(void) : _node(NULL) { }
@@ -64,16 +63,8 @@ template <typename RmapIte>
 mapIte<T, node_type>::mapIte(const RmapIte &src) 
 {
 	this->_node = src._node;
-	//*this = src; 
-	//this->operator=(src);
 	
 }
-//template <typename T, typename node_type>
-//mapIte<T, node_type>::mapIte(const mapIte &src) 
-//{
-////	this->_node = src._node;
-//	*this = src; 
-//}
 
 template <typename T, typename node_type>
 mapIte<T, node_type>::~mapIte(void) { return ; }
@@ -158,7 +149,6 @@ typename mapIte<T, node_type>::pointer mapIte<T, node_type>::operator->(void) co
 	return &(this->operator*());
 }
 
-} // ******************************************************* ft namespace end //
+} 
 
-#endif // ********************************************* MAP_ITE_CLASS_HPP end //
-
+#endif 
