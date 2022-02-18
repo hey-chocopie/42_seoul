@@ -6,15 +6,15 @@ NAME			= ft_container.out
 VECTOR_NAME		= diff/diff_vector
 MAP_NAME		= diff/diff_map
 STACK_NAME		= diff/diff_stack
+MK_DIR			= mkdir -p out diff objs
 
 all				:$(VECTOR_NAME) $(MAP_NAME) $(STACK_NAME)
 
 vector:			$(VECTOR_NAME)
 
+
 $(VECTOR_NAME) :
-				mkdir -p out
-				mkdir -p diff
-				mkdir -p objs
+				$(MK_DIR)
 				$(CXX) $(CXXFLAGS) -o objs/ft_vector.o -DTESTED_NAMESPACE=ft -c ./test_srcs/vector/vector_test.cpp
 				$(CXX) $(CXXFLAGS) -o objs/std_vector.o -DTESTED_NAMESPACE=std -c ./test_srcs/vector/vector_test.cpp
 				$(CXX) $(CXXFLAGS) -o out/ft_vector.out objs/ft_vector.o
@@ -27,9 +27,7 @@ $(VECTOR_NAME) :
 map:			$(MAP_NAME)
 	
 $(MAP_NAME)		:
-				mkdir -p out
-				mkdir -p diff
-				mkdir -p objs
+				$(MK_DIR)
 				$(CXX) $(CXXFLAGS) -o objs/ft_map.o -DTESTED_NAMESPACE=ft -c ./test_srcs/map/map_test.cpp
 				$(CXX) $(CXXFLAGS) -o objs/std_map.o -DTESTED_NAMESPACE=std -c ./test_srcs/map/map_test.cpp
 				$(CXX) $(CXXFLAGS) -o out/ft_map.out objs/ft_map.o
@@ -41,9 +39,7 @@ $(MAP_NAME)		:
 stack:			$(STACK_NAME)
 
 $(STACK_NAME)	:
-				mkdir -p out
-				mkdir -p diff
-				mkdir -p objs
+				$(MK_DIR)
 				$(CXX) $(CXXFLAGS) -o objs/ft_stack.o -DTESTED_NAMESPACE=ft -c ./test_srcs/stack/stack_test.cpp
 				$(CXX) $(CXXFLAGS) -o objs/std_stack.o -DTESTED_NAMESPACE=std -c ./test_srcs/stack/stack_test.cpp
 				$(CXX) $(CXXFLAGS) -o out/ft_stack.out objs/ft_stack.o
