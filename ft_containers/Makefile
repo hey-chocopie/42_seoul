@@ -54,7 +54,7 @@ $(STACK_NAME)	:
 				rm out/ft_data out/std_data
 				
 clean:
-				rm -rf $(OBJS_DIR)
+				rm -rf objs
 
 fclean:			clean
 				$(RM) $(NAME)
