@@ -154,13 +154,15 @@ int main(void) {
 	std::cout << "----------------------- Modifiers " << std::endl;
 	{
 		TESTED_NAMESPACE::map<std::string, int> m1;
-
 		std::cout << "> insert1 " << std::endl;
 		std::cout << "> [hoylee, 42] 추가 " << std::endl;
 		TESTED_NAMESPACE::pair<TESTED_NAMESPACE::map<std::string, int>::iterator, bool> m_pair;
 		std::cout << "=====================" << std::endl;
 		m_pair = m1.insert(TESTED_NAMESPACE::make_pair<std::string, int>("hoylee", 42));
 
+		TESTED_NAMESPACE::map<std::string, int>::iterator m1_i= m1.begin();
+		m1.insert(TESTED_NAMESPACE::make_pair<std::string, int>("adylee", 52));
+		std::cout << "🚛 m_i  ( m1_iter : " << (*(m1_i)).first << " )" << std::endl;
 		std::cout << "🚛 m  ( size : " << m1.size() << " )" << std::endl;
 		print_map(m1);
 		std::cout << "insert return : " << m_pair.second << std::endl;
