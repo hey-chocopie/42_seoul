@@ -1,9 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <time.h>
 #include "../define.hpp"
-#include "../../vector.hpp"
-#include "../../vector_iter.hpp"
+#include "../../include/vector.hpp"
+#include "../../include/vector_iter.hpp"
 //#include "iterator.hpp"
 
 template<typename T>
@@ -21,7 +22,8 @@ void print_vector(TESTED_NAMESPACE::vector<T>& v) {
 }
 
 int main() {
-
+	clock_t start, end;
+	start = clock();
 	std::cout << "=====================================" << std::endl;
 	std::cout << "==============[ VECTOR ]=============" << std::endl;
 	std::cout << "=====================================" << std::endl;
@@ -134,11 +136,8 @@ int main() {
 		print_vector(ft2);
 		std::cout << std::endl;
 
-		std::cout << "  [ capacity test ]" << std::endl;
-		std::cout << "🚛 ft capacity  : " << ft2.capacity() << std::endl;
 		ft2.clear();
 		std::cout << "> clear로 비움" << std::endl;
-		std::cout << "🚛 ft  ( capacity : " << ft2.capacity() << " )" << std::endl;
 		print_vector(ft2);
 		std::cout << std::endl;
 
@@ -159,19 +158,16 @@ int main() {
 		std::cout << "  [ reserve test ]" << std::endl;
 		TESTED_NAMESPACE::vector<int> ft3(4, 5);
 		std::cout << "> 5 가 4개 들어간 벡터"<< std::endl;
-		std::cout << "🚛 ft  ( capacity : " << ft3.capacity() << " )" << std::endl;
 		print_vector(ft3);
 		std::cout << std::endl;
 
 		std::cout << "> 11으로 reserve"<< std::endl;
 		ft3.reserve(11);
-		std::cout << "🚛 ft  ( capacity : " << ft3.capacity() << " )" << std::endl;
 		print_vector(ft3);
 		std::cout << std::endl;
 
 		std::cout << "> 3으로 reserve (아무일도 일어나지 않음)"<< std::endl;
 		ft3.reserve(3);
-		std::cout << "🚛 ft  ( capacity : " << ft3.capacity() << " )" << std::endl;
 		print_vector(ft3);
 		std::cout << std::endl;
 	}
@@ -251,13 +247,13 @@ int main() {
 		std::cout << "  [ insert test ]" << std::endl;
 		std::cout << "> insert begin(), 1" << std::endl;
 		ft1.insert(ft1.begin(), 1);
-		std::cout << "🚛 ft  ( size : " << ft1.size() << ", cap : " << ft1.capacity() << " )" << std::endl;
+		std::cout << "🚛 ft  ( size : " << ft1.size()  << " )" << std::endl;
 		print_vector(ft1);
 		std::cout << std::endl;
 
 		std::cout << "> insert begin() + 1, 2, 2" << std::endl;
 		ft1.insert(ft1.begin() + 1, 2, 2);
-		std::cout << "🚛 ft  ( size : " << ft1.size() << ", cap : " << ft1.capacity() << " )" << std::endl;
+		std::cout << "🚛 ft  ( size : " << ft1.size() << " )" << std::endl;
 		print_vector(ft1);
 		std::cout << std::endl;
 
@@ -266,7 +262,7 @@ int main() {
 		TESTED_NAMESPACE::vector<int> add2(3, 3);
 		ft_iter = add2.begin();
 		ft1.insert(ft1.begin() + 3, ft_iter, add2.end());
-		std::cout << "🚛 ft  ( size : " << ft1.size() << ", cap : " << ft1.capacity() << " )" << std::endl;
+		std::cout << "🚛 ft  ( size : " << ft1.size() << " )" << std::endl;
 		print_vector(ft1);
 		std::cout << std::endl;
 
@@ -511,5 +507,6 @@ int main() {
 		print_vector(ft2);
 		std::cout << std::endl;
 	}
-
+    end = clock();
+    std::cout << "result : " << (double)(end - start) << std::endl;
 }

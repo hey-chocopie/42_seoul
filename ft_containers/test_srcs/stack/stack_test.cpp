@@ -1,6 +1,7 @@
 #include <stack>
-#include "../../stack.hpp"
-#include "../../vector.hpp"
+#include <time.h>
+#include "../../include/stack.hpp"
+#include "../../include/vector.hpp"
 #include "../define.hpp"
 
 
@@ -14,6 +15,9 @@ void print_stack(TESTED_NAMESPACE::stack<T> s) {
 }
 
 int main() {
+	clock_t start, end;
+	start = clock();
+
 	std::cout << "=====================================" << std::endl;
 	std::cout << "==============[ STACK ]==============" << std::endl;
 	std::cout << "=====================================" << std::endl;
@@ -172,4 +176,6 @@ int main() {
 	std::cout << "> [aaa, aaa, aaa] >= [aaa, aaa, aab]" << std::endl;
 	std::cout << "🚛 stk  : " << (stk5 >= stk6) << std::endl;
 
+    end = clock();
+    std::cout << "result : " << (double)(end - start) << std::endl;
 }

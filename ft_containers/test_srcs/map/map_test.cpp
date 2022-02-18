@@ -1,7 +1,8 @@
 #include <map>
 #include <iostream>
+#include <time.h>
 #include "../define.hpp"
-#include "../../../map.hpp"
+#include "../../include/map.hpp"
 
 template<typename T1, typename T2>
 void print_map(TESTED_NAMESPACE::map<T1, T2> map) {
@@ -19,6 +20,9 @@ void print_map(TESTED_NAMESPACE::map<T1, T2> map) {
 
 
 int main(void) {
+	clock_t start, end;
+	start = clock();
+
 	std::cout << "=====================================" << std::endl;
 	std::cout << "===============[ MAP ]===============" << std::endl;
 	std::cout << "=====================================" << std::endl;
@@ -329,5 +333,6 @@ int main(void) {
 		m1.get_allocator().deallocate(m_p, 5);
 
 	}
-
+    end = clock();
+    std::cout << "result : " << (double)(end - start) << std::endl;
 }
