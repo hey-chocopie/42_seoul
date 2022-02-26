@@ -340,7 +340,7 @@ int main() {
 	{
 		TESTED_NAMESPACE::vector<int> ft1(5, 5);
 		TESTED_NAMESPACE::vector<int> ft2(5, 5);
-
+		
 		std::cout << "  [ operator == test 1 ]" << std::endl;
 		
 		std::cout << "🚛 ft1  : ";
