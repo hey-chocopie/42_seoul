@@ -1,6 +1,6 @@
 CXX				= clang++
 RM				= rm -rf
-CXXFLAGS		= -fsanitize=address -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+CXXFLAGS		= -Wall -Wextra -Werror -std=c++98 -fsanitize=address
 
 NAME			= ft_container.out
 VECTOR_NAME		= diff/diff_vector
