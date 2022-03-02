@@ -1,8 +1,8 @@
 #include <map>
 #include <iostream>
 #include <time.h>
-#include "../define.hpp"
-#include "../../include/map.hpp"
+#include "define.hpp"
+#include "../include/map.hpp"
 
 template<typename T1, typename T2>
 void print_map(TESTED_NAMESPACE::map<T1, T2> map) {

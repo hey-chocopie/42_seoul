@@ -2,9 +2,9 @@
 #include <vector>
 #include <string>
 #include <time.h>
-#include "../define.hpp"
-#include "../../include/vector.hpp"
-#include "../../include/vector_iter.hpp"
+#include "define.hpp"
+#include "../include/vector.hpp"
+#include "../include/vector_iter.hpp"
 //#include "iterator.hpp"
 
 template<typename T>

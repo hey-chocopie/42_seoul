@@ -1,9 +1,9 @@
 #include <stack>
 #include <vector>
 #include <time.h>
-#include "../../include/stack.hpp"
-#include "../../include/vector.hpp"
-#include "../define.hpp"
+#include "../include/stack.hpp"
+#include "../include/vector.hpp"
+#include "define.hpp"
 
 
 template<class T>

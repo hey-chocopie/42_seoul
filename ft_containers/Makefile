@@ -15,8 +15,8 @@ vector:			$(VECTOR_NAME)
 
 $(VECTOR_NAME) :
 				$(MK_DIR)
-				$(CXX) $(CXXFLAGS) -o objs/ft_vector.o -DTESTED_NAMESPACE=ft -c ./test_srcs/vector/vector_test.cpp
-				$(CXX) $(CXXFLAGS) -o objs/std_vector.o -DTESTED_NAMESPACE=std -c ./test_srcs/vector/vector_test.cpp
+				$(CXX) $(CXXFLAGS) -o objs/ft_vector.o -DTESTED_NAMESPACE=ft -c ./test_srcs/vector_test.cpp
+				$(CXX) $(CXXFLAGS) -o objs/std_vector.o -DTESTED_NAMESPACE=std -c ./test_srcs/vector_test.cpp
 				$(CXX) $(CXXFLAGS) -o out/ft_vector.out objs/ft_vector.o
 				$(CXX) $(CXXFLAGS) -o out/std_vector.out objs/std_vector.o
 				./out/ft_vector.out >out/ft_data
@@ -28,8 +28,8 @@ map:			$(MAP_NAME)
 	
 $(MAP_NAME)		:
 				$(MK_DIR)
-				$(CXX) $(CXXFLAGS) -o objs/ft_map.o -DTESTED_NAMESPACE=ft -c ./test_srcs/map/map_test.cpp
-				$(CXX) $(CXXFLAGS) -o objs/std_map.o -DTESTED_NAMESPACE=std -c ./test_srcs/map/map_test.cpp
+				$(CXX) $(CXXFLAGS) -o objs/ft_map.o -DTESTED_NAMESPACE=ft -c ./test_srcs/map_test.cpp
+				$(CXX) $(CXXFLAGS) -o objs/std_map.o -DTESTED_NAMESPACE=std -c ./test_srcs/map_test.cpp
 				$(CXX) $(CXXFLAGS) -o out/ft_map.out objs/ft_map.o
 				$(CXX) $(CXXFLAGS) -o out/std_map.out objs/std_map.o
 				./out/ft_map.out >out/ft_data
@@ -40,8 +40,8 @@ stack:			$(STACK_NAME)
 
 $(STACK_NAME)	:
 				$(MK_DIR)
-				$(CXX) $(CXXFLAGS) -o objs/ft_stack.o -DTESTED_NAMESPACE=ft -c ./test_srcs/stack/stack_test.cpp
-				$(CXX) $(CXXFLAGS) -o objs/std_stack.o -DTESTED_NAMESPACE=std -c ./test_srcs/stack/stack_test.cpp
+				$(CXX) $(CXXFLAGS) -o objs/ft_stack.o -DTESTED_NAMESPACE=ft -c ./test_srcs/stack_test.cpp
+				$(CXX) $(CXXFLAGS) -o objs/std_stack.o -DTESTED_NAMESPACE=std -c ./test_srcs/stack_test.cpp
 				$(CXX) $(CXXFLAGS) -o out/ft_stack.out objs/ft_stack.o
 				$(CXX) $(CXXFLAGS) -o out/std_stack.out objs/std_stack.o
 				./out/ft_stack.out >out/ft_data
